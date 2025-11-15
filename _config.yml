@@ -1,10 +1,9 @@
-# Theme Settings
-remote_theme: "mmistakes/minimal-mistakes@4.24.0"
-minimal_mistakes_skin: "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
-
 # Site Settings
+remote_theme: "mmistakes/minimal-mistakes@4.24.0"
+minimal_mistakes_skin: "dark"
+
 title: "Online Voting System"
-name: "yadnyeshkolte"
+name: "Your Name"
 description: "Documentation for Online Voting System"
 url: "https://yadnyeshkolte.github.io"
 baseurl: "/online-voting-system"
@@ -23,16 +22,6 @@ plugins:
   - jekyll-feed
   - jekyll-include-cache
 
-navigation:
-  - title: "Getting Started"
-    url: /getting-started/
-  - title: "Installation"
-    url: /installation/
-  - title: "User Guide"
-    url: /user-guide/
-  - title: "API Reference"
-    url: /api/
-
 # Reading Files
 include:
   - _pages
@@ -46,17 +35,18 @@ exclude:
 
 # Defaults
 defaults:
-  # _posts
+  # _docs
   - scope:
-      path: ""
-      type: posts
+      path: "_docs"
+      type: docs
     values:
       layout: single
-      author_profile: true
-      read_time: true
+      read_time: false
+      author_profile: false
+      share: false
       comments: false
-      share: true
-      related: true
+      sidebar:
+        nav: "docs"
   # _pages
   - scope:
       path: "_pages"
@@ -65,11 +55,17 @@ defaults:
       layout: single
       author_profile: false
 
+# Collections
+collections:
+  docs:
+    output: true
+    permalink: /:collection/:path/
+
 # Site Author
 author:
-  name: "Yadnyesh Kolte"
+  name: "Your Name"
   bio: "Developer of Online Voting System"
-  location: "India"
+  location: "Your Location"
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"

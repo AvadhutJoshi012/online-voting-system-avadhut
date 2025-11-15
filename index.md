@@ -1,19 +1,56 @@
 ---
-layout: home
-title: "Online Voting System Documentation"
+layout: splash
+title: "Online Voting System"
+header:
+  overlay_color: "#000"
+  overlay_filter: "0.5"
+  overlay_image: /assets/images/header.jpg
+  actions:
+    - label: "Get Started"
+      url: "/docs/introduction/"
+    - label: "View on GitHub"
+      url: "https://github.com/yadnyeshkolte/online-voting-system"
+excerpt: "A secure and reliable platform for conducting online elections"
+intro:
+  - excerpt: 'Complete documentation for the Online Voting System'
+feature_row:
+  - image_path: /assets/images/database-icon.png
+    alt: "Database"
+    title: "Database"
+    excerpt: "Learn about the database structure, schemas, and ER diagrams"
+    url: "/docs/database/ovs-database/"
+    btn_label: "Read More"
+    btn_class: "btn--primary"
+  - image_path: /assets/images/backend-icon.png
+    alt: "Backend"
+    title: "Backend"
+    excerpt: "Explore the Spring Boot backend architecture and APIs"
+    url: "/docs/backend/springcontainer/"
+    btn_label: "Read More"
+    btn_class: "btn--primary"
+  - image_path: /assets/images/frontend-icon.png
+    alt: "Frontend"
+    title: "Frontend"
+    excerpt: "Discover the React frontend components and user experience"
+    url: "/docs/frontend/usereffectvoting/"
+    btn_label: "Read More"
+    btn_class: "btn--primary"
 ---
 
-# Welcome to Online Voting System Documentation
+{% include feature_row id="intro" type="center" %}
 
-This documentation provides comprehensive information about the Online Voting System project.
+{% include feature_row %}
 
 ## Quick Links
 
-- [Getting Started]({{ site.baseurl }}{% link _pages/getting-started.md %})
-- [Installation]({{ site.baseurl }}{% link _pages/installation.md %})
-- [User Guide]({{ site.baseurl }}{% link _pages/user-guide.md %})
-- [API Reference]({{ site.baseurl }}{% link _pages/api.md %})
+- [Installation Guide](/docs/installation/)
+- [API Reference](/docs/backend/api-reference/)
+- [Database Schema](/docs/database/databaseref/)
 
-## About
+## Features
 
-Online Voting System is a secure and reliable platform for conducting online elections.
+- **Secure Authentication**: JWT-based authentication system
+- **Real-time Voting**: Live vote counting and results
+- **Admin Dashboard**: Comprehensive election management
+- **Responsive Design**: Works on all devices
+- **Audit Trail**: Complete voting history and logs
