@@ -1,0 +1,76 @@
+# Theme Settings
+remote_theme: "mmistakes/minimal-mistakes@4.24.0"
+minimal_mistakes_skin: "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
+
+# Site Settings
+title: "Online Voting System"
+name: "yadnyeshkolte"
+description: "Documentation for Online Voting System"
+url: "https://yadnyeshkolte.github.io"
+baseurl: "/online-voting-system"
+repository: "yadnyeshkolte/online-voting-system"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+permalink: /:categories/:title/
+
+# Plugins
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-gist
+  - jekyll-feed
+  - jekyll-include-cache
+
+navigation:
+  - title: "Getting Started"
+    url: /getting-started/
+  - title: "Installation"
+    url: /installation/
+  - title: "User Guide"
+    url: /user-guide/
+  - title: "API Reference"
+    url: /api/
+
+# Reading Files
+include:
+  - _pages
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# Defaults
+defaults:
+  # _posts
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      read_time: true
+      comments: false
+      share: true
+      related: true
+  # _pages
+  - scope:
+      path: "_pages"
+      type: pages
+    values:
+      layout: single
+      author_profile: false
+
+# Site Author
+author:
+  name: "Yadnyesh Kolte"
+  bio: "Developer of Online Voting System"
+  location: "India"
+  links:
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/yadnyeshkolte"
