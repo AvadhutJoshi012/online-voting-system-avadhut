@@ -3,7 +3,7 @@ remote_theme: "mmistakes/minimal-mistakes@4.24.0"
 minimal_mistakes_skin: "dark"
 
 title: "Online Voting System"
-name: "Your Name"
+name: "yadnyeshkolte"
 description: "Documentation for Online Voting System"
 url: "https://yadnyeshkolte.github.io"
 baseurl: "/online-voting-system"
@@ -63,9 +63,9 @@ collections:
 
 # Site Author
 author:
-  name: "Your Name"
+  name: "yadnyeshkolte"
   bio: "Developer of Online Voting System"
-  location: "Your Location"
+  location: "India"
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
