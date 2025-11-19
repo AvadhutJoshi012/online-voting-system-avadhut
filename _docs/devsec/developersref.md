@@ -1,13 +1,9 @@
+
 ---
-
 title: "Developer Reference"
-
 permalink: /docs/devsec/developersref/
-
 sidebar:
-
-&nbsp; nav: "docs"
-
+  nav: "docs"
 ---
 
 
