@@ -1,78 +1,125 @@
 ---
-
 layout: single
-
 title: "About"
-
 permalink: /about/
-
 ---
 
-
-
-\## About Online Voting System
-
-
+## About Online Voting System
 
 The Online Voting System is a secure and reliable platform designed for conducting online elections. Built with modern web technologies, it ensures transparency, security, and ease of use for both voters and administrators.
 
+---
+
+## 📋 Project Details
+
+**Course Name**: PG-DAC  
+**Batch Name**: August 2025  
+**Group Number**: 06  
+**Project Head**: Avadhut Ravindra Joshi
+
+### Project Title
+**Online Voting System** - A secure web-based platform for online voting and real-time result display
+
+---
+
+## 👥 Team Members
+
+| Sr. No | Name | PRN | GitHub |
+|--------|------|-----|--------|
+| 01 | Aaman Javaed Sayyad | 250850120003 | [@Aamanjs](https://github.com/Aamanjs) |
+| 02 | Avadhut Ravindra Joshi | 250850120042 | [@AvadhutJoshi012](https://github.com/AvadhutJoshi012) |
+| 03 | Deepak Sanjay Revgade | 250850120137 | [@deepakrevgade](https://github.com/deepakrevgade) |
+| 04 | Rishikesh Sukhadev More | 250850120143 | [@rushimore17](https://github.com/rushimore17) |
+| 05 | Yadnyesh Rajesh Kolte | 250850120192 | [@yadnyeshkolte](https://github.com/yadnyeshkolte) |
+
+---
+
+## 📖 Project Description
+
+The Online Voting System is a comprehensive solution that provides:
+
+1. **Secure Web-Based Platform** for online voting and real-time result display
+2. **Admin Management System** to efficiently manage elections, candidates, and voters
+3. **Modern Architecture** built using React.js, Spring Boot, and MySQL with secure authentication
+4. **Transparency & Security** ensuring fair elections with audit trails and vote integrity
+
+---
+
+## 💻 Technology Stack
+
+### Frontend
+- **React.js** - Modern UI framework
+- **HTML5 & CSS3** - Responsive design
+- **JavaScript (ES6+)** - Interactive components
+
+### Backend
+- **Spring Boot** - Java-based backend framework
+- **Spring Security** - Authentication and authorization
+- **JWT** - Secure token-based authentication
+- **Spring Data JPA** - Database operations
+
+### Database
+- **MySQL 8.0+** - Relational database management
+
+### Development Tools
+- **IntelliJ IDEA / Eclipse** - Java development
+- **Visual Studio Code** - Frontend development
+- **Git & GitHub** - Version control
+- **Maven** - Dependency management
+- **npm** - Package management
+
+---
+
+## 🎯 Key Features
+
+### For Voters
+- ✅ **Secure Registration** - JWT-based authentication system
+- ✅ **Easy Voting** - Simple and intuitive voting interface
+- ✅ **Real-time Results** - Live vote counting and results display
+- ✅ **Vote Verification** - Check voting status and history
+
+### For Administrators
+- ✅ **Election Management** - Create and manage elections
+- ✅ **Candidate Management** - Add and manage candidates
+- ✅ **Voter Management** - User verification and approval
+- ✅ **Results Dashboard** - Comprehensive election reports
+- ✅ **Audit Trail** - Complete voting history and logs
+
+### Security Features
+- 🔒 **Encrypted Passwords** - BCrypt hashing
+- 🔒 **Vote Integrity** - Cryptographic hash for each vote
+- 🔒 **One Vote Policy** - Database constraint enforcement
+- 🔒 **ID Verification** - Aadhar, PAN, Voter ID, Passport support
+- 🔒 **Role-Based Access** - Separate admin and voter privileges
+
+---
+
+## 🏗️ Project Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    ONLINE VOTING SYSTEM                  │
+└─────────────────────────────────────────────────────────┘
+                            │
+        ┌───────────────────┼───────────────────┐
+        ▼                   ▼                   ▼
+   ┌─────────┐        ┌──────────┐       ┌──────────┐
+   │ React.js│◄──────►│  Spring  │◄─────►│  MySQL   │
+   │Frontend │        │   Boot   │       │ Database │
+   └─────────┘        └──────────┘       └──────────┘
+        │                   │                   │
+    UI Layer          Business Logic      Data Storage
+    Components        REST APIs            Relationships
+    State Mgmt        JWT Auth             Transactions
+```
+
+---
+
+## 🔗 Repository & Links
+
+- **GitHub Repository**: [yadnyeshkolte/online-voting-system](https://github.com/yadnyeshkolte/online-voting-system)
+- **Documentation Site**: [https://yadnyeshkolte.github.io/online-voting-system](https://yadnyeshkolte.github.io/online-voting-system)
+- **Issue Tracker**: [GitHub Issues](https://github.com/yadnyeshkolte/online-voting-system/issues)
 
 
-\### Project Details
-
-
-
-\- \*\*Developer\*\*: yadnyeshkolte
-
-\- \*\*Organization\*\*: PG-DAC Project - Group 06
-
-\- \*\*Repository\*\*: \[GitHub](https://github.com/yadnyeshkolte/online-voting-system)
-
-
-
-\### Technology Stack
-
-
-
-\#### Backend
-
-\- Spring Boot
-
-\- JWT Authentication
-
-\- MySQL Database
-
-
-
-\#### Frontend
-
-\- React
-
-\- Modern UI Components
-
-\- Responsive Design
-
-
-
-\### Key Features
-
-
-
-\- \*\*Secure Authentication\*\*: JWT-based authentication system
-
-\- \*\*Real-time Voting\*\*: Live vote counting and results
-
-\- \*\*Admin Dashboard\*\*: Comprehensive election management
-
-\- \*\*Responsive Design\*\*: Works on all devices
-
-\- \*\*Audit Trail\*\*: Complete voting history and logs
-
-
-
-\### Contact
-
-
-
-For questions or issues, please visit our \[GitHub repository](https://github.com/yadnyeshkolte/online-voting-system).
-
+---
