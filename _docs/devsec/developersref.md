@@ -12,7 +12,7 @@ sidebar:
 
 
 
-\## DevSec - Developer \& Security Reference
+## DevSec - Developer & Security Reference
 
 
 
@@ -24,25 +24,25 @@ Welcome to the Developer Reference section! This area contains all the technical
 
 
 
-\## 📋 Quick Navigation
+## 📋 Quick Navigation
 
 
 
-\### Database
+### Database
 
-\- \[Create Database](/docs/devsec/database/createovsdatabase/) - Complete database setup script with tables and sample data
+- [Create Database](/docs/devsec/database/createovsdatabase/) - Complete database setup script with tables and sample data
 
 
 
-\### Coming Soon
+### Coming Soon
 
-\- \*\*Backend\*\* - Spring Boot setup, configuration, and development guides
+- **Backend** - Spring Boot setup, configuration, and development guides
 
-\- \*\*Frontend\*\* - React development, component library, and build processes
+- **Frontend** - React development, component library, and build processes
 
-\- \*\*Security\*\* - Authentication, authorization, and security best practices
+- **Security** - Authentication, authorization, and security best practices
 
-\- \*\*Deployment\*\* - Production deployment guides and CI/CD pipelines
+- **Deployment** - Production deployment guides and CI/CD pipelines
 
 
 
@@ -50,11 +50,11 @@ Welcome to the Developer Reference section! This area contains all the technical
 
 
 
-\## 🚀 Development Environment Setup
+## 🚀 Development Environment Setup
 
 
 
-\### Prerequisites
+### Prerequisites
 
 
 
@@ -62,13 +62,13 @@ Before starting development, ensure you have the following installed:
 
 
 
-\### Quick Start Commands
+### Quick Start Commands
 
 
 
 ```bash
 
-\# Clone the repository
+# Clone the repository
 
 git clone https://github.com/yadnyeshkolte/online-voting-system.git
 
@@ -76,7 +76,7 @@ cd online-voting-system
 
 
 
-\# Setup database (see Database section)
+# Setup database (see Database section)
 
 mysql -u root -p < scripts/createovsdatabase.sql
 
