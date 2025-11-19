@@ -44,12 +44,3 @@ docs:
         url: /docs/frontend/feedback/
       - title: "UI Components"
         url: /docs/frontend/ui-components/
-
-  - title: DevSec
-    children:
-      - title: "Developers Reference"
-        url: /docs/devsec/developersref/
-      - title: "Database"
-        children:
-          - title: "Create Database"
-            url: /docs/devsec/database/createovsdatabase/

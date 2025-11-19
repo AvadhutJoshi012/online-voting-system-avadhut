@@ -9,6 +9,9 @@ url: "https://yadnyeshkolte.github.io"
 baseurl: "/online-voting-system"
 repository: "yadnyeshkolte/online-voting-system"
 
+# Favicon
+logo: "/assets/images/favicon.ico"
+
 # Build settings
 markdown: kramdown
 highlighter: rouge

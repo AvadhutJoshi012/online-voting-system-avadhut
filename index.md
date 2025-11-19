@@ -35,24 +35,11 @@ feature_row:
     url: "/docs/frontend/usereffectvoting/"
     btn_label: "Read More"
     btn_class: "btn--primary"
-  - image_path: /assets/images/devsec-icon.png
-    alt: "DevSec"
-    title: "DevSec"
-    excerpt: "Developers Reference Section"
-    url: "/docs/devsec/developersref/"
-    btn_label: "Read More"
-    btn_class: "btn--primary"
 ---
 
 {% include feature_row id="intro" type="center" %}
 
 {% include feature_row %}
-
-## Quick Links
-
-- [Installation Guide](/docs/installation/)
-- [API Reference](/docs/backend/api-reference/)
-- [Database Schema](/docs/database/databaseref/)
 
 ## Features
 

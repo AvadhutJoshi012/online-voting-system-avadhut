@@ -15,7 +15,6 @@ The Online Voting System is a secure and reliable platform designed for conducti
 **Course Name**: PG-DAC  
 **Batch Name**: August 2025  
 **Group Number**: 06  
-**Project Head**: Avadhut Ravindra Joshi
 
 ### Project Title
 **Online Voting System** - A secure web-based platform for online voting and real-time result display
@@ -98,7 +97,7 @@ The Online Voting System is a comprehensive solution that provides:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    ONLINE VOTING SYSTEM                  │
+│                    ONLINE VOTING SYSTEM                 │
 └─────────────────────────────────────────────────────────┘
                             │
         ┌───────────────────┼───────────────────┐

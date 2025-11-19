@@ -6,56 +6,136 @@ last_modified_at: 2025-11-15
 toc: true
 ---
 
-# OVS Database Overview
+This document outlines the database schema for this application.
 
-## Database Schema
+---
 
-The Online Voting System uses a relational database to store all system data.
+## TABLE 1: ADMINS
 
-## Main Tables
+| FIELD ID | FIELD NAME | DATA TYPE | CONSTRAINTS |
+|----------|------------|-----------|-------------|
+| 1 | admin_id | bigint | PRIMARY KEY, AUTO_INCREMENT |
+| 2 | user_id | bigint | FOREIGN KEY, UNIQUE |
+| 3 | assigned_at | timestamp | NOT NULL |
 
-### Users Table
+---
 
-Stores user information and credentials.
+## TABLE 2: ELECTION_RESULT
 
-| Column | Type | Description |
-|--------|------|-------------|
-| id | INT | Primary key |
-| username | VARCHAR(50) | Unique username |
-| email | VARCHAR(100) | User email |
-| password_hash | VARCHAR(255) | Hashed password |
-| role | ENUM | User role (admin/voter) |
-| created_at | TIMESTAMP | Account creation time |
+| FIELD ID | FIELD NAME | DATA TYPE | CONSTRAINTS |
+|----------|------------|-----------|-------------|
+| 1 | result_id | bigint | PRIMARY KEY, AUTO_INCREMENT |
+| 2 | election_id | bigint | FOREIGN KEY |
+| 3 | candidate_id | bigint | FOREIGN KEY |
+| 4 | vote_count | bigint | NOT NULL |
+| 5 | vote_percentage | decimal(5,2) | NOT NULL |
+| 6 | rank_position | int | NOT NULL |
+| 7 | last_updated | timestamp | NOT NULL |
 
-### Elections Table
+---
 
-Stores election information.
+## TABLE 3: CANDIDATES
 
-| Column | Type | Description |
-|--------|------|-------------|
-| id | INT | Primary key |
-| title | VARCHAR(200) | Election title |
-| description | TEXT | Election description |
-| start_date | DATETIME | Election start time |
-| end_date | DATETIME | Election end time |
-| status | ENUM | Election status |
+| FIELD ID | FIELD NAME | DATA TYPE | CONSTRAINTS |
+|----------|------------|-----------|-------------|
+| 1 | candidate_id | bigint | PRIMARY KEY, AUTO_INCREMENT |
+| 2 | user_id | bigint | FOREIGN KEY |
+| 3 | election_id | bigint | FOREIGN KEY |
+| 4 | candidate_name | varchar(255) | NOT NULL |
+| 5 | party_name | varchar(255) | NOT NULL |
+| 6 | candidate_symbol | varchar(255) | NOT NULL |
+| 7 | candidate_photo_url | varchar(500) | NOT NULL |
+| 8 | age | int | NOT NULL |
+| 9 | qualification | varchar(255) | NOT NULL |
+| 10 | manifesto | text | NOT NULL |
+| 11 | registration_number | varchar(50) | UNIQUE |
+| 12 | registration_status | enum(...) | NOT NULL |
+| 13 | approved_at | timestamp | NOT NULL |
+| 14 | registered_at | timestamp | NOT NULL |
 
-### Votes Table
+---
 
-Stores cast votes (encrypted).
+## TABLE 4: ELECTION_REPORTS
 
-| Column | Type | Description |
-|--------|------|-------------|
-| id | INT | Primary key |
-| election_id | INT | Foreign key to elections |
-| user_id | INT | Foreign key to users |
-| candidate_id | INT | Foreign key to candidates |
-| vote_hash | VARCHAR(255) | Encrypted vote |
-| timestamp | TIMESTAMP | Vote cast time |
+| FIELD ID | FIELD NAME | DATA TYPE | CONSTRAINTS |
+|----------|------------|-----------|-------------|
+| 1 | report_id | bigint | PRIMARY KEY, AUTO_INCREMENT |
+| 2 | election_id | bigint | FOREIGN KEY |
+| 3 | total_registered_voters | bigint | NOT NULL |
+| 4 | total_votes_cast | bigint | NOT NULL |
+| 5 | voter_turnout_percentage | decimal(5,2) | NOT NULL |
+| 6 | total_candidates | int | NOT NULL |
+| 7 | winning_candidate_id | bigint | FOREIGN KEY |
+| 8 | winning_margin | bigint | NOT NULL |
+| 9 | report_generated_by | bigint | FOREIGN KEY |
+| 10 | report_generated_at | timestamp | NOT NULL |
 
-## Relationships
+---
 
-- One election has many candidates
-- One election has many votes
-- One user can cast one vote per election
-- Each vote is linked to one candidate
+## TABLE 5: ELECTIONS
+
+| FIELD ID | FIELD NAME | DATA TYPE | CONSTRAINTS |
+|----------|------------|-----------|-------------|
+| 1 | election_id | bigint | PRIMARY KEY, AUTO_INCREMENT |
+| 2 | election_name | varchar(255) | NOT NULL |
+| 3 | election_type | enum(...) | NOT NULL |
+| 4 | start_date | datetime | NOT NULL |
+| 5 | end_date | datetime | NOT NULL |
+| 6 | status | enum(...) | NOT NULL |
+| 7 | result_published | tinyint(1) | NOT NULL |
+| 8 | result_published_at | timestamp | NOT NULL |
+| 9 | result_published_by | bigint | FOREIGN KEY |
+| 10 | created_by | bigint | FOREIGN KEY |
+| 11 | created_at | timestamp | NOT NULL |
+
+---
+
+## TABLE 6: USERS
+
+| FIELD ID | FIELD NAME | DATA TYPE | CONSTRAINTS |
+|----------|------------|-----------|-------------|
+| 1 | user_id | bigint | PRIMARY KEY, AUTO_INCREMENT |
+| 2 | email | varchar(255) | UNIQUE |
+| 3 | password_hash | varchar(255) | NOT NULL |
+| 4 | full_name | varchar(255) | NOT NULL |
+| 5 | phone_number | varchar(20) | NOT NULL |
+| 6 | date_of_birth | date | NOT NULL |
+| 7 | gender | enum(...) | NOT NULL |
+| 8 | address | text | NOT NULL |
+| 9 | city | varchar(100) | NOT NULL |
+| 10 | state | varchar(100) | NOT NULL |
+| 11 | pincode | varchar(10) | NOT NULL |
+| 12 | id_proof_type | enum(...) | NOT NULL |
+| 13 | profile_image_url | varchar(500) | NOT NULL |
+| 14 | role | enum(...) | NOT NULL |
+| 15 | is_active | tinyint(1) | NOT NULL |
+| 16 | is_verified | tinyint(1) | NOT NULL |
+| 17 | registration_status | enum(...) | NOT NULL |
+| 18 | approved_at | timestamp | NOT NULL |
+| 19 | created_at | timestamp | NOT NULL |
+| 20 | updated_at | timestamp | NOT NULL |
+
+---
+
+## TABLE 7: VOTER_ELECTION_STATUS
+
+| FIELD ID | FIELD NAME | DATA TYPE | CONSTRAINTS |
+|----------|------------|-----------|-------------|
+| 1 | status_id | bigint | PRIMARY KEY, AUTO_INCREMENT |
+| 2 | election_id | bigint | FOREIGN KEY |
+| 3 | user_id | bigint | FOREIGN KEY |
+| 4 | has_voted | tinyint(1) | NOT NULL |
+| 5 | voted_at | timestamp | NOT NULL |
+
+---
+
+## TABLE 8: VOTES
+
+| FIELD ID | FIELD NAME | DATA TYPE | CONSTRAINTS |
+|----------|------------|-----------|-------------|
+| 1 | vote_id | bigint | PRIMARY KEY, AUTO_INCREMENT |
+| 2 | election_id | bigint | FOREIGN KEY |
+| 3 | user_id | bigint | FOREIGN KEY |
+| 4 | candidate_id | bigint | FOREIGN KEY |
+| 5 | vote_hash | varchar(255) | UNIQUE |
+| 6 | voted_at | timestamp | NOT NULL |
