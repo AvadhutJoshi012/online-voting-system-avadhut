@@ -4,7 +4,7 @@ title: "Online Voting System"
 header:
   overlay_color: "#000"
   overlay_filter: "0.5"
-  overlay_image: /assets/images/header.jpg
+  overlay_image: /assets/images/header.png
   actions:
     - label: "Get Started"
       url: "/docs/introduction/"
@@ -33,6 +33,13 @@ feature_row:
     title: "Frontend"
     excerpt: "Discover the React frontend components and user experience"
     url: "/docs/frontend/usereffectvoting/"
+    btn_label: "Read More"
+    btn_class: "btn--primary"
+  - image_path: /assets/images/devsec-icon.png
+    alt: "DevSec"
+    title: "DevSec"
+    excerpt: "Developers Reference Section"
+    url: "/docs/devsec/developersref/"
     btn_label: "Read More"
     btn_class: "btn--primary"
 ---

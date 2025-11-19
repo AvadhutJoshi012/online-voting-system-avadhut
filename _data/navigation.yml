@@ -1,9 +1,9 @@
 # Main navigation
 main:
   - title: "Documentation"
-    url: /docs/
+    url: /docs/introduction/
   - title: "Getting Started"
-    url: /getting-started/
+    url: /docs/quick-start/
   - title: "About"
     url: /about/
 
@@ -47,7 +47,7 @@ docs:
 
   - title: DevSec
     children:
-      - title: "Developers Reference Section"
+      - title: "Developers Reference"
         url: /docs/devsec/developersref/
       - title: "Database"
         children:
