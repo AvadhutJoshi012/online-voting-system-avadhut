@@ -3,6 +3,7 @@ title: "Database ER Diagram"
 permalink: /docs/database/databaseer/
 excerpt: "Entity-Relationship diagram and explanation"
 last_modified_at: 2025-11-15
+mermaid: true
 toc: true
 ---
 
