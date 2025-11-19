@@ -10,9 +10,7 @@ header:
       url: "/docs/introduction/"
     - label: "View on GitHub"
       url: "https://github.com/yadnyeshkolte/online-voting-system"
-excerpt: "A secure and reliable platform for conducting online elections"
-intro:
-  - excerpt: 'Complete documentation for the Online Voting System'
+excerpt: "Complete documentation for the Online Voting System"
 feature_row:
   - image_path: /assets/images/database-icon.png
     alt: "Database"
