@@ -1,0 +1,246 @@
+```sql
+-- ============================================
+-- TEST DATA INSERTION
+-- ============================================
+
+-- 1. INSERT 20 USERS WITH ALL DETAILS
+INSERT INTO users (email, password_hash, full_name, phone_number, date_of_birth, gender, address, city, state, pincode, id_proof_type, id_proof_number, profile_image_url, is_active, is_verified, approved_at) VALUES
+('rajesh.kumar@email.com', 'rajesh', 'Rajesh Kumar', '9876543210', '1995-01-15', 'MALE', '123 MG Road', 'Mumbai', 'Maharashtra', '400001', 'AADHAR', '123456789012', 'https://example.com/profiles/rajesh.jpg', TRUE, TRUE, '2024-01-10 10:00:00'),
+('priya.sharma@email.com', 'prive', 'Priya Sharma', '9876543211', '1990-05-20', 'FEMALE', '456 CP Avenue', 'Delhi', 'Delhi', '110001', 'VOTER_ID', 'VOT2345678901', 'https://example.com/profiles/priya.jpg', TRUE, TRUE, '2024-01-10 10:30:00'),
+('amit.patel@email.com', 'amit', 'Amit Patel', '9876543212', '1988-08-10', 'MALE', '789 Brigade Road', 'Bangalore', 'Karnataka', '560001', 'AADHAR', '345678901234', 'https://example.com/profiles/amit.jpg', TRUE, TRUE, '2024-01-10 11:00:00'),
+('sneha.desai@email.com', 'sneha', 'Sneha Desai', '9876543213', '1992-03-25', 'FEMALE', '321 Park Street', 'Pune', 'Maharashtra', '411001', 'VOTER_ID', 'VOT4567890123', 'https://example.com/profiles/sneha.jpg', TRUE, TRUE, '2024-01-10 11:30:00'),
+('vikram.singh@email.com', 'passworvikram', 'Vikram Singh', '9876543214', '1985-11-30', 'MALE', '654 Mall Road', 'Jaipur', 'Rajasthan', '302001', 'AADHAR', '567890123456', 'https://example.com/profiles/vikram.jpg', TRUE, TRUE, '2024-01-10 12:00:00'),
+('anita.verma@email.com', 'passwordanita', 'Anita Verma', '9876543215', '1993-07-18', 'FEMALE', '234 Lake Road', 'Kolkata', 'West Bengal', '700001', 'VOTER_ID', 'VOT6789012345', 'https://example.com/profiles/anita.jpg', TRUE, TRUE, '2024-01-11 09:00:00'),
+('rahul.mehta@email.com', 'passwordrahul', 'Rahul Mehta', '9876543216', '1991-12-05', 'MALE', '567 Station Road', 'Ahmedabad', 'Gujarat', '380001', 'AADHAR', '678901234567', 'https://example.com/profiles/rahul.jpg', TRUE, TRUE, '2024-01-11 09:30:00'),
+('kavita.nair@email.com', 'passwo', 'Kavita Nair', '9876543217', '1989-04-22', 'FEMALE', '890 Beach Road', 'Chennai', 'Tamil Nadu', '600001', 'VOTER_ID', 'VOT7890123456', 'https://example.com/profiles/kavita.jpg', TRUE, TRUE, '2024-01-11 10:00:00'),
+('suresh.reddy@email.com', 'passwosu', 'Suresh Reddy', '9876543218', '1987-09-14', 'MALE', '123 Tech Park', 'Hyderabad', 'Telangana', '500001', 'AADHAR', '789012345678', 'https://example.com/profiles/suresh.jpg', TRUE, TRUE, '2024-01-11 10:30:00'),
+('meena.iyer@email.com', 'passwome', 'Meena Iyer', '9876543219', '1994-06-08', 'FEMALE', '456 Garden View', 'Kochi', 'Kerala', '682001', 'VOTER_ID', 'VOT8901234567', 'https://example.com/profiles/meena.jpg', TRUE, TRUE, '2024-01-11 11:00:00'),
+('anil.gupta@email.com', 'passwomn', 'Anil Gupta', '9876543220', '1986-02-28', 'MALE', '789 Civil Lines', 'Lucknow', 'Uttar Pradesh', '226001', 'AADHAR', '890123456789', 'https://example.com/profiles/anil.jpg', TRUE, TRUE, '2024-01-11 11:30:00'),
+('pooja.joshi@email.com', 'passwopo', 'Pooja Joshi', '9876543221', '1996-10-12', 'FEMALE', '234 University Road', 'Indore', 'Madhya Pradesh', '452001', 'VOTER_ID', 'VOT9012345678', 'https://example.com/profiles/pooja.jpg', TRUE, TRUE, '2024-01-11 12:00:00'),
+('deepak.saxena@email.com', 'passwode', 'Deepak Saxena', '9876543222', '1990-08-19', 'MALE', '567 Market Square', 'Bhopal', 'Madhya Pradesh', '462001', 'AADHAR', '901234567890', 'https://example.com/profiles/deepak.jpg', TRUE, TRUE, '2024-01-12 09:00:00'),
+('neha.kapoor@email.com', 'passwonela', 'Neha Kapoor', '9876543223', '1992-11-03', 'FEMALE', '890 Hill View', 'Shimla', 'Himachal Pradesh', '171001', 'VOTER_ID', 'VOT0123456789', 'https://example.com/profiles/neha.jpg', TRUE, TRUE, '2024-01-12 09:30:00'),
+('ravi.krishnan@email.com', 'passworavi', 'Ravi Krishnan', '9876543224', '1988-03-17', 'MALE', '123 Temple Street', 'Madurai', 'Tamil Nadu', '625001', 'AADHAR', '012345678901', 'https://example.com/profiles/ravi.jpg', TRUE, TRUE, '2024-01-12 10:00:00'),
+('shalini.das@email.com', 'passwoshala', 'Shalini Das', '9876543225', '1995-05-29', 'FEMALE', '456 Fort Road', 'Guwahati', 'Assam', '781001', 'VOTER_ID', 'VOT1234567891', 'https://example.com/profiles/shalini.jpg', TRUE, TRUE, '2024-01-12 10:30:00'),
+('manish.yadav@email.com', 'passwoamina', 'Manish Yadav', '9876543226', '1991-07-21', 'MALE', '789 Railway Colony', 'Patna', 'Bihar', '800001', 'AADHAR', '123456789013', 'https://example.com/profiles/manish.jpg', TRUE, TRUE, '2024-01-12 11:00:00'),
+('divya.menon@email.com', 'passwodivya', 'Divya Menon', '9876543227', '1993-09-09', 'FEMALE', '234 Beach Front', 'Thiruvananthapuram', 'Kerala', '695001', 'VOTER_ID', 'VOT2345678902', 'https://example.com/profiles/divya.jpg', TRUE, TRUE, '2024-01-12 11:30:00'),
+('arjun.pandey@email.com', 'passwoarjun', 'Arjun Pandey', '9876543228', '1989-12-24', 'MALE', '567 Ring Road', 'Nagpur', 'Maharashtra', '440001', 'AADHAR', '234567890124', 'https://example.com/profiles/arjun.jpg', TRUE, TRUE, '2024-01-12 12:00:00'),
+('ritika.singh@email.com', 'passworit', 'Ritika Singh', '9876543229', '1994-01-31', 'FEMALE', '890 Cantonment', 'Dehradun', 'Uttarakhand', '248001', 'VOTER_ID', 'VOT3456789013', 'https://example.com/profiles/ritika.jpg', TRUE, TRUE, '2024-01-12 12:30:00');
+
+-- 2. INSERT 2 ADMINS
+INSERT INTO admins (email, password_hash, full_name, phone_number) VALUES
+('admin.primary@voting.com', 'admin123', 'Sanjay Malhotra', '9999888877'),
+('admin.secondary@voting.com', 'admin123', 'Priyanka Chopra', '9999888878');
+
+-- 3. INSERT 2 ACTIVE ELECTIONS AND 2 PAST ELECTIONS
+INSERT INTO elections (election_name, election_type, start_date, end_date, status, result_published, result_published_at, result_published_by, created_by) VALUES
+-- Active Elections
+('Maharashtra State Assembly Election 2025', 'STATE', '2025-11-20 08:00:00', '2025-11-25 18:00:00', 'ACTIVE', FALSE, NULL, NULL, 1),
+('Mumbai Municipal Corporation Election 2025', 'LOCAL', '2025-11-21 08:00:00', '2025-11-24 18:00:00', 'ACTIVE', FALSE, NULL, NULL, 2),
+-- Past Elections (Completed)
+('Karnataka State Assembly Election 2024', 'STATE', '2024-05-10 08:00:00', '2024-05-15 18:00:00', 'COMPLETED', TRUE, '2024-05-16 10:00:00', 1, 1),
+('Delhi Municipal Corporation Election 2024', 'LOCAL', '2024-03-01 08:00:00', '2024-03-05 18:00:00', 'COMPLETED', TRUE, '2024-03-06 10:00:00', 2, 2);
+
+-- 4. INSERT 5 CANDIDATES FOR ELECTION 1 (Maharashtra State) AND 5 FOR ELECTION 2 (Mumbai Municipal)
+-- Candidates for Election 1 (Maharashtra State Assembly Election 2025)
+INSERT INTO candidates (user_id, election_id, party_name, party_symbol, manifesto) VALUES
+(1, 1, 'Indian National Congress', 'Hand', 'Development for all sections of society, focus on education and healthcare reform'),
+(3, 1, 'Bharatiya Janata Party', 'Lotus', 'Infrastructure development, digital transformation, and economic growth'),
+(5, 1, 'Shiv Sena (UBT)', 'Flaming Torch', 'Protection of Marathi interests, industrial development, job creation'),
+(7, 1, 'Nationalist Congress Party', 'Clock', 'Agricultural reforms, farmer welfare, rural development'),
+(9, 1, 'Aam Aadmi Party', 'Broom', 'Anti-corruption measures, free utilities, quality education for all');
+
+-- Candidates for Election 2 (Mumbai Municipal Corporation Election 2025)
+INSERT INTO candidates (user_id, election_id, party_name, party_symbol, manifesto) VALUES
+(2, 2, 'Indian National Congress', 'Hand', 'Better civic amenities, improved public transport, waste management'),
+(4, 2, 'Bharatiya Janata Party', 'Lotus', 'Smart city initiatives, improved infrastructure, efficient administration'),
+(6, 2, 'Shiv Sena (UBT)', 'Flaming Torch', 'Local employment priority, better housing, Mumbai for Mumbaikars'),
+(8, 2, 'Nationalist Congress Party', 'Clock', 'Water supply improvement, road maintenance, green Mumbai initiative'),
+(10, 2, 'Maharashtra Navnirman Sena', 'Railway Engine', 'Focus on middle-class welfare, affordable housing, traffic solutions');
+
+
+-- 5. INSERT VOTES (17 users voted in Election 1, 18 users voted in Election 2)
+-- Election 1 votes (Users 1-17 voted, Users 18-20 did NOT vote)
+INSERT INTO votes (election_id, user_id, candidate_id, vote_hash, voted_at) VALUES
+(1, 1, 1, CONCAT('hash_e1_u1_c1_', MD5(CONCAT('1', '1', '1', NOW()))), '2025-11-20 09:15:00'),
+(1, 2, 2, CONCAT('hash_e1_u2_c2_', MD5(CONCAT('1', '2', '2', NOW()))), '2025-11-20 10:30:00'),
+(1, 3, 3, CONCAT('hash_e1_u3_c3_', MD5(CONCAT('1', '3', '3', NOW()))), '2025-11-20 11:45:00'),
+(1, 4, 1, CONCAT('hash_e1_u4_c1_', MD5(CONCAT('1', '4', '1', NOW()))), '2025-11-20 13:20:00'),
+(1, 5, 2, CONCAT('hash_e1_u5_c2_', MD5(CONCAT('1', '5', '2', NOW()))), '2025-11-20 14:10:00'),
+(1, 6, 4, CONCAT('hash_e1_u6_c4_', MD5(CONCAT('1', '6', '4', NOW()))), '2025-11-20 15:00:00'),
+(1, 7, 5, CONCAT('hash_e1_u7_c5_', MD5(CONCAT('1', '7', '5', NOW()))), '2025-11-20 15:45:00'),
+(1, 8, 1, CONCAT('hash_e1_u8_c1_', MD5(CONCAT('1', '8', '1', NOW()))), '2025-11-20 16:20:00'),
+(1, 9, 2, CONCAT('hash_e1_u9_c2_', MD5(CONCAT('1', '9', '2', NOW()))), '2025-11-21 09:00:00'),
+(1, 10, 3, CONCAT('hash_e1_u10_c3_', MD5(CONCAT('1', '10', '3', NOW()))), '2025-11-21 10:15:00'),
+(1, 11, 4, CONCAT('hash_e1_u11_c4_', MD5(CONCAT('1', '11', '4', NOW()))), '2025-11-21 11:30:00'),
+(1, 12, 1, CONCAT('hash_e1_u12_c1_', MD5(CONCAT('1', '12', '1', NOW()))), '2025-11-21 12:45:00'),
+(1, 13, 2, CONCAT('hash_e1_u13_c2_', MD5(CONCAT('1', '13', '2', NOW()))), '2025-11-21 13:50:00'),
+(1, 14, 5, CONCAT('hash_e1_u14_c5_', MD5(CONCAT('1', '14', '5', NOW()))), '2025-11-21 14:30:00'),
+(1, 15, 3, CONCAT('hash_e1_u15_c3_', MD5(CONCAT('1', '15', '3', NOW()))), '2025-11-21 15:15:00'),
+(1, 16, 1, CONCAT('hash_e1_u16_c1_', MD5(CONCAT('1', '16', '1', NOW()))), '2025-11-21 16:00:00'),
+(1, 17, 2, CONCAT('hash_e1_u17_c2_', MD5(CONCAT('1', '17', '2', NOW()))), '2025-11-21 16:45:00');
+
+-- Election 2 votes (Users 1-18 voted, Users 19-20 did NOT vote)
+INSERT INTO votes (election_id, user_id, candidate_id, vote_hash, voted_at) VALUES
+(2, 1, 6, CONCAT('hash_e2_u1_c6_', MD5(CONCAT('2', '1', '6', NOW()))), '2025-11-21 09:30:00'),
+(2, 2, 7, CONCAT('hash_e2_u2_c7_', MD5(CONCAT('2', '2', '7', NOW()))), '2025-11-21 10:00:00'),
+(2, 3, 8, CONCAT('hash_e2_u3_c8_', MD5(CONCAT('2', '3', '8', NOW()))), '2025-11-21 11:15:00'),
+(2, 4, 6, CONCAT('hash_e2_u4_c6_', MD5(CONCAT('2', '4', '6', NOW()))), '2025-11-21 12:00:00'),
+(2, 5, 7, CONCAT('hash_e2_u5_c7_', MD5(CONCAT('2', '5', '7', NOW()))), '2025-11-21 13:10:00'),
+(2, 6, 9, CONCAT('hash_e2_u6_c9_', MD5(CONCAT('2', '6', '9', NOW()))), '2025-11-21 14:00:00'),
+(2, 7, 10, CONCAT('hash_e2_u7_c10_', MD5(CONCAT('2', '7', '10', NOW()))), '2025-11-21 14:45:00'),
+(2, 8, 6, CONCAT('hash_e2_u8_c6_', MD5(CONCAT('2', '8', '6', NOW()))), '2025-11-21 15:30:00'),
+(2, 9, 7, CONCAT('hash_e2_u9_c7_', MD5(CONCAT('2', '9', '7', NOW()))), '2025-11-21 16:15:00'),
+(2, 10, 8, CONCAT('hash_e2_u10_c8_', MD5(CONCAT('2', '10', '8', NOW()))), '2025-11-22 09:00:00'),
+(2, 11, 9, CONCAT('hash_e2_u11_c9_', MD5(CONCAT('2', '11', '9', NOW()))), '2025-11-22 10:00:00'),
+(2, 12, 6, CONCAT('hash_e2_u12_c6_', MD5(CONCAT('2', '12', '6', NOW()))), '2025-11-22 11:00:00'),
+(2, 13, 7, CONCAT('hash_e2_u13_c7_', MD5(CONCAT('2', '13', '7', NOW()))), '2025-11-22 12:00:00'),
+(2, 14, 10, CONCAT('hash_e2_u14_c10_', MD5(CONCAT('2', '14', '10', NOW()))), '2025-11-22 13:00:00'),
+(2, 15, 8, CONCAT('hash_e2_u15_c8_', MD5(CONCAT('2', '15', '8', NOW()))), '2025-11-22 14:00:00'),
+(2, 16, 6, CONCAT('hash_e2_u16_c6_', MD5(CONCAT('2', '16', '6', NOW()))), '2025-11-22 15:00:00'),
+(2, 17, 7, CONCAT('hash_e2_u17_c7_', MD5(CONCAT('2', '17', '7', NOW()))), '2025-11-22 16:00:00'),
+(2, 18, 8, CONCAT('hash_e2_u18_c8_', MD5(CONCAT('2', '18', '8', NOW()))), '2025-11-22 16:30:00');
+
+
+-- UPDATE voter_election_status for all users in both active elections
+-- Election 1: Users 1-17 voted, Users 18-20 did NOT vote
+INSERT INTO voter_election_status (election_id, user_id, has_voted, voted_at) VALUES
+(1, 1, TRUE, '2025-11-20 09:15:00'),
+(1, 2, TRUE, '2025-11-20 10:30:00'),
+(1, 3, TRUE, '2025-11-20 11:45:00'),
+(1, 4, TRUE, '2025-11-20 13:20:00'),
+(1, 5, TRUE, '2025-11-20 14:10:00'),
+(1, 6, TRUE, '2025-11-20 15:00:00'),
+(1, 7, TRUE, '2025-11-20 15:45:00'),
+(1, 8, TRUE, '2025-11-20 16:20:00'),
+(1, 9, TRUE, '2025-11-21 09:00:00'),
+(1, 10, TRUE, '2025-11-21 10:15:00'),
+(1, 11, TRUE, '2025-11-21 11:30:00'),
+(1, 12, TRUE, '2025-11-21 12:45:00'),
+(1, 13, TRUE, '2025-11-21 13:50:00'),
+(1, 14, TRUE, '2025-11-21 14:30:00'),
+(1, 15, TRUE, '2025-11-21 15:15:00'),
+(1, 16, TRUE, '2025-11-21 16:00:00'),
+(1, 17, TRUE, '2025-11-21 16:45:00'),
+(1, 18, FALSE, NULL),
+(1, 19, FALSE, NULL),
+(1, 20, FALSE, NULL);
+
+-- Election 2: Users 1-18 voted, Users 19-20 did NOT vote
+INSERT INTO voter_election_status (election_id, user_id, has_voted, voted_at) VALUES
+(2, 1, TRUE, '2025-11-21 09:30:00'),
+(2, 2, TRUE, '2025-11-21 10:00:00'),
+(2, 3, TRUE, '2025-11-21 11:15:00'),
+(2, 4, TRUE, '2025-11-21 12:00:00'),
+(2, 5, TRUE, '2025-11-21 13:10:00'),
+(2, 6, TRUE, '2025-11-21 14:00:00'),
+(2, 7, TRUE, '2025-11-21 14:45:00'),
+(2, 8, TRUE, '2025-11-21 15:30:00'),
+(2, 9, TRUE, '2025-11-21 16:15:00'),
+(2, 10, TRUE, '2025-11-22 09:00:00'),
+(2, 11, TRUE, '2025-11-22 10:00:00'),
+(2, 12, TRUE, '2025-11-22 11:00:00'),
+(2, 13, TRUE, '2025-11-22 12:00:00'),
+(2, 14, TRUE, '2025-11-22 13:00:00'),
+(2, 15, TRUE, '2025-11-22 14:00:00'),
+(2, 16, TRUE, '2025-11-22 15:00:00'),
+(2, 17, TRUE, '2025-11-22 16:00:00'),
+(2, 18, TRUE, '2025-11-22 16:30:00'),
+(2, 19, FALSE, NULL),
+(2, 20, FALSE, NULL);
+
+-- 6. UPDATE election_results table (for active elections - current vote counts)
+-- Election 1 Results (Maharashtra State - 17 votes cast)
+-- Candidate 1 (user_id 1): 5 votes
+-- Candidate 2 (user_id 3): 6 votes
+-- Candidate 3 (user_id 5): 3 votes
+-- Candidate 4 (user_id 7): 2 votes
+-- Candidate 5 (user_id 9): 1 vote
+INSERT INTO election_results (election_id, candidate_id, vote_count, vote_percentage, rank_position) VALUES
+(1, 1, 5, 29.41, 2),
+(1, 2, 6, 35.29, 1),
+(1, 3, 3, 17.65, 3),
+(1, 4, 2, 11.76, 4),
+(1, 5, 1, 5.88, 5);
+
+-- Election 2 Results (Mumbai Municipal - 18 votes cast)
+-- Candidate 6 (user_id 2): 6 votes
+-- Candidate 7 (user_id 4): 6 votes
+-- Candidate 8 (user_id 6): 4 votes
+-- Candidate 9 (user_id 8): 1 vote
+-- Candidate 10 (user_id 10): 1 vote
+INSERT INTO election_results (election_id, candidate_id, vote_count, vote_percentage, rank_position) VALUES
+(2, 6, 6, 33.33, 1),
+(2, 7, 6, 33.33, 1),
+(2, 8, 4, 22.22, 3),
+(2, 9, 1, 5.56, 4),
+(2, 10, 1, 5.56, 4);
+
+-- UPDATE election_reports table
+-- Report for Election 1 (Maharashtra State Assembly)
+INSERT INTO election_reports (election_id, total_registered_voters, total_votes_cast, voter_turnout_percentage, total_candidates, winning_candidate_id, winning_margin, report_generated_by) VALUES
+(1, 20, 17, 85.00, 5, 2, 1, 1);
+
+-- Report for Election 2 (Mumbai Municipal Corporation)
+INSERT INTO election_reports (election_id, total_registered_voters, total_votes_cast, voter_turnout_percentage, total_candidates, winning_candidate_id, winning_margin, report_generated_by) VALUES
+(2, 20, 18, 90.00, 5, 6, 0, 2);
+
+-- 7. UPDATE dummy verification tables with the 20 inserted users
+-- Update Aadhar records (for users who used AADHAR as id_proof_type)
+INSERT INTO dummy_aadhar_records (aadhar_number, full_name, date_of_birth, address) VALUES
+('678901234567', 'Anita Verma', '1993-07-18', '234 Lake Road, Kolkata, West Bengal'),
+('789012345678', 'Suresh Reddy', '1987-09-14', '123 Tech Park, Hyderabad, Telangana'),
+('890123456789', 'Anil Gupta', '1986-02-28', '789 Civil Lines, Lucknow, Uttar Pradesh'),
+('901234567890', 'Deepak Saxena', '1990-08-19', '567 Market Square, Bhopal, Madhya Pradesh'),
+('012345678901', 'Ravi Krishnan', '1988-03-17', '123 Temple Street, Madurai, Tamil Nadu'),
+('123456789013', 'Manish Yadav', '1991-07-21', '789 Railway Colony, Patna, Bihar'),
+('234567890124', 'Arjun Pandey', '1989-12-24', '567 Ring Road, Nagpur, Maharashtra');
+
+-- Update Voter ID records (for users who used VOTER_ID as id_proof_type)
+INSERT INTO dummy_voter_id_records (voter_id_number, full_name, date_of_birth) VALUES
+('VOT6789012345', 'Anita Verma', '1993-07-18'),
+('VOT7890123456', 'Kavita Nair', '1989-04-22'),
+('VOT8901234567', 'Meena Iyer', '1994-06-08'),
+('VOT9012345678', 'Pooja Joshi', '1996-10-12'),
+('VOT0123456789', 'Neha Kapoor', '1992-11-03'),
+('VOT1234567891', 'Shalini Das', '1995-05-29'),
+('VOT2345678902', 'Divya Menon', '1993-09-09'),
+('VOT3456789013', 'Ritika Singh', '1994-01-31');
+
+-- Update PAN records (optional secondary verification)
+INSERT INTO dummy_pan_records (pan_number, full_name, date_of_birth) VALUES
+('FGHIJ6789K', 'Anita Verma', '1993-07-18'),
+('GHIJK7890L', 'Rahul Mehta', '1991-12-05'),
+('HIJKL8901M', 'Kavita Nair', '1989-04-22'),
+('IJKLM9012N', 'Suresh Reddy', '1987-09-14'),
+('JKLMN0123O', 'Meena Iyer', '1994-06-08'),
+('KLMNO1234P', 'Anil Gupta', '1986-02-28'),
+('LMNOP2345Q', 'Pooja Joshi', '1996-10-12'),
+('MNOPQ3456R', 'Deepak Saxena', '1990-08-19'),
+('NOPQR4567S', 'Neha Kapoor', '1992-11-03'),
+('OPQRS5678T', 'Ravi Krishnan', '1988-03-17'),
+('PQRST6789U', 'Shalini Das', '1995-05-29'),
+('QRSTU7890V', 'Manish Yadav', '1991-07-21'),
+('RSTUV8901W', 'Divya Menon', '1993-09-09'),
+('STUVW9012X', 'Arjun Pandey', '1989-12-24'),
+('TUVWX0123Y', 'Ritika Singh', '1994-01-31');
+
+-- Update Passport records (optional secondary verification)
+INSERT INTO dummy_passport_records (passport_number, full_name, date_of_birth) VALUES
+('P67890123', 'Anita Verma', '1993-07-18'),
+('P78901234', 'Rahul Mehta', '1991-12-05'),
+('P89012345', 'Kavita Nair', '1989-04-22'),
+('P90123456', 'Suresh Reddy', '1987-09-14'),
+('P01234567', 'Meena Iyer', '1994-06-08'),
+('P12345679', 'Anil Gupta', '1986-02-28'),
+('P23456780', 'Pooja Joshi', '1996-10-12'),
+('P34567891', 'Deepak Saxena', '1990-08-19'),
+('P45678902', 'Neha Kapoor', '1992-11-03'),
+('P56789013', 'Ravi Krishnan', '1988-03-17'),
+('P67890124', 'Shalini Das', '1995-05-29'),
+('P78901235', 'Manish Yadav', '1991-07-21'),
+('P89012346', 'Divya Menon', '1993-09-09'),
+('P90123457', 'Arjun Pandey', '1989-12-24'),
+('P01234568', 'Ritika Singh', '1994-01-31');
+
+
+```
