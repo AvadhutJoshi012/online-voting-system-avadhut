@@ -79,3 +79,36 @@
 - **Admin**: `admin@voting.com` / `admin123`
 - **Dummy Aadhar**: `123456789012`, Name: `John Doe`, DOB: `1990-01-01`
 - **Dummy Voter ID**: `ABC1234567`, Name: `Jane Doe`, DOB: `1992-02-02`
+
+
+### User Credentials
+
+| # | Email Address | Password |
+|---|---|---|
+| 1 | rajesh.kumar@email.com | rajesh |
+| 2 | priya.sharma@email.com | prive |
+| 3 | amit.patel@email.com | amit |
+| 4 | sneha.desai@email.com | sneha |
+| 5 | vikram.singh@email.com | pasworvikram |
+| 6 | anita.verma@email.com | passwordanita |
+| 7 | rahul.mehta@email.com | passwordrahul |
+| 8 | kavita.nair@email.com | passwo |
+| 9 | suresh.reddy@email.com | paswosu |
+| 10 | meena.iyer@email.com | passwome |
+| 11 | anil.gupta@email.com | passwomn |
+| 12 | pooja.joshi@email.com | passwopo |
+| 13 | deepak.saxena@email.com | passwode |
+| 14 | neha.kapoor@email.com | passwonela |
+| 15 | ravi.krishnan@email.com | passworavi |
+| 16 | shalini.das@email.com | passwoshala |
+| 17 | manish.yadav@email.com | passwomina |
+| 18 | divya.menon@email.com | passwodivya |
+| 19 | arjun.pandey@email.com | passoarjun |
+| 20 | ritika.singh@email.com | passwrit |
+
+### Admin Credentials
+
+| # | Email Address | Password |
+|---|---|---|
+| 1 | admin@voting.com | admin123 |
+| 2 | admin.secondary@voting.com | admin123 |

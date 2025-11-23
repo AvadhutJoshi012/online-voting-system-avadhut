@@ -1,5 +1,4 @@
 ```sql
-
 CREATE DATABASE devovs;
 
 USE devovs;
@@ -221,10 +220,6 @@ INSERT INTO dummy_passport_records (passport_number, full_name, date_of_birth) V
 ('P34567890', 'Amit Patel', '1988-08-10'),
 ('P45678901', 'Sneha Desai', '1992-03-25'),
 ('P56789012', 'Vikram Singh', '1985-11-30');
-
--- Create sample admin account (password: admin123)
-INSERT INTO admins (email, password_hash, full_name, phone_number) VALUES
-('admin@voting.com', 'p$2a$10$', 'System Administrator', '9876543210');
 
 ```
 
