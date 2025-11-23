@@ -1,4 +1,5 @@
 ```sql
+
 CREATE DATABASE devovs;
 
 USE devovs;
@@ -221,5 +222,6 @@ INSERT INTO dummy_passport_records (passport_number, full_name, date_of_birth) V
 ('P45678901', 'Sneha Desai', '1992-03-25'),
 ('P56789012', 'Vikram Singh', '1985-11-30');
 
-```
 
+
+```

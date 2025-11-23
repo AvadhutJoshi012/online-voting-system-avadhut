@@ -1,4 +1,5 @@
 ```sql
+
 -- ============================================
 -- TEST DATA INSERTION
 -- ============================================
@@ -241,6 +242,7 @@ INSERT INTO dummy_passport_records (passport_number, full_name, date_of_birth) V
 ('P89012346', 'Divya Menon', '1993-09-09'),
 ('P90123457', 'Arjun Pandey', '1989-12-24'),
 ('P01234568', 'Ritika Singh', '1994-01-31');
+
 
 
 ```
