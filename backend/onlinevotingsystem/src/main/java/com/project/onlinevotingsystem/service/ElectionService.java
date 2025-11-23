@@ -54,18 +54,21 @@ public class ElectionService {
         Election election = electionRepository.findById(electionId)
                 .orElseThrow(() -> new RuntimeException("Election not found"));
 
-        // Clear previous results
-        electionResultRepository.deleteByElection_ElectionId(electionId);
-
         List<Candidate> candidates = candidateRepository.findByElection_ElectionId(electionId);
         long totalVotes = voteRepository.countByElection_ElectionId(electionId);
 
         for (Candidate candidate : candidates) {
             long candidateVotes = voteRepository.countByCandidate_CandidateId(candidate.getCandidateId());
 
-            ElectionResult result = new ElectionResult();
-            result.setElection(election);
-            result.setCandidate(candidate);
+            ElectionResult result = electionResultRepository
+                    .findByElection_ElectionIdAndCandidate_CandidateId(electionId, candidate.getCandidateId())
+                    .orElse(new ElectionResult());
+
+            if (result.getResultId() == null) {
+                result.setElection(election);
+                result.setCandidate(candidate);
+            }
+            
             result.setVoteCount(candidateVotes);
 
             if (totalVotes > 0) {

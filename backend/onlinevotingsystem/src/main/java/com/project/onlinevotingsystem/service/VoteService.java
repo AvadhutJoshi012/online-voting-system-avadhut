@@ -18,6 +18,7 @@ public class VoteService {
     private final ElectionRepository electionRepository;
     private final UserRepository userRepository;
     private final CandidateRepository candidateRepository;
+    private final ElectionService electionService;
 
     @Transactional
     public Vote castVote(Long electionId, Long userId, Long candidateId) {
@@ -55,6 +56,9 @@ public class VoteService {
         status.setHasVoted(true);
         status.setVotedAt(LocalDateTime.now());
         voterElectionStatusRepository.save(status);
+
+        // Update Election Results
+        electionService.calculateResults(electionId);
 
         return vote;
     }
