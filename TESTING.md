@@ -81,15 +81,16 @@
 - **Dummy Voter ID**: `ABC1234567`, Name: `Jane Doe`, DOB: `1992-02-02`
 
 
-### User Credentials
 
-| # | Email Address | Password |
+### User Accounts test 
+
+| # | Email | Password |
 |---|---|---|
 | 1 | rajesh.kumar@email.com | rajesh |
 | 2 | priya.sharma@email.com | prive |
 | 3 | amit.patel@email.com | amit |
 | 4 | sneha.desai@email.com | sneha |
-| 5 | vikram.singh@email.com | pasworvikram |
+| 5 | vikram.singh@email.com | passworvikram |
 | 6 | anita.verma@email.com | passwordanita |
 | 7 | rahul.mehta@email.com | passwordrahul |
 | 8 | kavita.nair@email.com | passwo |
@@ -103,12 +104,12 @@
 | 16 | shalini.das@email.com | passwoshala |
 | 17 | manish.yadav@email.com | passwomina |
 | 18 | divya.menon@email.com | passwodivya |
-| 19 | arjun.pandey@email.com | passoarjun |
-| 20 | ritika.singh@email.com | passwrit |
+| 19 | arjun.pandey@email.com | passwoarjun |
+| 20 | ritika.singh@email.com | passworit |
 
-### Admin Credentials
+### Admin Accounts
 
-| # | Email Address | Password |
+| # | Email | Password |
 |---|---|---|
 | 1 | admin@voting.com | admin123 |
 | 2 | admin.secondary@voting.com | admin123 |
