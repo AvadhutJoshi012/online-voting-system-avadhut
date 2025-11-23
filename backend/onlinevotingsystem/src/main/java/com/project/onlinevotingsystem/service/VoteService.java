@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -31,7 +32,9 @@ public class VoteService {
         }
 
         // Check if user has already voted
-        if (voterElectionStatusRepository.findByElection_ElectionIdAndUser_UserId(electionId, userId).isPresent()) {
+        Optional<VoterElectionStatus> existingStatusOpt = voterElectionStatusRepository.findByElection_ElectionIdAndUser_UserId(electionId, userId);
+        
+        if (existingStatusOpt.isPresent() && Boolean.TRUE.equals(existingStatusOpt.get().getHasVoted())) {
             throw new RuntimeException("User has already voted in this election");
         }
 
@@ -50,9 +53,14 @@ public class VoteService {
         vote = voteRepository.save(vote);
 
         // Update Status
-        VoterElectionStatus status = new VoterElectionStatus();
-        status.setElection(election);
-        status.setUser(user);
+        VoterElectionStatus status;
+        if (existingStatusOpt.isPresent()) {
+            status = existingStatusOpt.get();
+        } else {
+            status = new VoterElectionStatus();
+            status.setElection(election);
+            status.setUser(user);
+        }
         status.setHasVoted(true);
         status.setVotedAt(LocalDateTime.now());
         voterElectionStatusRepository.save(status);
@@ -64,6 +72,8 @@ public class VoteService {
     }
 
     public boolean hasUserVoted(Long electionId, Long userId) {
-        return voterElectionStatusRepository.findByElection_ElectionIdAndUser_UserId(electionId, userId).isPresent();
+        return voterElectionStatusRepository.findByElection_ElectionIdAndUser_UserId(electionId, userId)
+                .map(status -> Boolean.TRUE.equals(status.getHasVoted()))
+                .orElse(false);
     }
 }
