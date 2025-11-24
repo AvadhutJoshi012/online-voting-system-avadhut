@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, Badge, Modal } from 'react-bootstrap';
-import { getActiveElections, getCandidates, castVote, checkHasVoted, getElectionResults } from '../services/api';
+import { getActiveElections, getCompletedElections, getCandidates, castVote, checkHasVoted, getElectionResults } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 const UserDashboard = () => {
     const [elections, setElections] = useState([]);
+    const [completedElections, setCompletedElections] = useState([]);
     const [selectedElection, setSelectedElection] = useState(null);
     const [candidates, setCandidates] = useState([]);
     const [hasVotedMap, setHasVotedMap] = useState({});
@@ -20,6 +21,9 @@ const UserDashboard = () => {
     const loadElections = async () => {
         const data = await getActiveElections();
         setElections(data);
+
+        const completedData = await getCompletedElections();
+        setCompletedElections(completedData);
 
         // Check voting status for each election
         const votedStatus = {};
@@ -81,7 +85,26 @@ const UserDashboard = () => {
                                 ) : (
                                     <Button variant="primary" onClick={() => handleSelectElection(e)}>Vote Now</Button>
                                 )}
-                                <Button variant="link" onClick={() => handleViewResults(e)}>View Live Results</Button>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+
+            <h4 className="mt-4">Past Election Results</h4>
+            {completedElections.length === 0 && <p>No completed elections found.</p>}
+
+            <Row>
+                {completedElections.map(e => (
+                    <Col md={4} key={e.electionId} className="mb-3">
+                        <Card>
+                            <Card.Body>
+                                <Card.Title>{e.electionName}</Card.Title>
+                                <Card.Subtitle className="mb-2 text-muted">{e.electionType}</Card.Subtitle>
+                                <Card.Text>
+                                    Status: <Badge bg="secondary">{e.status}</Badge>
+                                </Card.Text>
+                                <Button variant="link" onClick={() => handleViewResults(e)}>View Results</Button>
                             </Card.Body>
                         </Card>
                     </Col>

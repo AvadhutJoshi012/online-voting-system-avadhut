@@ -25,6 +25,11 @@ public class UserElectionController {
         return ResponseEntity.ok(electionService.getActiveElections());
     }
 
+    @GetMapping("/completed")
+    public ResponseEntity<List<Election>> getCompletedElections() {
+        return ResponseEntity.ok(electionService.getPastElections());
+    }
+
     @GetMapping("/{id}/candidates")
     public ResponseEntity<List<Candidate>> getCandidates(@PathVariable Long id) {
         return ResponseEntity.ok(electionService.getCandidatesForElection(id));

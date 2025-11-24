@@ -27,6 +27,11 @@ export const getActiveElections = async () => {
     return response.data;
 };
 
+export const getCompletedElections = async () => {
+    const response = await api.get('/user/elections/completed');
+    return response.data;
+};
+
 export const getCandidates = async (electionId) => {
     const response = await api.get(`/user/elections/${electionId}/candidates`);
     return response.data;

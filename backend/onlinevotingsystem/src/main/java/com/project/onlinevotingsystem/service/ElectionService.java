@@ -30,6 +30,10 @@ public class ElectionService {
         return electionRepository.findByStatus(ElectionStatus.ACTIVE);
     }
 
+    public List<Election> getPastElections() {
+        return electionRepository.findByStatus(ElectionStatus.COMPLETED);
+    }
+
     public Election createElection(Election election) {
         return electionRepository.save(election);
     }
