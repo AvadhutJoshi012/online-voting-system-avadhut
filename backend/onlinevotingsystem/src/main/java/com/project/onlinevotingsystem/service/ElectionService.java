@@ -145,4 +145,18 @@ public class ElectionService {
         return electionReportRepository.findByElection_ElectionId(electionId)
                 .orElseThrow(() -> new RuntimeException("Report not found"));
     }
+
+    @Transactional
+    public void updateCandidatePhoto(Long candidateId, byte[] photoData) {
+        Candidate candidate = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> new RuntimeException("Candidate not found"));
+        candidate.setCandidatePhoto(photoData);
+        candidateRepository.save(candidate);
+    }
+
+    public byte[] getCandidatePhoto(Long candidateId) {
+        Candidate candidate = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> new RuntimeException("Candidate not found"));
+        return candidate.getCandidatePhoto();
+    }
 }

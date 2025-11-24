@@ -67,4 +67,15 @@ public class UserElectionController {
         }
         return ResponseEntity.ok(electionService.getResults(id));
     }
+
+    @GetMapping("/candidates/{candidateId}/photo")
+    public ResponseEntity<byte[]> getCandidatePhoto(@PathVariable Long candidateId) {
+        byte[] photo = electionService.getCandidatePhoto(candidateId);
+        if (photo == null || photo.length == 0) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok()
+                .header("Content-Type", "image/jpeg") // Assuming JPEG, but browsers handle most image types even with wrong header
+                .body(photo);
+    }
 }

@@ -8,7 +8,8 @@ import com.project.onlinevotingsystem.service.ElectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -51,5 +52,15 @@ public class AdminElectionController {
     @GetMapping("/{id}/results")
     public ResponseEntity<List<ElectionResult>> getResults(@PathVariable Long id) {
         return ResponseEntity.ok(electionService.getResults(id));
+    }
+
+    @PostMapping("/{id}/candidates/{candidateId}/photo")
+    public ResponseEntity<?> uploadCandidatePhoto(@PathVariable Long id, @PathVariable Long candidateId, @RequestParam("file") MultipartFile file) {
+        try {
+            electionService.updateCandidatePhoto(candidateId, file.getBytes());
+            return ResponseEntity.ok("Photo uploaded successfully");
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().body("Failed to read file");
+        }
     }
 }
