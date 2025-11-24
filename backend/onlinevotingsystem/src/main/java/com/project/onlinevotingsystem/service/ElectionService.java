@@ -34,6 +34,11 @@ public class ElectionService {
         return electionRepository.findByStatus(ElectionStatus.COMPLETED);
     }
 
+    public Election getElectionById(Long electionId) {
+        return electionRepository.findById(electionId)
+                .orElseThrow(() -> new RuntimeException("Election not found"));
+    }
+
     public Election createElection(Election election) {
         return electionRepository.save(election);
     }

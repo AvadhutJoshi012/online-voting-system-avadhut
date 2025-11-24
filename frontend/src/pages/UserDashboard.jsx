@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, Badge, Modal } from 'react-bootstrap';
-import { getActiveElections, getCompletedElections, getCandidates, castVote, checkHasVoted, getElectionResults } from '../services/api';
+import { getActiveElections, getCompletedElections, getCandidates, castVote, checkHasVoted, getUserElectionResults } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 const UserDashboard = () => {
@@ -56,7 +56,7 @@ const UserDashboard = () => {
     const handleViewResults = async (election) => {
         // Allow viewing results (maybe for completed or active if allowed)
         // For now assumes we can view it.
-        const res = await getElectionResults(election.electionId);
+        const res = await getUserElectionResults(election.electionId);
         setResults(res);
         setSelectedElection(election);
         setShowResults(true);

@@ -60,7 +60,11 @@ public class UserElectionController {
 
     @GetMapping("/{id}/results")
     public ResponseEntity<List<ElectionResult>> getResults(@PathVariable Long id) {
-        // Users can view results of completed elections or live if allowed.
+        // Users can only view results of completed elections
+        Election election = electionService.getElectionById(id);
+        if (election.getStatus() != com.project.onlinevotingsystem.entity.ElectionStatus.COMPLETED) {
+            return ResponseEntity.status(403).build(); // Forbidden
+        }
         return ResponseEntity.ok(electionService.getResults(id));
     }
 }

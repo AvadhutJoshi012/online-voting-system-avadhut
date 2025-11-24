@@ -51,6 +51,11 @@ export const checkHasVoted = async (electionId, userId) => {
     return response.data;
 };
 
+export const getUserElectionResults = async (electionId) => {
+    const response = await api.get(`/user/elections/${electionId}/results`);
+    return response.data;
+};
+
 // Admin APIs
 export const getAllElections = async () => {
     const response = await api.get('/admin/elections');
