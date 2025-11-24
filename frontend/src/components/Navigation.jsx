@@ -22,7 +22,10 @@ const Navigation = () => {
                             <Nav.Link as={Link} to="/admin">Admin Dashboard</Nav.Link>
                         )}
                         {user && user.role === 'USER' && (
-                            <Nav.Link as={Link} to="/user">User Dashboard</Nav.Link>
+                            <>
+                                <Nav.Link as={Link} to="/user">User Dashboard</Nav.Link>
+                                <Nav.Link as={Link} to="/user/profile">Profile</Nav.Link>
+                            </>
                         )}
                     </Nav>
                     <Nav>
