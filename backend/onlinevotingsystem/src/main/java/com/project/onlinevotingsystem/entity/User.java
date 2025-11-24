@@ -38,12 +38,11 @@ public class User {
     private String state;
     private String pincode;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "id_proof_type")
-    private IdProofType idProofType;
+    @Column(name = "aadhar_number", nullable = false, unique = true, length = 12)
+    private String aadharNumber;
 
-    @Column(name = "id_proof_number")
-    private String idProofNumber;
+    @Column(name = "voter_id_number", nullable = false, unique = true, length = 20)
+    private String voterIdNumber;
 
     @Column(name = "pan_card_number")
     private String panCardNumber;

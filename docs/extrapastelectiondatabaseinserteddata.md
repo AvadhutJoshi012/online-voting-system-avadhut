@@ -1,5 +1,6 @@
 ```sql
 
+
 -- ============================================
 -- MISSING DATA FOR KARNATAKA AND DELHI ELECTIONS
 -- ============================================
@@ -143,5 +144,7 @@ INSERT INTO election_reports (election_id, total_registered_voters, total_votes_
 -- Report for Election 4 (Delhi)
 INSERT INTO election_reports (election_id, total_registered_voters, total_votes_cast, voter_turnout_percentage, total_candidates, winning_candidate_id, winning_margin, report_generated_by) VALUES
 (4, 20, 16, 80.00, 5, 16, 4, 2);
+
+
 
 ```

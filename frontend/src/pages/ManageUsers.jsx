@@ -59,8 +59,8 @@ const ManageUsers = () => {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
-                        <th>ID Type</th>
-                        <th>ID Number</th>
+                        <th>Aadhar</th>
+                        <th>Voter ID</th>
                         <th>PAN</th>
                         <th>Passport</th>
                         <th>Actions</th>
@@ -73,8 +73,8 @@ const ManageUsers = () => {
                             <td>{user.fullName}</td>
                             <td>{user.email}</td>
                             <td>{user.phoneNumber}</td>
-                            <td>{user.idProofType}</td>
-                            <td>{user.idProofNumber}</td>
+                            <td>{user.aadharNumber}</td>
+                            <td>{user.voterIdNumber}</td>
                             <td>{user.panCardNumber || '-'}</td>
                             <td>{user.passportNumber || '-'}</td>
                             <td>

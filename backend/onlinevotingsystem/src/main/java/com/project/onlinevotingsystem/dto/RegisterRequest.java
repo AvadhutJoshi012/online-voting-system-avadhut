@@ -1,7 +1,6 @@
 package com.project.onlinevotingsystem.dto;
 
 import com.project.onlinevotingsystem.entity.Gender;
-import com.project.onlinevotingsystem.entity.IdProofType;
 import lombok.Data;
 import java.time.LocalDate;
 
@@ -17,7 +16,7 @@ public class RegisterRequest {
     private String city;
     private String state;
     private String pincode;
-    private IdProofType idProofType;
-    private String idProofNumber;
+    private String aadharNumber;
+    private String voterIdNumber;
     private String profileImageUrl;
 }

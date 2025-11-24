@@ -2,7 +2,6 @@ package com.project.onlinevotingsystem.service;
 
 import com.project.onlinevotingsystem.entity.DummyAadharRecord;
 import com.project.onlinevotingsystem.entity.DummyVoterIdRecord;
-import com.project.onlinevotingsystem.entity.IdProofType;
 import com.project.onlinevotingsystem.repository.DummyAadharRecordRepository;
 import com.project.onlinevotingsystem.repository.DummyVoterIdRecordRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,18 +17,19 @@ public class VerificationService {
     private final DummyAadharRecordRepository aadharRepository;
     private final DummyVoterIdRecordRepository voterIdRepository;
 
-    public boolean verifyUser(IdProofType type, String number, String fullName, LocalDate dob) {
-        if (type == IdProofType.AADHAR) {
-            Optional<DummyAadharRecord> record = aadharRepository.findByAadharNumberAndFullNameAndDateOfBirth(
-                    number, fullName, dob
-            );
-            return record.isPresent() && Boolean.TRUE.equals(record.get().getIsValid());
-        } else if (type == IdProofType.VOTER_ID) {
-            Optional<DummyVoterIdRecord> record = voterIdRepository.findByVoterIdNumberAndFullNameAndDateOfBirth(
-                    number, fullName, dob
-            );
-            return record.isPresent() && Boolean.TRUE.equals(record.get().getIsValid());
-        }
-        return false;
+    public boolean verifyUserIdentity(String aadharNumber, String voterIdNumber, String fullName, LocalDate dob) {
+        // Verify Aadhar
+        Optional<DummyAadharRecord> aadharRecord = aadharRepository.findByAadharNumberAndFullNameAndDateOfBirth(
+                aadharNumber, fullName, dob
+        );
+        boolean isAadharValid = aadharRecord.isPresent() && Boolean.TRUE.equals(aadharRecord.get().getIsValid());
+
+        // Verify Voter ID
+        Optional<DummyVoterIdRecord> voterRecord = voterIdRepository.findByVoterIdNumberAndFullNameAndDateOfBirth(
+                voterIdNumber, fullName, dob
+        );
+        boolean isVoterIdValid = voterRecord.isPresent() && Boolean.TRUE.equals(voterRecord.get().getIsValid());
+
+        return isAadharValid && isVoterIdValid;
     }
 }

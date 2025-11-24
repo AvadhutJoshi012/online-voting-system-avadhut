@@ -60,14 +60,24 @@ public class AuthService {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Email already registered");
         }
+        if (userRepository.existsByAadharNumber(request.getAadharNumber())) {
+            throw new RuntimeException("Aadhar number already registered");
+        }
+        if (userRepository.existsByVoterIdNumber(request.getVoterIdNumber())) {
+            throw new RuntimeException("Voter ID number already registered");
+        }
 
-        // Check verification
-        boolean isVerified = verificationService.verifyUser(
-                request.getIdProofType(),
-                request.getIdProofNumber(),
+        // Check verification (Both required)
+        boolean isVerified = verificationService.verifyUserIdentity(
+                request.getAadharNumber(),
+                request.getVoterIdNumber(),
                 request.getFullName(),
                 request.getDateOfBirth()
         );
+
+        if (!isVerified) {
+             throw new RuntimeException("Identity verification failed. Please check your Aadhar and Voter ID details.");
+        }
 
         User user = new User();
         user.setEmail(request.getEmail());
@@ -80,8 +90,8 @@ public class AuthService {
         user.setCity(request.getCity());
         user.setState(request.getState());
         user.setPincode(request.getPincode());
-        user.setIdProofType(request.getIdProofType());
-        user.setIdProofNumber(request.getIdProofNumber());
+        user.setAadharNumber(request.getAadharNumber());
+        user.setVoterIdNumber(request.getVoterIdNumber());
         user.setProfileImageUrl(request.getProfileImageUrl());
         user.setIsVerified(isVerified);
 

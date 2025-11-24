@@ -24,7 +24,7 @@ public class ElectionReport {
     @Column(name = "total_votes_cast")
     private Long totalVotesCast;
 
-    @Column(name = "voter_turnout_percentage")
+    @Column(name = "voter_turnout_percentage", precision = 5, scale = 2)
     private BigDecimal voterTurnoutPercentage;
 
     @Column(name = "total_candidates")

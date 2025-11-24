@@ -1,6 +1,5 @@
 ```sql
-
-CREATE DATABASE devovs;
+CREATE DATABASE IF NOT EXISTS devovs;
 
 USE devovs;
 
@@ -11,20 +10,23 @@ USE devovs;
 
 -- 1. Create users table first (no dependencies)
 -- Users can be both VOTERS and CANDIDATES
+-- Modified to include specific Aadhar and Voter ID columns as required
 CREATE TABLE users (
     user_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(20),
+    phone_number VARCHAR(255),
     date_of_birth DATE NOT NULL,
     gender ENUM('MALE', 'FEMALE', 'OTHER') NOT NULL,
     address TEXT,
     city VARCHAR(100),
     state VARCHAR(100),
     pincode VARCHAR(10),
-    id_proof_type ENUM('AADHAR', 'VOTER_ID') NOT NULL,
-    id_proof_number VARCHAR(20) NOT NULL,
+    aadhar_number VARCHAR(12) UNIQUE NOT NULL,
+    voter_id_number VARCHAR(20) UNIQUE NOT NULL,
+    pan_card_number VARCHAR(255),
+    passport_number VARCHAR(255),
     profile_image_url VARCHAR(500),
     is_active BOOLEAN DEFAULT TRUE,
     is_verified BOOLEAN DEFAULT FALSE,
@@ -32,7 +34,8 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_email (email),
-    INDEX idx_id_proof (id_proof_type, id_proof_number)
+    INDEX idx_aadhar (aadhar_number),
+    INDEX idx_voter (voter_id_number)
 );
 
 -- 2. Create admins table (separate admin accounts)
@@ -42,7 +45,7 @@ CREATE TABLE admins (
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(20),
+    phone_number VARCHAR(255),
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -75,7 +78,7 @@ CREATE TABLE candidates (
     election_id BIGINT NOT NULL,
     party_name VARCHAR(255) NOT NULL,
     party_symbol VARCHAR(255) NOT NULL,
-    candidate_photo BLOB,
+    candidate_photo LONGBLOB,
     manifesto TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE RESTRICT,
@@ -190,38 +193,145 @@ CREATE TABLE dummy_passport_records (
     INDEX idx_passport (passport_number)
 );
 
--- Insert sample data for Aadhar (Primary)
+-- 7. UPDATE dummy verification tables with the 20 inserted users
+
+-- Insert verification records for 20 existing users
 INSERT INTO dummy_aadhar_records (aadhar_number, full_name, date_of_birth, address) VALUES
 ('123456789012', 'Rajesh Kumar', '1995-01-15', '123 MG Road, Mumbai, Maharashtra'),
-('234567890123', 'Priya Sharma', '1990-05-20', '456 CP Avenue, Delhi'),
+('990000000002', 'Priya Sharma', '1990-05-20', '456 CP Avenue, Delhi, Delhi'),
 ('345678901234', 'Amit Patel', '1988-08-10', '789 Brigade Road, Bangalore, Karnataka'),
-('456789012345', 'Sneha Desai', '1992-03-25', '321 Park Street, Pune, Maharashtra'),
-('567890123456', 'Vikram Singh', '1985-11-30', '654 Mall Road, Jaipur, Rajasthan');
+('990000000004', 'Sneha Desai', '1992-03-25', '321 Park Street, Pune, Maharashtra'),
+('567890123456', 'Vikram Singh', '1985-11-30', '654 Mall Road, Jaipur, Rajasthan'),
+('990000000006', 'Anita Verma', '1993-07-18', '234 Lake Road, Kolkata, West Bengal'),
+('678901234567', 'Rahul Mehta', '1991-12-05', '567 Station Road, Ahmedabad, Gujarat'),
+('990000000008', 'Kavita Nair', '1989-04-22', '890 Beach Road, Chennai, Tamil Nadu'),
+('789012345678', 'Suresh Reddy', '1987-09-14', '123 Tech Park, Hyderabad, Telangana'),
+('990000000010', 'Meena Iyer', '1994-06-08', '456 Garden View, Kochi, Kerala'),
+('890123456789', 'Anil Gupta', '1986-02-28', '789 Civil Lines, Lucknow, Uttar Pradesh'),
+('990000000012', 'Pooja Joshi', '1996-10-12', '234 University Road, Indore, Madhya Pradesh'),
+('901234567890', 'Deepak Saxena', '1990-08-19', '567 Market Square, Bhopal, Madhya Pradesh'),
+('990000000014', 'Neha Kapoor', '1992-11-03', '890 Hill View, Shimla, Himachal Pradesh'),
+('012345678901', 'Ravi Krishnan', '1988-03-17', '123 Temple Street, Madurai, Tamil Nadu'),
+('990000000016', 'Shalini Das', '1995-05-29', '456 Fort Road, Guwahati, Assam'),
+('123456789013', 'Manish Yadav', '1991-07-21', '789 Railway Colony, Patna, Bihar'),
+('990000000018', 'Divya Menon', '1993-09-09', '234 Beach Front, Thiruvananthapuram, Kerala'),
+('234567890124', 'Arjun Pandey', '1989-12-24', '567 Ring Road, Nagpur, Maharashtra'),
+('990000000020', 'Ritika Singh', '1994-01-31', '890 Cantonment, Dehradun, Uttarakhand');
 
--- Insert sample data for Voter ID (Primary)
 INSERT INTO dummy_voter_id_records (voter_id_number, full_name, date_of_birth) VALUES
-('VOT1234567890', 'Rajesh Kumar', '1995-01-15'),
+('VOT9900000001', 'Rajesh Kumar', '1995-01-15'),
 ('VOT2345678901', 'Priya Sharma', '1990-05-20'),
-('VOT3456789012', 'Amit Patel', '1988-08-10'),
+('VOT9900000003', 'Amit Patel', '1988-08-10'),
 ('VOT4567890123', 'Sneha Desai', '1992-03-25'),
-('VOT5678901234', 'Vikram Singh', '1985-11-30');
+('VOT9900000005', 'Vikram Singh', '1985-11-30'),
+('VOT6789012345', 'Anita Verma', '1993-07-18'),
+('VOT9900000007', 'Rahul Mehta', '1991-12-05'),
+('VOT7890123456', 'Kavita Nair', '1989-04-22'),
+('VOT9900000009', 'Suresh Reddy', '1987-09-14'),
+('VOT8901234567', 'Meena Iyer', '1994-06-08'),
+('VOT9900000011', 'Anil Gupta', '1986-02-28'),
+('VOT9012345678', 'Pooja Joshi', '1996-10-12'),
+('VOT9900000013', 'Deepak Saxena', '1990-08-19'),
+('VOT0123456789', 'Neha Kapoor', '1992-11-03'),
+('VOT9900000015', 'Ravi Krishnan', '1988-03-17'),
+('VOT1234567891', 'Shalini Das', '1995-05-29'),
+('VOT9900000017', 'Manish Yadav', '1991-07-21'),
+('VOT2345678902', 'Divya Menon', '1993-09-09'),
+('VOT9900000019', 'Arjun Pandey', '1989-12-24'),
+('VOT3456789013', 'Ritika Singh', '1994-01-31');
 
--- Insert sample data for PAN (Secondary - Optional)
 INSERT INTO dummy_pan_records (pan_number, full_name, date_of_birth) VALUES
-('ABCDE1234F', 'Rajesh Kumar', '1995-01-15'),
-('BCDEF2345G', 'Priya Sharma', '1990-05-20'),
-('CDEFG3456H', 'Amit Patel', '1988-08-10'),
-('DEFGH4567I', 'Sneha Desai', '1992-03-25'),
-('EFGHI5678J', 'Vikram Singh', '1985-11-30');
+('ABCDE1001Z', 'Rajesh Kumar', '1995-01-15'),
+('ABCDE1002Z', 'Priya Sharma', '1990-05-20'),
+('ABCDE1003Z', 'Amit Patel', '1988-08-10'),
+('ABCDE1004Z', 'Sneha Desai', '1992-03-25'),
+('ABCDE1005Z', 'Vikram Singh', '1985-11-30'),
+('ABCDE1006Z', 'Anita Verma', '1993-07-18'),
+('ABCDE1007Z', 'Rahul Mehta', '1991-12-05'),
+('ABCDE1008Z', 'Kavita Nair', '1989-04-22'),
+('ABCDE1009Z', 'Suresh Reddy', '1987-09-14'),
+('ABCDE1010Z', 'Meena Iyer', '1994-06-08'),
+('ABCDE1011Z', 'Anil Gupta', '1986-02-28'),
+('ABCDE1012Z', 'Pooja Joshi', '1996-10-12'),
+('ABCDE1013Z', 'Deepak Saxena', '1990-08-19'),
+('ABCDE1014Z', 'Neha Kapoor', '1992-11-03'),
+('ABCDE1015Z', 'Ravi Krishnan', '1988-03-17'),
+('ABCDE1016Z', 'Shalini Das', '1995-05-29'),
+('ABCDE1017Z', 'Manish Yadav', '1991-07-21'),
+('ABCDE1018Z', 'Divya Menon', '1993-09-09'),
+('ABCDE1019Z', 'Arjun Pandey', '1989-12-24'),
+('ABCDE1020Z', 'Ritika Singh', '1994-01-31');
 
--- Insert sample data for Passport (Secondary - Optional)
 INSERT INTO dummy_passport_records (passport_number, full_name, date_of_birth) VALUES
-('P12345678', 'Rajesh Kumar', '1995-01-15'),
-('P23456789', 'Priya Sharma', '1990-05-20'),
-('P34567890', 'Amit Patel', '1988-08-10'),
-('P45678901', 'Sneha Desai', '1992-03-25'),
-('P56789012', 'Vikram Singh', '1985-11-30');
+('P9900001', 'Rajesh Kumar', '1995-01-15'),
+('P9900002', 'Priya Sharma', '1990-05-20'),
+('P9900003', 'Amit Patel', '1988-08-10'),
+('P9900004', 'Sneha Desai', '1992-03-25'),
+('P9900005', 'Vikram Singh', '1985-11-30'),
+('P9900006', 'Anita Verma', '1993-07-18'),
+('P9900007', 'Rahul Mehta', '1991-12-05'),
+('P9900008', 'Kavita Nair', '1989-04-22'),
+('P9900009', 'Suresh Reddy', '1987-09-14'),
+('P9900010', 'Meena Iyer', '1994-06-08'),
+('P9900011', 'Anil Gupta', '1986-02-28'),
+('P9900012', 'Pooja Joshi', '1996-10-12'),
+('P9900013', 'Deepak Saxena', '1990-08-19'),
+('P9900014', 'Neha Kapoor', '1992-11-03'),
+('P9900015', 'Ravi Krishnan', '1988-03-17'),
+('P9900016', 'Shalini Das', '1995-05-29'),
+('P9900017', 'Manish Yadav', '1991-07-21'),
+('P9900018', 'Divya Menon', '1993-09-09'),
+('P9900019', 'Arjun Pandey', '1989-12-24'),
+('P9900020', 'Ritika Singh', '1994-01-31');
 
+-- Insert 10 new unassigned verification records
+INSERT INTO dummy_aadhar_records (aadhar_number, full_name, date_of_birth, address) VALUES
+('880000000000', 'Yadnyesh', '2000-01-01', '123 Test Lane, Test City, Test State'),
+('880000000001', 'Rushikesh', '2000-01-01', '123 Test Lane, Test City, Test State'),
+('880000000002', 'Aavdut', '2000-01-01', '123 Test Lane, Test City, Test State'),
+('880000000003', 'Aaman', '2000-01-01', '123 Test Lane, Test City, Test State'),
+('880000000004', 'Deepak', '2000-01-01', '123 Test Lane, Test City, Test State'),
+('880000000005', 'Yadnyesh Kolte', '2000-01-01', '123 Test Lane, Test City, Test State'),
+('880000000006', 'Rushikesh More', '2000-01-01', '123 Test Lane, Test City, Test State'),
+('880000000007', 'Aavdut Joshi', '2000-01-01', '123 Test Lane, Test City, Test State'),
+('880000000008', 'Aaman Sayyad', '2000-01-01', '123 Test Lane, Test City, Test State'),
+('880000000009', 'Deepak Revgade', '2000-01-01', '123 Test Lane, Test City, Test State');
+
+INSERT INTO dummy_voter_id_records (voter_id_number, full_name, date_of_birth) VALUES
+('VOT8800000000', 'Yadnyesh', '2000-01-01'),
+('VOT8800000001', 'Rushikesh', '2000-01-01'),
+('VOT8800000002', 'Aavdut', '2000-01-01'),
+('VOT8800000003', 'Aaman', '2000-01-01'),
+('VOT8800000004', 'Deepak', '2000-01-01'),
+('VOT8800000005', 'Yadnyesh Kolte', '2000-01-01'),
+('VOT8800000006', 'Rushikesh More', '2000-01-01'),
+('VOT8800000007', 'Aavdut Joshi', '2000-01-01'),
+('VOT8800000008', 'Aaman Sayyad', '2000-01-01'),
+('VOT8800000009', 'Deepak Revgade', '2000-01-01');
+
+INSERT INTO dummy_pan_records (pan_number, full_name, date_of_birth) VALUES
+('FGHIJ2000K', 'Yadnyesh', '2000-01-01'),
+('FGHIJ2001K', 'Rushikesh', '2000-01-01'),
+('FGHIJ2002K', 'Aavdut', '2000-01-01'),
+('FGHIJ2003K', 'Aaman', '2000-01-01'),
+('FGHIJ2004K', 'Deepak', '2000-01-01'),
+('FGHIJ2005K', 'Yadnyesh Kolte', '2000-01-01'),
+('FGHIJ2006K', 'Rushikesh More', '2000-01-01'),
+('FGHIJ2007K', 'Aavdut Joshi', '2000-01-01'),
+('FGHIJ2008K', 'Aaman Sayyad', '2000-01-01'),
+('FGHIJ2009K', 'Deepak Revgade', '2000-01-01');
+
+INSERT INTO dummy_passport_records (passport_number, full_name, date_of_birth) VALUES
+('P8800000', 'Yadnyesh', '2000-01-01'),
+('P8800001', 'Rushikesh', '2000-01-01'),
+('P8800002', 'Aavdut', '2000-01-01'),
+('P8800003', 'Aaman', '2000-01-01'),
+('P8800004', 'Deepak', '2000-01-01'),
+('P8800005', 'Yadnyesh Kolte', '2000-01-01'),
+('P8800006', 'Rushikesh More', '2000-01-01'),
+('P8800007', 'Aavdut Joshi', '2000-01-01'),
+('P8800008', 'Aaman Sayyad', '2000-01-01'),
+('P8800009', 'Deepak Revgade', '2000-01-01');
 
 
 ```

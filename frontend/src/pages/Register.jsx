@@ -15,8 +15,8 @@ const Register = () => {
         city: '',
         state: '',
         pincode: '',
-        idProofType: 'AADHAR',
-        idProofNumber: '',
+        aadharNumber: '',
+        voterIdNumber: '',
         profileImageUrl: 'https://via.placeholder.com/150'
     });
     const [error, setError] = useState('');
@@ -73,15 +73,12 @@ const Register = () => {
                     </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Label>ID Proof Type</Form.Label>
-                    <Form.Select name="idProofType" onChange={handleChange}>
-                        <option value="AADHAR">Aadhar</option>
-                        <option value="VOTER_ID">Voter ID</option>
-                    </Form.Select>
+                    <Form.Label>Aadhar Number</Form.Label>
+                    <Form.Control name="aadharNumber" type="text" onChange={handleChange} required placeholder="12-digit Aadhar Number" />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Label>ID Proof Number</Form.Label>
-                    <Form.Control name="idProofNumber" type="text" onChange={handleChange} required />
+                    <Form.Label>Voter ID Number</Form.Label>
+                    <Form.Control name="voterIdNumber" type="text" onChange={handleChange} required placeholder="Voter ID Card Number" />
                 </Form.Group>
 
                  <Form.Group className="mb-3">

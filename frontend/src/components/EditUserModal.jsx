@@ -64,8 +64,14 @@ const EditUserModal = ({ show, onHide, user, onUpdate }) => {
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>{user.idProofType} Number</Form.Label>
-                        <Form.Control type="text" value={user.idProofNumber || ''} readOnly />
+                        <Form.Label>Aadhar Number</Form.Label>
+                        <Form.Control type="text" value={user.aadharNumber || ''} readOnly />
+                        <Form.Text className="text-muted">Cannot be changed.</Form.Text>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <Form.Label>Voter ID Number</Form.Label>
+                        <Form.Control type="text" value={user.voterIdNumber || ''} readOnly />
                         <Form.Text className="text-muted">Cannot be changed.</Form.Text>
                     </Form.Group>
 

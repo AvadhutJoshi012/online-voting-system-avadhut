@@ -140,8 +140,14 @@ const ProfilePage = () => {
                                 </Row>
 
                                 <Form.Group className="mb-3">
-                                    <Form.Label>{user.idProofType} Number</Form.Label>
-                                    <Form.Control type="text" value={user.idProofNumber} readOnly />
+                                    <Form.Label>Aadhar Number</Form.Label>
+                                    <Form.Control type="text" value={user.aadharNumber} readOnly />
+                                    <Form.Text className="text-muted">Primary ID cannot be changed.</Form.Text>
+                                </Form.Group>
+
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Voter ID Number</Form.Label>
+                                    <Form.Control type="text" value={user.voterIdNumber} readOnly />
                                     <Form.Text className="text-muted">Primary ID cannot be changed.</Form.Text>
                                 </Form.Group>
 

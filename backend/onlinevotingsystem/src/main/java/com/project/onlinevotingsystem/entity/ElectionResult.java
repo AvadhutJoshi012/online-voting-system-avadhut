@@ -25,7 +25,7 @@ public class ElectionResult {
     @Column(name = "vote_count")
     private Long voteCount;
 
-    @Column(name = "vote_percentage")
+    @Column(name = "vote_percentage", precision = 5, scale = 2)
     private BigDecimal votePercentage;
 
     @Column(name = "rank_position")
