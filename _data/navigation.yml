@@ -24,7 +24,7 @@ docs:
         url: /docs/database/ovs-database/
       - title: "Database Structure"
         url: /docs/database/databasestructure/
-      - title: "Database Insertion Queries1 "
+      - title: "Database Insertion Queries 1 "
         url: /docs/database/databaseinsertion/
       - title: "Database Insertion Queries 2"
         url: /docs/database/databaseinsertion2/
