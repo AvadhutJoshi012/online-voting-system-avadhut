@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Container, Table, Button, Modal, Form, Badge } from 'react-bootstrap';
-import { getAllElections, createElection, updateElectionStatus, calculateResults, getElectionResults, addCandidate } from '../services/api';
+import { Container, Table, Button, Modal, Form, Badge, Tabs, Tab } from 'react-bootstrap';
+import { getAllElections, createElection, updateElectionStatus, calculateResults, getElectionResults, addCandidate, updateCandidateImage } from '../services/api';
+import ManageUsers from './ManageUsers';
 
 const AdminDashboard = () => {
     const [elections, setElections] = useState([]);
@@ -23,6 +24,8 @@ const AdminDashboard = () => {
         partySymbol: '',
         manifesto: ''
     });
+
+    const [candidateImage, setCandidateImage] = useState(null);
 
     // To simplify candidate addition, usually we'd search for a user.
     // Here I'll just ask for User ID for simplicity as per requirement "Candidate will be user".
@@ -66,9 +69,18 @@ const AdminDashboard = () => {
             user: { userId: userIdForCandidate }
         };
         try {
-            await addCandidate(selectedElection.electionId, candidatePayload);
+            // First add candidate
+            const addedCandidate = await addCandidate(selectedElection.electionId, candidatePayload);
+
+            // Then upload image if provided
+            if (candidateImage && addedCandidate && addedCandidate.candidateId) {
+                await updateCandidateImage(addedCandidate.candidateId, candidateImage);
+            }
+
             alert('Candidate added');
             setShowCandidateModal(false);
+            setCandidateImage(null);
+            setUserIdForCandidate('');
         } catch (e) {
             alert('Failed to add candidate. Ensure User ID is valid and not already a candidate.');
         }
@@ -77,47 +89,55 @@ const AdminDashboard = () => {
     return (
         <Container className="mt-4">
             <h2>Admin Dashboard</h2>
-            <Button className="mb-3" onClick={() => setShowCreateModal(true)}>Create New Election</Button>
 
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {elections.map(e => (
-                        <tr key={e.electionId}>
-                            <td>{e.electionId}</td>
-                            <td>{e.electionName}</td>
-                            <td>{e.electionType}</td>
-                            <td><Badge bg={e.status === 'ACTIVE' ? 'success' : 'secondary'}>{e.status}</Badge></td>
-                            <td>
-                                {e.status === 'DRAFT' && (
-                                    <Button size="sm" variant="primary" onClick={() => handleStatusChange(e.electionId, 'SCHEDULED')}>Schedule</Button>
-                                )}
-                                {e.status === 'SCHEDULED' && (
-                                    <Button size="sm" variant="success" className="ms-2" onClick={() => handleStatusChange(e.electionId, 'ACTIVE')}>Start</Button>
-                                )}
-                                {e.status === 'ACTIVE' && (
-                                    <Button size="sm" variant="warning" className="ms-2" onClick={() => handleStatusChange(e.electionId, 'COMPLETED')}>End</Button>
-                                )}
-                                <Button size="sm" variant="info" className="ms-2" onClick={() => {
-                                    setSelectedElection(e);
-                                    setShowCandidateModal(true);
-                                }}>Add Candidate</Button>
+            <Tabs defaultActiveKey="elections" id="admin-tabs" className="mb-3">
+                <Tab eventKey="elections" title="Manage Elections">
+                    <Button className="mb-3" onClick={() => setShowCreateModal(true)}>Create New Election</Button>
 
-                                <Button size="sm" variant="dark" className="ms-2" onClick={() => handleCalculateResults(e.electionId)}>Calc Results</Button>
-                                <Button size="sm" variant="outline-primary" className="ms-2" onClick={() => handleViewResults(e)}>View Results</Button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {elections.map(e => (
+                                <tr key={e.electionId}>
+                                    <td>{e.electionId}</td>
+                                    <td>{e.electionName}</td>
+                                    <td>{e.electionType}</td>
+                                    <td><Badge bg={e.status === 'ACTIVE' ? 'success' : 'secondary'}>{e.status}</Badge></td>
+                                    <td>
+                                        {e.status === 'DRAFT' && (
+                                            <Button size="sm" variant="primary" onClick={() => handleStatusChange(e.electionId, 'SCHEDULED')}>Schedule</Button>
+                                        )}
+                                        {e.status === 'SCHEDULED' && (
+                                            <Button size="sm" variant="success" className="ms-2" onClick={() => handleStatusChange(e.electionId, 'ACTIVE')}>Start</Button>
+                                        )}
+                                        {e.status === 'ACTIVE' && (
+                                            <Button size="sm" variant="warning" className="ms-2" onClick={() => handleStatusChange(e.electionId, 'COMPLETED')}>End</Button>
+                                        )}
+                                        <Button size="sm" variant="info" className="ms-2" onClick={() => {
+                                            setSelectedElection(e);
+                                            setShowCandidateModal(true);
+                                        }}>Add Candidate</Button>
+
+                                        <Button size="sm" variant="dark" className="ms-2" onClick={() => handleCalculateResults(e.electionId)}>Calc Results</Button>
+                                        <Button size="sm" variant="outline-primary" className="ms-2" onClick={() => handleViewResults(e)}>View Results</Button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </Tab>
+                <Tab eventKey="users" title="Manage Users">
+                    <ManageUsers />
+                </Tab>
+            </Tabs>
 
             {/* Create Election Modal */}
             <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
@@ -160,6 +180,14 @@ const AdminDashboard = () => {
                          <Form.Group className="mb-3">
                             <Form.Label>Party Symbol</Form.Label>
                             <Form.Control type="text" onChange={(e) => setNewCandidate({...newCandidate, partySymbol: e.target.value})} />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Candidate Photo</Form.Label>
+                            <Form.Control
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setCandidateImage(e.target.files[0])}
+                            />
                         </Form.Group>
                     </Form>
                 </Modal.Body>

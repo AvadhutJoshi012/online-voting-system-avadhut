@@ -88,3 +88,34 @@ export const getElectionResults = async (electionId) => {
     const response = await api.get(`/admin/elections/${electionId}/results`);
     return response.data;
 };
+
+// User Profile
+export const getUserProfile = async () => {
+    const response = await api.get('/user/profile');
+    return response.data;
+};
+
+export const updateUserProfile = async (profileData) => {
+    const response = await api.put('/user/profile', profileData);
+    return response.data;
+};
+
+// Admin User Management
+export const searchUsers = async (query) => {
+    const response = await api.get('/admin/users', { params: { query } });
+    return response.data;
+};
+
+export const adminUpdateUser = async (userId, userData) => {
+    const response = await api.put(`/admin/users/${userId}`, userData);
+    return response.data;
+};
+
+export const updateCandidateImage = async (candidateId, imageFile) => {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    const response = await api.put(`/admin/candidates/${candidateId}/image`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    return response.data;
+};

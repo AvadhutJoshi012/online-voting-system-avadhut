@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
+import ProfilePage from './pages/ProfilePage';
 import Home from './pages/Home';
 import PrivateRoute from './components/PrivateRoute';
 
@@ -28,6 +29,14 @@ function App() {
           element={
             <PrivateRoute role="USER">
               <UserDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/user/profile"
+          element={
+            <PrivateRoute role="USER">
+              <ProfilePage />
             </PrivateRoute>
           }
         />

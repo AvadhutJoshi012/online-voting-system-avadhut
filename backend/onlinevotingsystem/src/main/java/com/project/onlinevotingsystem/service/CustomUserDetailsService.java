@@ -21,6 +21,42 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
 
+    public static class CustomUserDetails implements UserDetails {
+        private final User user;
+
+        public CustomUserDetails(User user) {
+            this.user = user;
+        }
+
+        public User getUser() {
+            return user;
+        }
+
+        @Override
+        public java.util.Collection<? extends org.springframework.security.core.GrantedAuthority> getAuthorities() {
+            return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+
+        @Override
+        public String getPassword() {
+            return user.getPasswordHash();
+        }
+
+        @Override
+        public String getUsername() {
+            return user.getEmail();
+        }
+
+        @Override
+        public boolean isAccountNonExpired() { return true; }
+        @Override
+        public boolean isAccountNonLocked() { return true; }
+        @Override
+        public boolean isCredentialsNonExpired() { return true; }
+        @Override
+        public boolean isEnabled() { return user.getIsActive(); }
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Try finding in Admin first
@@ -36,11 +72,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         // Try finding in User
         Optional<User> user = userRepository.findByEmail(username);
         if (user.isPresent()) {
-            return new org.springframework.security.core.userdetails.User(
-                    user.get().getEmail(),
-                    user.get().getPasswordHash(),
-                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-            );
+            return new CustomUserDetails(user.get());
         }
 
         throw new UsernameNotFoundException("User not found with username: " + username);

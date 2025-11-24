@@ -18,6 +18,7 @@ public class User {
     private String email;
 
     @Column(name = "password_hash", nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private String passwordHash;
 
     @Column(name = "full_name")
@@ -43,6 +44,12 @@ public class User {
 
     @Column(name = "id_proof_number")
     private String idProofNumber;
+
+    @Column(name = "pan_card_number")
+    private String panCardNumber;
+
+    @Column(name = "passport_number")
+    private String passportNumber;
 
     @Column(name = "profile_image_url", length = 500)
     private String profileImageUrl;
