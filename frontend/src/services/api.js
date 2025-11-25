@@ -89,6 +89,11 @@ export const getElectionResults = async (electionId) => {
     return response.data;
 };
 
+export const adminGetCandidates = async (electionId) => {
+    const response = await api.get(`/admin/elections/${electionId}/candidates`);
+    return response.data;
+};
+
 // User Profile
 export const getUserProfile = async () => {
     const response = await api.get('/user/profile');

@@ -178,6 +178,7 @@ public class ElectionService {
         }
 
         report.setReportGeneratedAt(LocalDateTime.now());
+        report.setReportGeneratedBy(election.getCreatedBy());
         electionReportRepository.save(report);
     }
 

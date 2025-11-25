@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Container, Table, Button, Modal, Form, Badge, Tabs, Tab, Row, Col } from 'react-bootstrap';
-import { getAllElections, createElection, updateElectionStatus, calculateResults, getElectionResults, addCandidate, updateCandidateImage, getCandidates } from '../services/api';
+import { getAllElections, createElection, updateElectionStatus, calculateResults, getElectionResults, addCandidate, updateCandidateImage, adminGetCandidates } from '../services/api';
 import ManageUsers from './ManageUsers';
 
 const AdminDashboard = () => {
@@ -71,7 +71,7 @@ const AdminDashboard = () => {
             // but standard save might returns election. candidates might be lazy loaded or just returned if eager).
             // Actually, we can fetch the candidates for the new election to get their IDs.
 
-            const candidatesFromDb = await getCandidates(electionId);
+            const candidatesFromDb = await adminGetCandidates(electionId);
 
             for (const localCand of newCandidatesList) {
                 if (localCand.imageFile) {
