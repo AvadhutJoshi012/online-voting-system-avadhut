@@ -10,7 +10,7 @@ toc: true
 
 ```sql
 
-CREATE DATABASE devovs;
+CREATE DATABASE IF NOT EXISTS devovs;
 
 USE devovs;
 
@@ -21,20 +21,23 @@ USE devovs;
 
 -- 1. Create users table first (no dependencies)
 -- Users can be both VOTERS and CANDIDATES
+-- Modified to include specific Aadhar and Voter ID columns as required
 CREATE TABLE users (
     user_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(20),
+    phone_number VARCHAR(255),
     date_of_birth DATE NOT NULL,
     gender ENUM('MALE', 'FEMALE', 'OTHER') NOT NULL,
     address TEXT,
     city VARCHAR(100),
     state VARCHAR(100),
     pincode VARCHAR(10),
-    id_proof_type ENUM('AADHAR', 'VOTER_ID') NOT NULL,
-    id_proof_number VARCHAR(20) NOT NULL,
+    aadhar_number VARCHAR(12) UNIQUE NOT NULL,
+    voter_id_number VARCHAR(20) UNIQUE NOT NULL,
+    pan_card_number VARCHAR(255),
+    passport_number VARCHAR(255),
     profile_image_url VARCHAR(500),
     is_active BOOLEAN DEFAULT TRUE,
     is_verified BOOLEAN DEFAULT FALSE,
@@ -42,7 +45,8 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_email (email),
-    INDEX idx_id_proof (id_proof_type, id_proof_number)
+    INDEX idx_aadhar (aadhar_number),
+    INDEX idx_voter (voter_id_number)
 );
 
 -- 2. Create admins table (separate admin accounts)
@@ -52,7 +56,7 @@ CREATE TABLE admins (
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(20),
+    phone_number VARCHAR(255),
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -85,7 +89,7 @@ CREATE TABLE candidates (
     election_id BIGINT NOT NULL,
     party_name VARCHAR(255) NOT NULL,
     party_symbol VARCHAR(255) NOT NULL,
-    candidate_photo BLOB,
+    candidate_photo LONGBLOB,
     manifesto TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE RESTRICT,
@@ -201,9 +205,6 @@ CREATE TABLE dummy_passport_records (
 );
 
 -- 7. UPDATE dummy verification tables with the 20 inserted users
--- Update Aadhar records (for users who used AADHAR as id_proof_type)
-
-
 
 -- Insert verification records for 20 existing users
 INSERT INTO dummy_aadhar_records (aadhar_number, full_name, date_of_birth, address) VALUES
@@ -342,5 +343,4 @@ INSERT INTO dummy_passport_records (passport_number, full_name, date_of_birth) V
 ('P8800007', 'Aavdut Joshi', '2000-01-01'),
 ('P8800008', 'Aaman Sayyad', '2000-01-01'),
 ('P8800009', 'Deepak Revgade', '2000-01-01');
-
 ```
