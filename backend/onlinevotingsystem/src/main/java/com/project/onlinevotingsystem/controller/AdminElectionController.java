@@ -1,5 +1,6 @@
 package com.project.onlinevotingsystem.controller;
 
+import com.project.onlinevotingsystem.dto.ElectionCreationRequest;
 import com.project.onlinevotingsystem.entity.Candidate;
 import com.project.onlinevotingsystem.entity.Election;
 import com.project.onlinevotingsystem.entity.ElectionResult;
@@ -25,8 +26,8 @@ public class AdminElectionController {
     }
 
     @PostMapping
-    public ResponseEntity<Election> createElection(@RequestBody Election election) {
-        return ResponseEntity.ok(electionService.createElection(election));
+    public ResponseEntity<Election> createElection(@RequestBody ElectionCreationRequest electionRequest) {
+        return ResponseEntity.ok(electionService.createElection(electionRequest));
     }
 
     @PutMapping("/{id}/status")
@@ -35,10 +36,12 @@ public class AdminElectionController {
     }
 
     @PostMapping("/{id}/candidates")
-    public ResponseEntity<Candidate> addCandidate(@PathVariable Long id, @RequestBody Candidate candidate) {
+    public ResponseEntity<?> addCandidate(@PathVariable Long id, @RequestBody Candidate candidate) {
         // Ensure candidate has election set
-        Election election = new Election();
-        election.setElectionId(id);
+        Election election = electionService.getElectionById(id);
+        if (election.getStatus() != ElectionStatus.DRAFT) {
+            return ResponseEntity.badRequest().body("Cannot add candidates to non-DRAFT elections.");
+        }
         candidate.setElection(election);
         return ResponseEntity.ok(electionService.addCandidate(candidate));
     }

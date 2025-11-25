@@ -111,10 +111,10 @@ export const adminUpdateUser = async (userId, userData) => {
     return response.data;
 };
 
-export const updateCandidateImage = async (candidateId, imageFile) => {
+export const updateCandidateImage = async (electionId, candidateId, imageFile) => {
     const formData = new FormData();
-    formData.append('image', imageFile);
-    const response = await api.put(`/admin/candidates/${candidateId}/image`, formData, {
+    formData.append('file', imageFile);
+    const response = await api.post(`/admin/elections/${electionId}/candidates/${candidateId}/photo`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     });
     return response.data;

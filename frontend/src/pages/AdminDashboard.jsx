@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Container, Table, Button, Modal, Form, Badge, Tabs, Tab } from 'react-bootstrap';
-import { getAllElections, createElection, updateElectionStatus, calculateResults, getElectionResults, addCandidate, updateCandidateImage } from '../services/api';
+import { Container, Table, Button, Modal, Form, Badge, Tabs, Tab, Row, Col } from 'react-bootstrap';
+import { getAllElections, createElection, updateElectionStatus, calculateResults, getElectionResults, addCandidate, updateCandidateImage, getCandidates } from '../services/api';
 import ManageUsers from './ManageUsers';
 
 const AdminDashboard = () => {
     const [elections, setElections] = useState([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showCandidateModal, setShowCandidateModal] = useState(false);
     const [showResultsModal, setShowResultsModal] = useState(false);
     const [selectedElection, setSelectedElection] = useState(null);
     const [results, setResults] = useState([]);
 
+    // Create Election State
     const [newElection, setNewElection] = useState({
         electionName: '',
         electionType: 'GENERAL',
@@ -18,18 +18,17 @@ const AdminDashboard = () => {
         endDate: ''
     });
 
-    const [newCandidate, setNewCandidate] = useState({
-        user: { userId: '' }, // Assuming we link by userId manually or select from list (simplified)
+    // Candidates list for the new election
+    const [newCandidatesList, setNewCandidatesList] = useState([]);
+
+    // Form state for adding a single candidate to the list
+    const [tempCandidate, setTempCandidate] = useState({
+        userId: '',
         partyName: '',
         partySymbol: '',
         manifesto: ''
     });
-
-    const [candidateImage, setCandidateImage] = useState(null);
-
-    // To simplify candidate addition, usually we'd search for a user.
-    // Here I'll just ask for User ID for simplicity as per requirement "Candidate will be user".
-    const [userIdForCandidate, setUserIdForCandidate] = useState('');
+    const [tempCandidateImage, setTempCandidateImage] = useState(null);
 
     useEffect(() => {
         loadElections();
@@ -40,10 +39,59 @@ const AdminDashboard = () => {
         setElections(data);
     };
 
+    const handleAddTempCandidate = () => {
+        if (!tempCandidate.userId || !tempCandidate.partyName) {
+            alert('User ID and Party Name are required');
+            return;
+        }
+        // Add to list
+        setNewCandidatesList([...newCandidatesList, { ...tempCandidate, imageFile: tempCandidateImage }]);
+        // Reset temp form
+        setTempCandidate({ userId: '', partyName: '', partySymbol: '', manifesto: '' });
+        setTempCandidateImage(null);
+    };
+
     const handleCreateElection = async () => {
-        await createElection(newElection);
-        setShowCreateModal(false);
-        loadElections();
+        try {
+            // 1. Create Election + Candidates (Metadata)
+            const payload = {
+                ...newElection,
+                candidates: newCandidatesList.map(({ imageFile, ...rest }) => ({
+                    ...rest,
+                    userId: parseInt(rest.userId)
+                }))
+            };
+
+            const createdElection = await createElection(payload);
+            const electionId = createdElection.electionId;
+
+            // 2. Upload images for candidates
+            // We need to fetch candidates of created election to map userIds to candidateIds,
+            // OR if the create response includes candidates (it likely doesn't include the generated IDs unless we modified return,
+            // but standard save might returns election. candidates might be lazy loaded or just returned if eager).
+            // Actually, we can fetch the candidates for the new election to get their IDs.
+
+            const candidatesFromDb = await getCandidates(electionId);
+
+            for (const localCand of newCandidatesList) {
+                if (localCand.imageFile) {
+                    // Find the candidateId for this userId
+                    const match = candidatesFromDb.find(c => c.user.userId === parseInt(localCand.userId));
+                    if (match) {
+                        await updateCandidateImage(electionId, match.candidateId, localCand.imageFile);
+                    }
+                }
+            }
+
+            alert('Election created successfully!');
+            setShowCreateModal(false);
+            setNewElection({ electionName: '', electionType: 'GENERAL', startDate: '', endDate: '' });
+            setNewCandidatesList([]);
+            loadElections();
+
+        } catch (e) {
+            alert('Failed to create election: ' + (e.response?.data?.message || e.message));
+        }
     };
 
     const handleStatusChange = async (id, status) => {
@@ -61,29 +109,6 @@ const AdminDashboard = () => {
         setResults(data);
         setSelectedElection(election);
         setShowResultsModal(true);
-    };
-
-    const handleAddCandidate = async () => {
-        const candidatePayload = {
-            ...newCandidate,
-            user: { userId: userIdForCandidate }
-        };
-        try {
-            // First add candidate
-            const addedCandidate = await addCandidate(selectedElection.electionId, candidatePayload);
-
-            // Then upload image if provided
-            if (candidateImage && addedCandidate && addedCandidate.candidateId) {
-                await updateCandidateImage(addedCandidate.candidateId, candidateImage);
-            }
-
-            alert('Candidate added');
-            setShowCandidateModal(false);
-            setCandidateImage(null);
-            setUserIdForCandidate('');
-        } catch (e) {
-            alert('Failed to add candidate. Ensure User ID is valid and not already a candidate.');
-        }
     };
 
     return (
@@ -121,10 +146,6 @@ const AdminDashboard = () => {
                                         {e.status === 'ACTIVE' && (
                                             <Button size="sm" variant="warning" className="ms-2" onClick={() => handleStatusChange(e.electionId, 'COMPLETED')}>End</Button>
                                         )}
-                                        <Button size="sm" variant="info" className="ms-2" onClick={() => {
-                                            setSelectedElection(e);
-                                            setShowCandidateModal(true);
-                                        }}>Add Candidate</Button>
 
                                         <Button size="sm" variant="dark" className="ms-2" onClick={() => handleCalculateResults(e.electionId)}>Calc Results</Button>
                                         <Button size="sm" variant="outline-primary" className="ms-2" onClick={() => handleViewResults(e)}>View Results</Button>
@@ -140,60 +161,112 @@ const AdminDashboard = () => {
             </Tabs>
 
             {/* Create Election Modal */}
-            <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
+            <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)} size="lg">
                 <Modal.Header closeButton><Modal.Title>Create Election</Modal.Title></Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" onChange={(e) => setNewElection({...newElection, electionName: e.target.value})} />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Type</Form.Label>
-                            <Form.Select onChange={(e) => setNewElection({...newElection, electionType: e.target.value})}>
-                                <option value="GENERAL">General</option>
-                                <option value="STATE">State</option>
-                                <option value="LOCAL">Local</option>
-                            </Form.Select>
-                        </Form.Group>
+                        <Row>
+                            <Col md={6}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Election Name</Form.Label>
+                                    <Form.Control type="text" value={newElection.electionName} onChange={(e) => setNewElection({...newElection, electionName: e.target.value})} />
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Type</Form.Label>
+                                    <Form.Select value={newElection.electionType} onChange={(e) => setNewElection({...newElection, electionType: e.target.value})}>
+                                        <option value="GENERAL">General</option>
+                                        <option value="STATE">State</option>
+                                        <option value="LOCAL">Local</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                             <Col md={6}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Start Date</Form.Label>
+                                    <Form.Control type="datetime-local" value={newElection.startDate} onChange={(e) => setNewElection({...newElection, startDate: e.target.value})} />
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>End Date</Form.Label>
+                                    <Form.Control type="datetime-local" value={newElection.endDate} onChange={(e) => setNewElection({...newElection, endDate: e.target.value})} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+
+                        <hr />
+                        <h5>Add Candidates</h5>
+                        <p className="text-muted small">Add candidates now. You cannot add them later.</p>
+
+                        <div className="p-3 border rounded mb-3 bg-light">
+                            <Row>
+                                <Col md={4}>
+                                    <Form.Group className="mb-2">
+                                        <Form.Label>User ID</Form.Label>
+                                        <Form.Control type="number" placeholder="User ID" value={tempCandidate.userId} onChange={(e) => setTempCandidate({...tempCandidate, userId: e.target.value})} />
+                                    </Form.Group>
+                                </Col>
+                                <Col md={4}>
+                                    <Form.Group className="mb-2">
+                                        <Form.Label>Party Name</Form.Label>
+                                        <Form.Control type="text" placeholder="Party" value={tempCandidate.partyName} onChange={(e) => setTempCandidate({...tempCandidate, partyName: e.target.value})} />
+                                    </Form.Group>
+                                </Col>
+                                <Col md={4}>
+                                    <Form.Group className="mb-2">
+                                        <Form.Label>Symbol</Form.Label>
+                                        <Form.Control type="text" placeholder="Symbol" value={tempCandidate.partySymbol} onChange={(e) => setTempCandidate({...tempCandidate, partySymbol: e.target.value})} />
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={8}>
+                                    <Form.Group className="mb-2">
+                                        <Form.Label>Manifesto</Form.Label>
+                                        <Form.Control type="text" placeholder="Short manifesto" value={tempCandidate.manifesto} onChange={(e) => setTempCandidate({...tempCandidate, manifesto: e.target.value})} />
+                                    </Form.Group>
+                                </Col>
+                                <Col md={4}>
+                                    <Form.Group className="mb-2">
+                                        <Form.Label>Photo</Form.Label>
+                                        <Form.Control type="file" onChange={(e) => setTempCandidateImage(e.target.files[0])} />
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                            <Button variant="outline-success" size="sm" onClick={handleAddTempCandidate}>Add to List</Button>
+                        </div>
+
+                        <h6>Candidates List ({newCandidatesList.length})</h6>
+                        <Table size="sm" bordered>
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Party</th>
+                                    <th>Symbol</th>
+                                    <th>Image</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {newCandidatesList.map((c, idx) => (
+                                    <tr key={idx}>
+                                        <td>{c.userId}</td>
+                                        <td>{c.partyName}</td>
+                                        <td>{c.partySymbol}</td>
+                                        <td>{c.imageFile ? c.imageFile.name : 'No Image'}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCreateModal(false)}>Close</Button>
-                    <Button variant="primary" onClick={handleCreateElection}>Create</Button>
-                </Modal.Footer>
-            </Modal>
-
-            {/* Add Candidate Modal */}
-            <Modal show={showCandidateModal} onHide={() => setShowCandidateModal(false)}>
-                <Modal.Header closeButton><Modal.Title>Add Candidate to {selectedElection?.electionName}</Modal.Title></Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>User ID (Candidate must be a registered user)</Form.Label>
-                            <Form.Control type="number" value={userIdForCandidate} onChange={(e) => setUserIdForCandidate(e.target.value)} />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Party Name</Form.Label>
-                            <Form.Control type="text" onChange={(e) => setNewCandidate({...newCandidate, partyName: e.target.value})} />
-                        </Form.Group>
-                         <Form.Group className="mb-3">
-                            <Form.Label>Party Symbol</Form.Label>
-                            <Form.Control type="text" onChange={(e) => setNewCandidate({...newCandidate, partySymbol: e.target.value})} />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Candidate Photo</Form.Label>
-                            <Form.Control
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => setCandidateImage(e.target.files[0])}
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowCandidateModal(false)}>Close</Button>
-                    <Button variant="primary" onClick={handleAddCandidate}>Add Candidate</Button>
+                    <Button variant="primary" onClick={handleCreateElection}>Create Election</Button>
                 </Modal.Footer>
             </Modal>
 

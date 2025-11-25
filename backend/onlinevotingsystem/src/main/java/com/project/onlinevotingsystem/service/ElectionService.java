@@ -1,8 +1,12 @@
 package com.project.onlinevotingsystem.service;
 
+import com.project.onlinevotingsystem.dto.CandidateDto;
+import com.project.onlinevotingsystem.dto.ElectionCreationRequest;
 import com.project.onlinevotingsystem.entity.*;
 import com.project.onlinevotingsystem.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +25,7 @@ public class ElectionService {
     private final ElectionReportRepository electionReportRepository;
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
+    private final AdminRepository adminRepository;
 
     public List<Election> getAllElections() {
         return electionRepository.findAll();
@@ -39,8 +44,47 @@ public class ElectionService {
                 .orElseThrow(() -> new RuntimeException("Election not found"));
     }
 
-    public Election createElection(Election election) {
-        return electionRepository.save(election);
+    @Transactional
+    public Election createElection(ElectionCreationRequest request) {
+        Election election = new Election();
+        election.setElectionName(request.getElectionName());
+        election.setElectionType(request.getElectionType());
+        election.setStartDate(request.getStartDate());
+        election.setEndDate(request.getEndDate());
+        election.setStatus(ElectionStatus.DRAFT);
+
+        // Get current admin user
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String adminUsername;
+        if (principal instanceof UserDetails) {
+            adminUsername = ((UserDetails) principal).getUsername();
+        } else {
+            adminUsername = principal.toString();
+        }
+
+        Admin createdByAdmin = adminRepository.findByEmail(adminUsername)
+                .orElseThrow(() -> new RuntimeException("Admin not found with email: " + adminUsername));
+        election.setCreatedBy(createdByAdmin.getAdminId());
+
+
+        Election savedElection = electionRepository.save(election);
+
+        if (request.getCandidates() != null) {
+            for (CandidateDto candDto : request.getCandidates()) {
+                User user = userRepository.findById(candDto.getUserId())
+                        .orElseThrow(() -> new RuntimeException("User not found with ID: " + candDto.getUserId()));
+
+                Candidate candidate = new Candidate();
+                candidate.setElection(savedElection);
+                candidate.setUser(user);
+                candidate.setPartyName(candDto.getPartyName());
+                candidate.setPartySymbol(candDto.getPartySymbol());
+                candidate.setManifesto(candDto.getManifesto());
+
+                candidateRepository.save(candidate);
+            }
+        }
+        return savedElection;
     }
 
     public Election updateElectionStatus(Long electionId, ElectionStatus status) {

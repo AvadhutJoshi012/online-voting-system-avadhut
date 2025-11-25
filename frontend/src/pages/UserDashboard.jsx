@@ -121,9 +121,16 @@ const UserDashboard = () => {
                             <Col md={6} key={c.candidateId} className="mb-3">
                                 <Card className="h-100">
                                     <Card.Body className="text-center">
-                                        <div style={{fontSize: '2rem', marginBottom: '10px'}}>
-                                            {/* Placeholder for photo */}
-                                            👤
+                                        <div style={{marginBottom: '10px'}}>
+                                            {c.candidatePhoto ? (
+                                                <img
+                                                    src={`data:image/jpeg;base64,${c.candidatePhoto}`}
+                                                    alt="Candidate"
+                                                    style={{width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50%'}}
+                                                />
+                                            ) : (
+                                                <div style={{fontSize: '2rem'}}>👤</div>
+                                            )}
                                         </div>
                                         <Card.Title>{c.user?.fullName}</Card.Title>
                                         <Card.Subtitle>{c.partyName} ({c.partySymbol})</Card.Subtitle>
