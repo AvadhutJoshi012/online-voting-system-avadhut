@@ -1,17 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { getUserProfile, updateUserProfile } from '../services/api';
+import { getUserProfile, updateUserProfile, uploadProfilePhoto } from '../services/api';
 import { Container, Row, Col, Card, Form, Button, Alert, Image } from 'react-bootstrap';
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [formData, setFormData] = useState({});
+    const [profilePhotoFile, setProfilePhotoFile] = useState(null);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const [profileImageUrl, setProfileImageUrl] = useState('');
 
     useEffect(() => {
         fetchProfile();
     }, []);
+
+    useEffect(() => {
+        if (user?.profileImageUrl) {
+            setProfileImageUrl(`/api/user/profile/photo/${user.profileImageUrl}?t=${new Date().getTime()}`);
+        } else {
+            setProfileImageUrl('http://localhost:5173/profiles/default.jpg');
+        }
+    }, [user]);
 
     const fetchProfile = async () => {
         try {
@@ -20,6 +30,23 @@ const ProfilePage = () => {
             setFormData(data);
         } catch (err) {
             setError('Failed to load profile');
+        }
+    };
+
+    const handlePhotoUpload = async () => {
+        if (!profilePhotoFile) {
+            setError('Please select a photo to upload.');
+            return;
+        }
+        try {
+            await uploadProfilePhoto(profilePhotoFile);
+            setMessage('Photo uploaded successfully!');
+            setError('');
+            // Refresh profile to get new image URL
+            fetchProfile();
+        } catch (err) {
+            setError('Failed to upload photo.');
+            setMessage('');
         }
     };
 
@@ -53,11 +80,18 @@ const ProfilePage = () => {
 
                             <div className="text-center mb-4">
                                 <Image
-                                    src={user.profileImageUrl || 'http://localhost:5173/profiles/1.jpg'}
+                                    src={profileImageUrl}
+                                    onError={(e) => { e.target.src = 'http://localhost:5173/profiles/default.jpg'; }}
                                     roundedCircle
                                     width="150"
                                     height="150"
                                 />
+                                {editMode && (
+                                    <Form.Group className="mt-2">
+                                        <Form.Control type="file" onChange={(e) => setProfilePhotoFile(e.target.files[0])} />
+                                        <Button size="sm" className="mt-2" onClick={handlePhotoUpload}>Upload Photo</Button>
+                                    </Form.Group>
+                                )}
                             </div>
 
                             <Form onSubmit={handleSubmit}>
@@ -175,17 +209,6 @@ const ProfilePage = () => {
                                         placeholder={!user.passportNumber && editMode ? "Enter Passport Number" : ""}
                                     />
                                     {user.passportNumber && editMode && <Form.Text className="text-muted">Already added, cannot be changed.</Form.Text>}
-                                </Form.Group>
-
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Profile Image URL</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="profileImageUrl"
-                                        value={editMode ? formData.profileImageUrl : user.profileImageUrl}
-                                        onChange={handleChange}
-                                        readOnly={!editMode}
-                                    />
                                 </Form.Group>
 
                                 {editMode ? (

@@ -116,6 +116,15 @@ export const adminUpdateUser = async (userId, userData) => {
     return response.data;
 };
 
+export const uploadProfilePhoto = async (imageFile) => {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+    const response = await api.post('/user/profile/photo', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    return response.data;
+};
+
 export const updateCandidateImage = async (electionId, candidateId, imageFile) => {
     const formData = new FormData();
     formData.append('file', imageFile);

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -70,6 +71,7 @@ public class ElectionService {
         Election savedElection = electionRepository.save(election);
 
         if (request.getCandidates() != null) {
+            List<Candidate> candidates = new ArrayList<>();
             for (CandidateDto candDto : request.getCandidates()) {
                 User user = userRepository.findById(candDto.getUserId())
                         .orElseThrow(() -> new RuntimeException("User not found with ID: " + candDto.getUserId()));
@@ -80,9 +82,10 @@ public class ElectionService {
                 candidate.setPartyName(candDto.getPartyName());
                 candidate.setPartySymbol(candDto.getPartySymbol());
                 candidate.setManifesto(candDto.getManifesto());
-
-                candidateRepository.save(candidate);
+                
+                candidates.add(candidateRepository.save(candidate));
             }
+            savedElection.setCandidates(candidates);
         }
         return savedElection;
     }

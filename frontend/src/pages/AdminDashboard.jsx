@@ -65,20 +65,15 @@ const AdminDashboard = () => {
             const createdElection = await createElection(payload);
             const electionId = createdElection.electionId;
 
-            // 2. Upload images for candidates
-            // We need to fetch candidates of created election to map userIds to candidateIds,
-            // OR if the create response includes candidates (it likely doesn't include the generated IDs unless we modified return,
-            // but standard save might returns election. candidates might be lazy loaded or just returned if eager).
-            // Actually, we can fetch the candidates for the new election to get their IDs.
-
-            const candidatesFromDb = await adminGetCandidates(electionId);
-
-            for (const localCand of newCandidatesList) {
-                if (localCand.imageFile) {
-                    // Find the candidateId for this userId
-                    const match = candidatesFromDb.find(c => c.user.userId === parseInt(localCand.userId));
-                    if (match) {
-                        await updateCandidateImage(electionId, match.candidateId, localCand.imageFile);
+            // 2. Upload images for candidates using the returned candidate IDs
+            if (createdElection.candidates && createdElection.candidates.length > 0) {
+                for (const localCand of newCandidatesList) {
+                    if (localCand.imageFile) {
+                        // Find the corresponding candidate from the backend response
+                        const match = createdElection.candidates.find(c => c.user.userId === parseInt(localCand.userId));
+                        if (match) {
+                            await updateCandidateImage(electionId, match.candidateId, localCand.imageFile);
+                        }
                     }
                 }
             }
