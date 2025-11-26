@@ -85,13 +85,14 @@ public class UserController {
 
             if (resource.exists() || resource.isReadable()) {
                 return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                        .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(file))
                         .body(resource);
             } else {
-                throw new RuntimeException("Could not read the file!");
+                // Return a default image or a 404 Not Found response
+                return ResponseEntity.notFound().build();
             }
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
         }
     }
 }

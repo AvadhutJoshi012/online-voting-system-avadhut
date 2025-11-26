@@ -17,7 +17,12 @@ const ProfilePage = () => {
 
     useEffect(() => {
         if (user?.profileImageUrl) {
-            setProfileImageUrl(`/api/user/profile/photo/${user.profileImageUrl}?t=${new Date().getTime()}`);
+            // Check if the URL is already absolute
+            if (user.profileImageUrl.startsWith('http')) {
+                setProfileImageUrl(user.profileImageUrl);
+            } else {
+                setProfileImageUrl(`/api/user/profile/photo/${user.profileImageUrl}?t=${new Date().getTime()}`);
+            }
         } else {
             setProfileImageUrl('http://localhost:5173/profiles/default.jpg');
         }
