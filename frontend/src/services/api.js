@@ -89,6 +89,11 @@ export const getElectionResults = async (electionId) => {
     return response.data;
 };
 
+export const adminGetCandidates = async (electionId) => {
+    const response = await api.get(`/admin/elections/${electionId}/candidates`);
+    return response.data;
+};
+
 // User Profile
 export const getUserProfile = async () => {
     const response = await api.get('/user/profile');
@@ -111,10 +116,19 @@ export const adminUpdateUser = async (userId, userData) => {
     return response.data;
 };
 
-export const updateCandidateImage = async (candidateId, imageFile) => {
+export const uploadProfilePhoto = async (imageFile) => {
     const formData = new FormData();
-    formData.append('image', imageFile);
-    const response = await api.put(`/admin/candidates/${candidateId}/image`, formData, {
+    formData.append('file', imageFile);
+    const response = await api.post('/user/profile/photo', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    return response.data;
+};
+
+export const updateCandidateImage = async (electionId, candidateId, imageFile) => {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+    const response = await api.post(`/admin/elections/${electionId}/candidates/${candidateId}/photo`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     });
     return response.data;
