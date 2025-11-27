@@ -88,8 +88,11 @@ public class UserController {
                         .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(file))
                         .body(resource);
             } else {
-                // Return a default image or a 404 Not Found response
-                return ResponseEntity.notFound().build();
+                Path defaultFile = Paths.get("user_uploads/profiles/").resolve("default.png");
+                Resource defaultResource = new UrlResource(defaultFile.toUri());
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(defaultFile))
+                        .body(defaultResource);
             }
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
