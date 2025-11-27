@@ -20,11 +20,13 @@ const ProfilePage = () => {
             // Check if the URL is already absolute
             if (user.profileImageUrl.startsWith('http')) {
                 setProfileImageUrl(user.profileImageUrl);
+            } else if (user.profileImageUrl.startsWith('/api')) {
+                setProfileImageUrl(`${user.profileImageUrl}?t=${new Date().getTime()}`);
             } else {
                 setProfileImageUrl(`/api/user/profile/photo/${user.profileImageUrl}?t=${new Date().getTime()}`);
             }
         } else {
-            setProfileImageUrl('http://localhost:5173/profiles/default.jpg');
+            setProfileImageUrl('/api/user/profile/photo/default.png');
         }
     }, [user]);
 
@@ -86,7 +88,7 @@ const ProfilePage = () => {
                             <div className="text-center mb-4">
                                 <Image
                                     src={profileImageUrl}
-                                    onError={(e) => { e.target.src = 'http://localhost:5173/profiles/default.jpg'; }}
+                                    onError={(e) => { e.target.src = '/api/user/profile/photo/default.png'; }}
                                     roundedCircle
                                     width="150"
                                     height="150"
