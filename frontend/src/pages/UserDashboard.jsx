@@ -147,7 +147,7 @@ const UserDashboard = () => {
             </Modal>
 
              {/* Results Modal Reuse */}
-            <Modal show={showResults} onHide={() => setShowResults(false)} size="lg">
+            <Modal show={showResults} onHide={() => {setShowResults(false); setSelectedElection(null);}} size="lg">
                 <Modal.Header closeButton><Modal.Title>Results: {selectedElection?.electionName}</Modal.Title></Modal.Header>
                 <Modal.Body>
                     <table className="table">
