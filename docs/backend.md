@@ -20,3 +20,23 @@ The application is designed to support multiple users accessing it simultaneousl
 * The application uses **JWT (JSON Web Token)** for authentication, which is **stateless**. This means the backend does not need to store user session data in memory.
 * This makes it highly suitable for **cloud deployment**, as you can easily scale horizontally (add more backend servers) to handle increased traffic without authentication issues.
 * The database serves as the single source of truth, handling the concurrency control for data.
+
+
+
+
+-----
+
+  * **Technology Stack:** The backend uses **Spring Data JPA** and **Hibernate**. These technologies automatically use **Parameterized Queries** (Prepared Statements) under the hood. This means user input is treated strictly as data, not as executable code, preventing the database from interpreting input as SQL commands.
+
+  * **Code Verification:**
+
+      * **Standard Queries:** Most database operations rely on built-in repository methods (e.g., `findByEmail`, `save`), which are inherently safe.
+      * **Custom Queries:** I examined `UserRepository.java` and found a custom search query:
+        ```java
+        @Query("SELECT u FROM User u WHERE ... LOWER(u.fullName) LIKE LOWER(CONCAT('%', :query, '%')) ...")
+        List<User> searchUsers(@Param("query") String query);
+        ```
+        This uses **Named Parameters** (`:query`), which is the correct and secure way to handle dynamic inputs in Spring Boot.
+      * **No Raw SQL:** A scan of the codebase confirmed there is no usage of `JdbcTemplate` or manual string concatenation to build SQL queries, which are the common sources of injection vulnerabilities.
+
+-----
