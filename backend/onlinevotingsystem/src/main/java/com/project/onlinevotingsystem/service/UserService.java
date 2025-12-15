@@ -94,4 +94,12 @@ public class UserService {
         candidate.setCandidatePhoto(image);
         candidateRepository.save(candidate);
     }
+
+    @Transactional
+    public void updateUserProfilePhoto(Long userId, String filename) {
+        User user = getUserProfile(userId);
+        String imageUrl = "/api/user/profile/photo/" + filename;
+        user.setProfileImageUrl(imageUrl);
+        userRepository.save(user);
+    }
 }

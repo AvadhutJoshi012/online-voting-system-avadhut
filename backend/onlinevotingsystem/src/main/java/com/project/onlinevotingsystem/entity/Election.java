@@ -1,8 +1,10 @@
 package com.project.onlinevotingsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -40,4 +42,8 @@ public class Election {
 
     @Column(name = "created_by")
     private Long createdBy;
+
+    @OneToMany(mappedBy = "election", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Candidate> candidates;
 }

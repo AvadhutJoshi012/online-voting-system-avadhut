@@ -1,5 +1,6 @@
 package com.project.onlinevotingsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public class Candidate {
 
     @ManyToOne
     @JoinColumn(name = "election_id", nullable = false)
+    @JsonBackReference
     private Election election;
 
     @Column(name = "party_name")
