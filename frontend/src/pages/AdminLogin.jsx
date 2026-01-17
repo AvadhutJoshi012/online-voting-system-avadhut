@@ -4,8 +4,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { loginUser } from '../services/api';
 
-const Login = () => {
-    const [voterId, setVoterId] = useState('');
+const AdminLogin = () => {
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const { login, user } = useAuth();
@@ -27,32 +27,32 @@ const Login = () => {
         setIsLoading(true);
         setError('');
         try {
-            const data = await loginUser(voterId, password);
+            const data = await loginUser(email, password);
             
-            if (data.role === 'ADMIN') {
-                setError('Please use the Admin Login page.');
+            if (data.role !== 'ADMIN') {
+                setError('Access Denied. This login is for Administrators only.');
                 setIsLoading(false);
                 return;
             }
 
             login(data.token);
-            navigate('/user');
+            navigate('/admin');
         } catch (err) {
-            setError('Invalid credentials. Please check your Voter ID and password.');
+            setError('Invalid credentials. Please check your email and password.');
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light py-5 animate-fade-in">
+        <div className="d-flex align-items-center justify-content-center min-vh-100 bg-dark py-5 animate-fade-in">
             <Container>
                 <Row className="justify-content-center">
                     <Col md={6} lg={5}>
-                        <Card className="form-card shadow-lg animate-slide-up">
-                            <div className="form-header">
-                                <h3 className="mb-0 fw-bold">Voter Login</h3>
-                                <p className="mb-0 text-white-50">Login with your Voter ID</p>
+                        <Card className="form-card shadow-lg animate-slide-up bg-secondary text-white border-0">
+                            <div className="form-header border-bottom border-light pb-3 mb-3">
+                                <h3 className="mb-0 fw-bold text-white">Admin Portal</h3>
+                                <p className="mb-0 text-white-50">Secure Login</p>
                             </div>
                             <Card.Body className="p-4 p-md-5">
                                 {error && (
@@ -63,15 +63,15 @@ const Login = () => {
                                 )}
                                 <Form onSubmit={handleSubmit}>
                                     <Form.Group className="mb-4">
-                                        <Form.Label className="fw-bold">Voter ID</Form.Label>
+                                        <Form.Label className="fw-bold">Email Address</Form.Label>
                                         <Form.Control
-                                            type="text"
-                                            placeholder="Enter your Voter ID"
-                                            value={voterId}
-                                            onChange={(e) => setVoterId(e.target.value)}
+                                            type="email"
+                                            placeholder="admin@example.com"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                             required
                                             size="lg"
-                                            className="bg-light border-0"
+                                            className="bg-dark text-white border-secondary"
                                         />
                                     </Form.Group>
 
@@ -84,32 +84,27 @@ const Login = () => {
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
                                             size="lg"
-                                            className="bg-light border-0"
+                                            className="bg-dark text-white border-secondary"
                                         />
                                     </Form.Group>
 
                                     <Button 
-                                        variant="primary" 
+                                        variant="danger" 
                                         type="submit" 
                                         className="w-100 mb-3 btn-lg fw-bold" 
                                         disabled={isLoading}
-                                        style={{ background: 'linear-gradient(to right, #667eea, #764ba2)', border: 'none' }}
                                     >
-                                        {isLoading ? 'Logging in...' : 'Login'}
+                                        {isLoading ? 'Authenticating...' : 'Admin Login'}
                                     </Button>
                                     
                                     <div className="text-center mt-3">
-                                        <span className="text-muted">Don't have an account? </span>
-                                        <Link to="/register" className="fw-bold text-decoration-none text-primary">Register Here</Link>
-                                    </div>
-                                    <div className="text-center mt-2">
-                                        <Link to="/admin-login" className="text-muted text-decoration-none small">Admin Login</Link>
+                                        <Link to="/login" className="text-light text-decoration-none small">User Login</Link>
                                     </div>
                                 </Form>
                             </Card.Body>
                         </Card>
                         <div className="text-center mt-4">
-                             <Link to="/" className="text-muted text-decoration-none">
+                             <Link to="/" className="text-white-50 text-decoration-none">
                                 <i className="bi bi-arrow-left me-1"></i> Back to Home
                             </Link>
                         </div>
@@ -120,4 +115,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default AdminLogin;

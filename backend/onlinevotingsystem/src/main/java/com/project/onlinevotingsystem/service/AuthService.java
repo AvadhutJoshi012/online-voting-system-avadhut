@@ -32,20 +32,20 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(request.getIdentifier(), request.getPassword())
         );
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getIdentifier());
 
         String role = "USER";
         Long id = null;
 
-        Optional<Admin> admin = adminRepository.findByEmail(request.getEmail());
+        Optional<Admin> admin = adminRepository.findByEmail(request.getIdentifier());
         if (admin.isPresent()) {
             role = "ADMIN";
             id = admin.get().getAdminId();
         } else {
-            Optional<User> user = userRepository.findByEmail(request.getEmail());
+            Optional<User> user = userRepository.findByVoterIdNumber(request.getIdentifier());
             if (user.isPresent()) {
                 role = "USER";
                 id = user.get().getUserId();
