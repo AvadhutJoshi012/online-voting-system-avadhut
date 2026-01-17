@@ -52,10 +52,12 @@ public class UserElectionController {
     }
 
     @GetMapping("/{id}/has-voted")
-    public ResponseEntity<Boolean> hasVoted(@PathVariable Long id, @RequestParam Long userId) {
-        // Security concern: User should only check their own status.
-        // But for this task I will allow passing userId.
-        return ResponseEntity.ok(voteService.hasUserVoted(id, userId));
+    public ResponseEntity<Boolean> hasVoted(@PathVariable Long id, Authentication authentication) {
+        String email = authentication.getName();
+        Long currentUserId = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"))
+                .getUserId();
+        return ResponseEntity.ok(voteService.hasUserVoted(id, currentUserId));
     }
 
     @GetMapping("/{id}/results")

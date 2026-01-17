@@ -45,10 +45,18 @@ public class AuthService {
             role = "ADMIN";
             id = admin.get().getAdminId();
         } else {
+            // Try Voter ID first
             Optional<User> user = userRepository.findByVoterIdNumber(request.getIdentifier());
             if (user.isPresent()) {
                 role = "USER";
                 id = user.get().getUserId();
+            } else {
+                // Fallback to Email (since CustomUserDetailsService allows it)
+                Optional<User> userByEmail = userRepository.findByEmail(request.getIdentifier());
+                if (userByEmail.isPresent()) {
+                    role = "USER";
+                    id = userByEmail.get().getUserId();
+                }
             }
         }
 
@@ -57,6 +65,17 @@ public class AuthService {
     }
 
     public User register(RegisterRequest request) {
+        // Age validation
+        if (request.getDateOfBirth() != null) {
+            java.time.LocalDate today = java.time.LocalDate.now();
+            java.time.Period period = java.time.Period.between(request.getDateOfBirth(), today);
+            if (period.getYears() < 18) {
+                throw new RuntimeException("You must be at least 18 years old to register.");
+            }
+        } else {
+             throw new RuntimeException("Date of birth is required.");
+        }
+
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Email already registered");
         }

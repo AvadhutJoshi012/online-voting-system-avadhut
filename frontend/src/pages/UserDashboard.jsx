@@ -28,7 +28,7 @@ const UserDashboard = () => {
         // Check voting status for each election
         const votedStatus = {};
         for (const election of data) {
-            const hasVoted = await checkHasVoted(election.electionId, user.id);
+            const hasVoted = await checkHasVoted(election.electionId);
             votedStatus[election.electionId] = hasVoted;
         }
         setHasVotedMap(votedStatus);

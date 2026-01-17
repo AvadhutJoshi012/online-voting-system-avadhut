@@ -44,10 +44,8 @@ export const castVote = async (electionId, candidateId) => {
     return response.data;
 };
 
-export const checkHasVoted = async (electionId, userId) => {
-    const response = await api.get(`/user/elections/${electionId}/has-voted`, {
-        params: { userId }
-    });
+export const checkHasVoted = async (electionId) => {
+    const response = await api.get(`/user/elections/${electionId}/has-voted`);
     return response.data;
 };
 
