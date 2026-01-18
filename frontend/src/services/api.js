@@ -92,6 +92,17 @@ export const adminGetCandidates = async (electionId) => {
     return response.data;
 };
 
+export const togglePublishResult = async (electionId) => {
+    const response = await api.put(`/admin/elections/${electionId}/publish`);
+    return response.data;
+};
+
+// Public APIs
+export const getPublishedResults = async () => {
+    const response = await api.get('/public/elections/results');
+    return response.data;
+};
+
 // User Profile
 export const getUserProfile = async () => {
     const response = await api.get('/user/profile');

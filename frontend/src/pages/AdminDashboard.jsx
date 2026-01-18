@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Container, Table, Button, Modal, Form, Badge, Tabs, Tab, Row, Col } from 'react-bootstrap';
-import { getAllElections, createElection, updateElectionStatus, calculateResults, getElectionResults, addCandidate, updateCandidateImage, adminGetCandidates } from '../services/api';
+import { getAllElections, createElection, updateElectionStatus, calculateResults, getElectionResults, addCandidate, updateCandidateImage, adminGetCandidates, togglePublishResult } from '../services/api';
 import ManageUsers from './ManageUsers';
 
 const AdminDashboard = () => {
@@ -99,6 +99,15 @@ const AdminDashboard = () => {
         alert('Results calculated!');
     };
 
+    const handleTogglePublish = async (id) => {
+        try {
+            await togglePublishResult(id);
+            loadElections();
+        } catch (error) {
+            alert("Error toggling publish status");
+        }
+    };
+
     const handleViewResults = async (election) => {
         const data = await getElectionResults(election.electionId);
         setResults(data);
@@ -144,6 +153,17 @@ const AdminDashboard = () => {
 
                                         <Button size="sm" variant="dark" className="ms-2" onClick={() => handleCalculateResults(e.electionId)}>Calc Results</Button>
                                         <Button size="sm" variant="outline-primary" className="ms-2" onClick={() => handleViewResults(e)}>View Results</Button>
+                                        
+                                        {e.status === 'COMPLETED' && (
+                                            <Button 
+                                                size="sm" 
+                                                variant={e.resultPublished ? "danger" : "info"} 
+                                                className="ms-2"
+                                                onClick={() => handleTogglePublish(e.electionId)}
+                                            >
+                                                {e.resultPublished ? "Unpublish" : "Publish"}
+                                            </Button>
+                                        )}
                                     </td>
                                 </tr>
                             ))}

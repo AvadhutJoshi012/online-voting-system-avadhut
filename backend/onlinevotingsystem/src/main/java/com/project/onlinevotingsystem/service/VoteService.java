@@ -50,20 +50,25 @@ public class VoteService {
         vote.setUser(user);
         vote.setCandidate(candidate);
         vote.setVoteHash(UUID.randomUUID().toString());
-        vote = voteRepository.save(vote);
+        
+        try {
+            vote = voteRepository.save(vote);
 
-        // Update Status
-        VoterElectionStatus status;
-        if (existingStatusOpt.isPresent()) {
-            status = existingStatusOpt.get();
-        } else {
-            status = new VoterElectionStatus();
-            status.setElection(election);
-            status.setUser(user);
+            // Update Status
+            VoterElectionStatus status;
+            if (existingStatusOpt.isPresent()) {
+                status = existingStatusOpt.get();
+            } else {
+                status = new VoterElectionStatus();
+                status.setElection(election);
+                status.setUser(user);
+            }
+            status.setHasVoted(true);
+            status.setVotedAt(LocalDateTime.now());
+            voterElectionStatusRepository.save(status);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            throw new RuntimeException("You have already voted in this election.");
         }
-        status.setHasVoted(true);
-        status.setVotedAt(LocalDateTime.now());
-        voterElectionStatusRepository.save(status);
 
         // Update Election Results
         electionService.calculateResults(electionId);

@@ -1,7 +1,15 @@
-import { Container, Row, Col, Card, Button, Badge, Table } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Badge, Table, ProgressBar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getPublishedResults } from '../services/api';
 
 const Home = () => {
+    const [publishedResults, setPublishedResults] = useState([]);
+
+    useEffect(() => {
+        getPublishedResults().then(data => setPublishedResults(data)).catch(err => console.error(err));
+    }, []);
+
     return (
         <div className="overflow-hidden">
             {/* Hero Section */}
@@ -31,6 +39,61 @@ const Home = () => {
             </div>
 
             <Container className="mb-5">
+                {/* Published Results Section */}
+                {publishedResults.length > 0 && (
+                    <div className="mb-5 animate-slide-up delay-200">
+                        <h2 className="text-center fw-bold text-primary mb-4">🏆 Election Results</h2>
+                        <Row>
+                            {publishedResults.map(election => (
+                                <Col md={12} className="mb-4" key={election.electionId}>
+                                    <Card className="shadow border-0">
+                                        <Card.Header className="bg-primary text-white">
+                                            <h4 className="mb-0">{election.electionName} <Badge bg="light" text="dark" className="ms-2 fs-6">{election.electionType}</Badge></h4>
+                                        </Card.Header>
+                                        <Card.Body>
+                                            <Table hover responsive className="align-middle">
+                                                <thead className="table-light">
+                                                    <tr>
+                                                        <th>Rank</th>
+                                                        <th>Candidate</th>
+                                                        <th>Party</th>
+                                                        <th>Votes</th>
+                                                        <th>%</th>
+                                                        <th>Bar</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {election.results.map((res, idx) => (
+                                                        <tr key={idx} className={idx === 0 ? "table-warning fw-bold" : ""}>
+                                                            <td>{res.rankPosition === 1 ? '🥇' : res.rankPosition === 2 ? '🥈' : res.rankPosition === 3 ? '🥉' : res.rankPosition}</td>
+                                                            <td>
+                                                                <div className="d-flex align-items-center">
+                                                                    {/* Placeholder for image if needed, or just name */}
+                                                                    {res.candidateName}
+                                                                    {idx === 0 && <span className="ms-2 badge bg-success">Winner</span>}
+                                                                </div>
+                                                            </td>
+                                                            <td>{res.partyName} ({res.partySymbol})</td>
+                                                            <td>{res.voteCount}</td>
+                                                            <td>{res.votePercentage}%</td>
+                                                            <td style={{ width: '30%' }}>
+                                                                <ProgressBar now={res.votePercentage} variant={idx === 0 ? "success" : "info"} label={`${res.votePercentage}%`} />
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </Table>
+                                        </Card.Body>
+                                        <Card.Footer className="text-muted small">
+                                            Ended on: {new Date(election.endDate).toLocaleDateString()}
+                                        </Card.Footer>
+                                    </Card>
+                                </Col>
+                            ))}
+                        </Row>
+                    </div>
+                )}
+
                 {/* Introduction & About */}
                 <Row className="mb-5 align-items-center animate-slide-up delay-200">
                     <Col lg={12} className="text-center mb-4">
