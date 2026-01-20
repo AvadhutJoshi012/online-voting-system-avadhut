@@ -1378,7 +1378,7 @@ INSERT INTO candidates (user_id, election_id, party_name, party_symbol, manifest
 -- Wait, let's pick users who are NOT likely to vote in these elections or just valid generic users. 
 -- The Candidates table references user_id. Candidate users don't have to be from that region necessarily (though usually are).
 -- Let's use users 21, 22, 23 for UP candidates (assuming they are candidates).
-(21, 5, 'Samajwadi Party', 'Bicycle', 'Social Justice'),
+(35, 5, 'Samajwadi Party', 'Bicycle', 'Social Justice'),
 (22, 5, 'Bahujan Samaj Party', 'Elephant', 'Inclusive Growth'),
 (23, 5, 'Indian National Congress', 'Hand', 'Change for Progress');
 
