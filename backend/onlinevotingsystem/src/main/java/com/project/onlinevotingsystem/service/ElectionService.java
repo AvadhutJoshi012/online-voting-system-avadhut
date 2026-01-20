@@ -44,16 +44,27 @@ public class ElectionService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return electionRepository.findByStatus(ElectionStatus.ACTIVE).stream()
-                .filter(election -> {
-                    if (election.getElectionType() == ElectionType.LOCAL) {
-                        return user.getCity() != null && user.getCity().equalsIgnoreCase(election.getCity())
-                                && user.getState() != null && user.getState().equalsIgnoreCase(election.getState());
-                    } else if (election.getElectionType() == ElectionType.STATE) {
-                        return user.getState() != null && user.getState().equalsIgnoreCase(election.getState());
-                    }
-                    return true; // GENERAL or SPECIAL open to all
-                })
+                .filter(election -> isElectionVisibleToUser(election, user))
                 .collect(Collectors.toList());
+    }
+
+    public List<Election> getPastElectionsForUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return electionRepository.findByStatus(ElectionStatus.COMPLETED).stream()
+                .filter(election -> isElectionVisibleToUser(election, user))
+                .collect(Collectors.toList());
+    }
+
+    public boolean isElectionVisibleToUser(Election election, User user) {
+        if (election.getElectionType() == ElectionType.LOCAL) {
+            return user.getCity() != null && user.getCity().equalsIgnoreCase(election.getCity())
+                    && user.getState() != null && user.getState().equalsIgnoreCase(election.getState());
+        } else if (election.getElectionType() == ElectionType.STATE) {
+            return user.getState() != null && user.getState().equalsIgnoreCase(election.getState());
+        }
+        return true; // GENERAL or SPECIAL open to all
     }
 
     public List<Election> getPastElections() {

@@ -30,8 +30,12 @@ public class UserElectionController {
     }
 
     @GetMapping("/completed")
-    public ResponseEntity<List<Election>> getCompletedElections() {
-        return ResponseEntity.ok(electionService.getPastElections());
+    public ResponseEntity<List<Election>> getCompletedElections(Authentication authentication) {
+        String email = authentication.getName();
+        Long userId = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"))
+                .getUserId();
+        return ResponseEntity.ok(electionService.getPastElectionsForUser(userId));
     }
 
     @GetMapping("/{id}/candidates")
@@ -65,12 +69,21 @@ public class UserElectionController {
     }
 
     @GetMapping("/{id}/results")
-    public ResponseEntity<List<ElectionResult>> getResults(@PathVariable Long id) {
+    public ResponseEntity<List<ElectionResult>> getResults(@PathVariable Long id, Authentication authentication) {
+        String email = authentication.getName();
+        com.project.onlinevotingsystem.entity.User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         // Users can only view results of completed elections
         Election election = electionService.getElectionById(id);
         if (election.getStatus() != com.project.onlinevotingsystem.entity.ElectionStatus.COMPLETED) {
             return ResponseEntity.status(403).build(); // Forbidden
         }
+
+        if (!electionService.isElectionVisibleToUser(election, user)) {
+            return ResponseEntity.status(403).build(); // Forbidden
+        }
+
         return ResponseEntity.ok(electionService.getResults(id));
     }
 

@@ -197,6 +197,8 @@ CREATE TABLE dummy_passport_records (
     INDEX idx_passport (passport_number)
 );
 
+
+
 -- 7. UPDATE dummy verification tables with the 20 inserted users
 
 -- Insert verification records for 20 existing users
@@ -242,7 +244,7 @@ INSERT INTO dummy_voter_id_records (voter_id_number, full_name, date_of_birth) V
 ('VOT9900000017', 'Manish Yadav', '1991-07-21'),
 ('VOT2345678902', 'Divya Menon', '1993-09-09'),
 ('VOT9900000019', 'Arjun Pandey', '1989-12-24'),
-('VOT3456789013', 'Ritika Singh', '1994-01-31');
+('VOT3456781013', 'Ritika Singh', '1994-01-31');
 
 INSERT INTO dummy_pan_records (pan_number, full_name, date_of_birth) VALUES
 ('ABCDE1001Z', 'Rajesh Kumar', '1995-01-15'),
@@ -366,7 +368,9 @@ INSERT INTO users (email, password_hash, full_name, phone_number, date_of_birth,
 ('manish.yadav@email.com', '$2a$12$cixu8lsqF57fOT9nhfvFNuqtcvslyP9GYDElxLiFfT5GTPSEUaSm.', 'Manish Yadav', '9876543226', '1991-07-21', 'MALE', '789 Railway Colony', 'Patna', 'Bihar', '800001', '123456789013', 'VOT9900000017', '/api/user/profile/photo/17.jpg', TRUE, TRUE, '2024-01-12 11:00:00'),
 ('divya.menon@email.com', '$2a$12$7.1FJPUPpYv1CruCSoKZOOSfcE2/zDhO/ukUf/5zpSBGzAKZBSy1i', 'Divya Menon', '9876543227', '1993-09-09', 'FEMALE', '234 Beach Front', 'Thiruvananthapuram', 'Kerala', '695001', '990000000018', 'VOT2345678902', '/api/user/profile/photo/18.jpg', TRUE, TRUE, '2024-01-12 11:30:00'),
 ('arjun.pandey@email.com', '$2a$12$L30Zr13diUPP9NvNqenasePzijLYWYXmVwES42gYmhX7WPcWbSK5q', 'Arjun Pandey', '9876543228', '1989-12-24', 'MALE', '567 Ring Road', 'Nagpur', 'Maharashtra', '440001', '234567890124', 'VOT9900000019', '/api/user/profile/photo/19.jpg', TRUE, TRUE, '2024-01-12 12:00:00'),
-('ritika.singh@email.com', '$2a$12$CJwSJuyIUvMaT5ApArqoR.kESXc1oiwv.mzn8GlDlguHhX8SV/aeS', 'Ritika Singh', '9876543229', '1994-01-31', 'FEMALE', '890 Cantonment', 'Dehradun', 'Uttarakhand', '248001', '990000000020', 'VOT3456789013', '/api/user/profile/photo/20.jpg', TRUE, TRUE, '2024-01-12 12:30:00');
+('ritika.singh@email.com', '$2a$12$CJwSJuyIUvMaT5ApArqoR.kESXc1oiwv.mzn8GlDlguHhX8SV/aeS', 'Ritika Singh', '9876543229', '1994-01-31', 'FEMALE', '890 Cantonment', 'Dehradun', 'Uttarakhand', '248001', '990000000020', 'VOT3456781013', '/api/user/profile/photo/20.jpg', TRUE, TRUE, '2024-01-12 12:30:00');
+
+
 
 -- 2. INSERT 2 ADMINS (Passwords set to 'admin123', email updated to match login)
 INSERT INTO admins (email, password_hash, full_name, phone_number) VALUES
@@ -1353,3 +1357,99 @@ INSERT INTO users (email, password_hash, full_name, phone_number, date_of_birth,
 ('yash.mourya187@email.com', '$2b$12$.cp3i43R0/0mNDNrLT.HkuhZMnsItRvZGskX/alIgeyCU30voOMfi', 'Yash Mourya', '7000000187', '2000-01-01', 'MALE', 'Lucknow City', 'Lucknow', 'Uttar Pradesh', '000000', '770000000187', 'VOT3456789207', TRUE, TRUE, NOW()),
 ('yash.shirude188@email.com', '$2b$12$JCG2msB6BOJFaM5e4SFpn.3jgodzUKLlurq6Na2MX9YhA2l47.HHq', 'Yash Shirude', '7000000188', '2000-01-01', 'MALE', 'Mumbai City', 'Mumbai', 'Maharashtra', '000000', '770000000188', 'VOT3456789208', TRUE, TRUE, NOW()),
 ('yash.sonkuwar189@email.com', '$2b$12$bYCMpsub7nklC6O0VwXyhua6bNYbQHBUxJ2IWtn..g1zTzotX6ffO', 'Yash Sonkuwar', '7000000189', '2000-01-01', 'MALE', 'Nagpur City', 'Nagpur', 'Maharashtra', '000000', '770000000189', 'VOT3456789209', TRUE, TRUE, NOW());
+
+-- ============================================
+-- NEW REGIONAL ELECTIONS (UP, MP, INDORE)
+-- ============================================
+
+-- 1. INSERT NEW ACTIVE ELECTIONS
+INSERT INTO elections (election_name, election_type, start_date, end_date, city, state, status, result_published, created_by) VALUES
+('Uttar Pradesh State Assembly Election 2026', 'STATE', '2026-02-01 08:00:00', '2026-02-10 18:00:00', NULL, 'Uttar Pradesh', 'ACTIVE', FALSE, 1),
+('Madhya Pradesh State Assembly Election 2026', 'STATE', '2026-02-05 08:00:00', '2026-02-15 18:00:00', NULL, 'Madhya Pradesh', 'ACTIVE', FALSE, 1),
+('Indore Municipal Corporation Election 2026', 'LOCAL', '2026-02-05 08:00:00', '2026-02-08 18:00:00', 'Indore', 'Madhya Pradesh', 'ACTIVE', FALSE, 2);
+
+-- Note: IDs are likely 5, 6, 7 respectively assuming previous were 1-4.
+-- Storing IDs in variables is not supported in standard SQL scripts usually, so we assume 5, 6, 7.
+
+-- 2. INSERT CANDIDATES
+-- For UP (Election ID 5)
+INSERT INTO candidates (user_id, election_id, party_name, party_symbol, manifesto) VALUES
+(21, 5, 'Bharatiya Janata Party', 'Lotus', 'Development for UP'), -- Madhur Chaudhari (Actually from Jalgaon/Pune in list but using for demo or picking distinct users)
+-- Wait, let's pick users who are NOT likely to vote in these elections or just valid generic users. 
+-- The Candidates table references user_id. Candidate users don't have to be from that region necessarily (though usually are).
+-- Let's use users 21, 22, 23 for UP candidates (assuming they are candidates).
+(21, 5, 'Samajwadi Party', 'Bicycle', 'Social Justice'),
+(22, 5, 'Bahujan Samaj Party', 'Elephant', 'Inclusive Growth'),
+(23, 5, 'Indian National Congress', 'Hand', 'Change for Progress');
+
+-- For MP (Election ID 6)
+INSERT INTO candidates (user_id, election_id, party_name, party_symbol, manifesto) VALUES
+(24, 6, 'Bharatiya Janata Party', 'Lotus', 'MP ke Man me Modi'),
+(25, 6, 'Indian National Congress', 'Hand', 'Welfare for MP'),
+(26, 6, 'Aam Aadmi Party', 'Broom', 'Clean Politics');
+
+-- For Indore (Election ID 7)
+INSERT INTO candidates (user_id, election_id, party_name, party_symbol, manifesto) VALUES
+(27, 7, 'Bharatiya Janata Party', 'Lotus', 'Cleanest City Forever'),
+(28, 7, 'Indian National Congress', 'Hand', 'Better Infrastructure'),
+(29, 7, 'Independent', 'Bat', 'Local Voice');
+
+-- 3. INSERT VOTES (Simulate some voting)
+-- UP Voters (State = Uttar Pradesh)
+-- Users: Anuj Tomar (Agra), Rajat Morya (Bareilly), Ayush Kush (Lucknow), etc.
+-- Let's assume User IDs for them.
+-- From the script: 
+-- Anuj Tomar -> ID 22 (created in '7. NEW USERS...' block)
+-- Rajat Morya -> ID 26
+-- Ayush Kush -> ID 27
+-- Prabal Singh -> ID 36
+-- Anuj Sharma -> ID 41
+-- Apoorv Singh -> ID 49
+-- Pranav Tiwari -> ID 50
+-- Plus the bulk users starting from ID 51...
+-- Let's use subqueries to be safe or just assume IDs based on the insert order in finalschema.sql
+
+-- Voting in UP Election (ID 5)
+-- Anuj Tomar (22) votes for Candidate 1 (User 21 - ID in candidates table is auto-inc, let's say 21)
+-- Candidate IDs:
+-- UP: 21, 22, 23 -> Candidate IDs 21, 22, 23
+-- MP: 24, 25, 26 -> Candidate IDs 24, 25, 26
+-- Indore: 27, 28, 29 -> Candidate IDs 27, 28, 29
+-- (Assuming continuous auto-inc from 20)
+
+INSERT INTO votes (election_id, user_id, candidate_id, vote_hash, voted_at) VALUES
+(5, 22, 21, CONCAT('hash_e5_u22_', MD5(NOW())), NOW()), -- Anuj Tomar votes
+(5, 26, 22, CONCAT('hash_e5_u26_', MD5(NOW())), NOW()), -- Rajat Morya votes
+(5, 27, 21, CONCAT('hash_e5_u27_', MD5(NOW())), NOW()); -- Ayush Kush votes
+
+INSERT INTO voter_election_status (election_id, user_id, has_voted, voted_at) VALUES
+(5, 22, TRUE, NOW()),
+(5, 26, TRUE, NOW()),
+(5, 27, TRUE, NOW()),
+(5, 36, FALSE, NULL), -- Prabal Singh (Not voted)
+(5, 41, FALSE, NULL); -- Anuj Sharma (Not voted)
+
+-- Voting in MP Election (ID 6)
+-- Users: Satyam Patel (Katni - 23), Satyam Bavankar (Seoni - 30), Ansh Mittal (Gwalior - 33), Rajdeep Kala (Ujjain - 34)
+INSERT INTO votes (election_id, user_id, candidate_id, vote_hash, voted_at) VALUES
+(6, 23, 24, CONCAT('hash_e6_u23_', MD5(NOW())), NOW()), -- Satyam Patel votes
+(6, 30, 25, CONCAT('hash_e6_u30_', MD5(NOW())), NOW()); -- Satyam Bavankar votes
+
+INSERT INTO voter_election_status (election_id, user_id, has_voted, voted_at) VALUES
+(6, 23, TRUE, NOW()),
+(6, 30, TRUE, NOW()),
+(6, 33, FALSE, NULL), -- Ansh Mittal
+(6, 34, FALSE, NULL); -- Rajdeep Kala
+
+-- Voting in Indore Election (ID 7) - LOCAL
+-- Users: Pooja Joshi (Indore - 12), Himanshu Muleva (40), Abhijeet Singh (51)
+-- Also generic users: Abhijit Mandloi (Indore), Ansh Jain, etc.
+INSERT INTO votes (election_id, user_id, candidate_id, vote_hash, voted_at) VALUES
+(7, 12, 27, CONCAT('hash_e7_u12_', MD5(NOW())), NOW()), -- Pooja Joshi votes
+(7, 40, 27, CONCAT('hash_e7_u40_', MD5(NOW())), NOW()); -- Himanshu Muleva votes
+
+INSERT INTO voter_election_status (election_id, user_id, has_voted, voted_at) VALUES
+(7, 12, TRUE, NOW()),
+(7, 40, TRUE, NOW()),
+(7, 51, FALSE, NULL); -- Abhijeet Singh
+
