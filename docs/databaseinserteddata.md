@@ -190,4 +190,30 @@ INSERT INTO election_reports (election_id, total_registered_voters, total_votes_
 (2, 20, 18, 90.00, 5, 6, 0, 2);
 
 
+-- 7. NEW USERS AND LOCATION UPDATES (January 20, 2026)
+-- Update Existing Elections with specific locations
+UPDATE elections SET state = 'Maharashtra', election_type = 'STATE' WHERE election_name = 'Maharashtra State Assembly Election 2025';
+UPDATE elections SET city = 'Mumbai', state = 'Maharashtra', election_type = 'LOCAL' WHERE election_name = 'Mumbai Municipal Corporation Election 2025';
+UPDATE elections SET state = 'Karnataka', election_type = 'STATE' WHERE election_name = 'Karnataka State Assembly Election 2024';
+UPDATE elections SET city = 'Delhi', state = 'Delhi', election_type = 'LOCAL' WHERE election_name = 'Delhi Municipal Corporation Election 2024';
+
+-- Insert 15 New Users
+INSERT INTO users (email, password_hash, full_name, phone_number, date_of_birth, gender, address, city, state, pincode, aadhar_number, voter_id_number, is_active, is_verified, approved_at) VALUES
+('madhur.chaudhari@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Madhur Chaudhari', '9000000001', '2000-01-01', 'MALE', 'Jalgaon City', 'Jalgaon', 'Maharashtra', '425001', '100000000001', 'VOT1000000001', TRUE, TRUE, NOW()),
+('anuj.tomar@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Anuj Tomar', '9000000002', '2000-01-01', 'MALE', 'Agra City', 'Agra', 'Uttar Pradesh', '282001', '100000000002', 'VOT1000000002', TRUE, TRUE, NOW()),
+('satyam.patel@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Satyam Patel', '9000000003', '2000-01-01', 'MALE', 'Katni City', 'Katni', 'Madhya Pradesh', '483501', '100000000003', 'VOT1000000003', TRUE, TRUE, NOW()),
+('soham.dey@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Soham Kumar Dey', '9000000004', '2000-01-01', 'MALE', 'Murshidabad City', 'Murshidabad', 'West Bengal', '742101', '100000000004', 'VOT1000000004', TRUE, TRUE, NOW()),
+('utkarsh.phalphale@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Utkarsh Phalphale', '9000000005', '2000-01-01', 'MALE', 'Pune City', 'Pune', 'Maharashtra', '411001', '100000000005', 'VOT1000000005', TRUE, TRUE, NOW()),
+('rajat.morya@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Rajat Morya', '9000000006', '2000-01-01', 'MALE', 'Bareilly City', 'Bareilly', 'Uttar Pradesh', '243001', '100000000006', 'VOT1000000006', TRUE, TRUE, NOW()),
+('ayush.kush@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Ayush Kush', '9000000007', '2000-01-01', 'MALE', 'Lucknow City', 'Lucknow', 'Uttar Pradesh', '226001', '100000000007', 'VOT1000000007', TRUE, TRUE, NOW()),
+('ninad.soman@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Ninad Soman', '9000000008', '2000-01-01', 'MALE', 'Pune City', 'Pune', 'Maharashtra', '411004', '100000000008', 'VOT1000000008', TRUE, TRUE, NOW()),
+('vivek.yadav@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Vivek Yadav', '9000000009', '2000-01-01', 'MALE', 'Nalanda City', 'Nalanda', 'Bihar', '803111', '100000000009', 'VOT1000000009', TRUE, TRUE, NOW()),
+('satyam.bavankar@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Satyam Bavankar', '9000000010', '2000-01-01', 'MALE', 'Seoni City', 'Seoni', 'Madhya Pradesh', '480661', '100000000010', 'VOT1000000010', TRUE, TRUE, NOW()),
+('tanay.mapare@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Tanay Mapare', '9000000011', '2000-01-01', 'MALE', 'Washim City', 'Washim', 'Maharashtra', '444505', '100000000011', 'VOT1000000011', TRUE, TRUE, NOW()),
+('ayush.shrivastava@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Ayush Shrivastava', '9000000012', '2000-01-01', 'MALE', 'Lucknow City', 'Lucknow', 'Uttar Pradesh', '226002', '100000000012', 'VOT1000000012', TRUE, TRUE, NOW()),
+('ansh.mittal@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Ansh Mittal', '9000000013', '2000-01-01', 'MALE', 'Gwalior City', 'Gwalior', 'Madhya Pradesh', '474001', '100000000013', 'VOT1000000013', TRUE, TRUE, NOW()),
+('rajdeep.kala@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Rajdeep Kala', '9000000014', '2000-01-01', 'MALE', 'Ujjain City', 'Ujjain', 'Madhya Pradesh', '456001', '100000000014', 'VOT1000000014', TRUE, TRUE, NOW()),
+('satyendra.rathore@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Satyendra Rathore', '9000000015', '2000-01-01', 'MALE', 'Ujjain City', 'Ujjain', 'Madhya Pradesh', '456001', '100000000015', 'VOT1000000015', TRUE, TRUE, NOW());
+
+
 ```

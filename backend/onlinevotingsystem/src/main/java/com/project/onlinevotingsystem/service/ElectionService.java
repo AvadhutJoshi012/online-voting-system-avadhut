@@ -39,6 +39,23 @@ public class ElectionService {
         return electionRepository.findByStatus(ElectionStatus.ACTIVE);
     }
 
+    public List<Election> getActiveElectionsForUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return electionRepository.findByStatus(ElectionStatus.ACTIVE).stream()
+                .filter(election -> {
+                    if (election.getElectionType() == ElectionType.LOCAL) {
+                        return user.getCity() != null && user.getCity().equalsIgnoreCase(election.getCity())
+                                && user.getState() != null && user.getState().equalsIgnoreCase(election.getState());
+                    } else if (election.getElectionType() == ElectionType.STATE) {
+                        return user.getState() != null && user.getState().equalsIgnoreCase(election.getState());
+                    }
+                    return true; // GENERAL or SPECIAL open to all
+                })
+                .collect(Collectors.toList());
+    }
+
     public List<Election> getPastElections() {
         return electionRepository.findByStatus(ElectionStatus.COMPLETED);
     }
@@ -56,6 +73,8 @@ public class ElectionService {
         election.setStartDate(request.getStartDate());
         election.setEndDate(request.getEndDate());
         election.setStatus(ElectionStatus.DRAFT);
+        election.setCity(request.getCity());
+        election.setState(request.getState());
 
         // Get current admin user
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

@@ -21,8 +21,12 @@ public class UserElectionController {
     private final VoteService voteService;
 
     @GetMapping("/active")
-    public ResponseEntity<List<Election>> getActiveElections() {
-        return ResponseEntity.ok(electionService.getActiveElections());
+    public ResponseEntity<List<Election>> getActiveElections(Authentication authentication) {
+        String email = authentication.getName();
+        Long userId = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"))
+                .getUserId();
+        return ResponseEntity.ok(electionService.getActiveElectionsForUser(userId));
     }
 
     @GetMapping("/completed")

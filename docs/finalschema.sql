@@ -1,3 +1,6 @@
+
+SET SQL_SAFE_UPDATES = 0;
+
 CREATE DATABASE IF NOT EXISTS devovs;
 
 USE devovs;
@@ -58,6 +61,8 @@ CREATE TABLE elections (
     election_type ENUM('GENERAL', 'STATE', 'LOCAL', 'SPECIAL') NOT NULL,
     start_date DATETIME NOT NULL,
     end_date DATETIME NOT NULL,
+    city VARCHAR(100),
+    state VARCHAR(100),
     status ENUM('DRAFT', 'SCHEDULED', 'ACTIVE', 'COMPLETED', 'CANCELLED') DEFAULT 'DRAFT',
     result_published BOOLEAN DEFAULT FALSE,
     result_published_at TIMESTAMP NULL,
@@ -333,6 +338,7 @@ INSERT INTO dummy_passport_records (passport_number, full_name, date_of_birth) V
 ('P8800009', 'Deepak Revgade', '2000-01-01');
 
 
+
 -- ============================================
 -- TEST DATA INSERTION
 -- ============================================
@@ -341,26 +347,26 @@ INSERT INTO dummy_passport_records (passport_number, full_name, date_of_birth) V
 -- 1. INSERT 20 USERS WITH BCRYPT HASHED PASSWORDS
 -- Updated to include both AADHAR and VOTER_ID for each user
 INSERT INTO users (email, password_hash, full_name, phone_number, date_of_birth, gender, address, city, state, pincode, aadhar_number, voter_id_number, profile_image_url, is_active, is_verified, approved_at) VALUES
-('rajesh.kumar@email.com', '$2a$12$h2bW9dGj8X89JMBBHjvffe2jKCerIAzPFK.LsQiy0yV3fOk/NwiV6', 'Rajesh Kumar', '9876543210', '1995-01-15', 'MALE', '123 MG Road', 'Mumbai', 'Maharashtra', '400001', '123456789012', 'VOT9900000001', 'http://localhost:5173/profiles/1.jpg', TRUE, TRUE, '2024-01-10 10:00:00'),
-('priya.sharma@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Priya Sharma', '9876543211', '1990-05-20', 'FEMALE', '456 CP Avenue', 'Delhi', 'Delhi', '110001', '990000000002', 'VOT2345678901', 'http://localhost:5173/profiles/2.jpg', TRUE, TRUE, '2024-01-10 10:30:00'),
-('amit.patel@email.com', '$2a$12$0XWI2r/7LgSn6twF9XBZWegKk85neQGOQkjdZutCEsccmAjWwQ1OK', 'Amit Patel', '9876543212', '1988-08-10', 'MALE', '789 Brigade Road', 'Bangalore', 'Karnataka', '560001', '345678901234', 'VOT9900000003', 'http://localhost:5173/profiles/3.jpg', TRUE, TRUE, '2024-01-10 11:00:00'),
-('sneha.desai@email.com', '$2a$12$GKbNrwaaUdIT0.3t.Qks8uI2KQvAvjT3WL8nK.rr9DbDEXglXm5Om', 'Sneha Desai', '9876543213', '1992-03-25', 'FEMALE', '321 Park Street', 'Pune', 'Maharashtra', '411001', '990000000004', 'VOT4567890123', 'http://localhost:5173/profiles/4.jpg', TRUE, TRUE, '2024-01-10 11:30:00'),
-('vikram.singh@email.com', '$2a$12$.IG7McJt2tLTfIzPS3msluu0mqH7KxpwAkhoeGYKDV1Ig9q5dOzra', 'Vikram Singh', '9876543214', '1985-11-30', 'MALE', '654 Mall Road', 'Jaipur', 'Rajasthan', '302001', '567890123456', 'VOT9900000005', 'http://localhost:5173/profiles/5.jpg', TRUE, TRUE, '2024-01-10 12:00:00'),
-('anita.verma@email.com', '$2a$12$rhrdrh19jqkEF5.8QcP9seYGIeC6nrZuiTicoOszmvgF64iZa21VS', 'Anita Verma', '9876543215', '1993-07-18', 'FEMALE', '234 Lake Road', 'Kolkata', 'West Bengal', '700001', '990000000006', 'VOT6789012345', 'http://localhost:5173/profiles/6.jpg', TRUE, TRUE, '2024-01-11 09:00:00'),
-('rahul.mehta@email.com', '$2a$12$vyYQkoMHbyFqOIJ0F07HoezJ/kN/UOJUYuYw.eZAdeDSAabI6zBCm', 'Rahul Mehta', '9876543216', '1991-12-05', 'MALE', '567 Station Road', 'Ahmedabad', 'Gujarat', '380001', '678901234567', 'VOT9900000007', 'http://localhost:5173/profiles/7.jpg', TRUE, TRUE, '2024-01-11 09:30:00'),
-('kavita.nair@email.com', '$2a$12$rTOeBs9Dz3IPFlPFQxyEaOrflZ3KqmKeOGA1cAbnWYb2BKt4XZPHm', 'Kavita Nair', '9876543217', '1989-04-22', 'FEMALE', '890 Beach Road', 'Chennai', 'Tamil Nadu', '600001', '990000000008', 'VOT7890123456', 'http://localhost:5173/profiles/8.jpg', TRUE, TRUE, '2024-01-11 10:00:00'),
-('suresh.reddy@email.com', '$2a$12$F2U/XiDNCaNI4Z3mqc1ITe/E3VCbsJ/mmoJS3hx//XTluntMRnxee', 'Suresh Reddy', '9876543218', '1987-09-14', 'MALE', '123 Tech Park', 'Hyderabad', 'Telangana', '500001', '789012345678', 'VOT9900000009', 'http://localhost:5173/profiles/9.jpg', TRUE, TRUE, '2024-01-11 10:30:00'),
-('meena.iyer@email.com', '$2a$12$/phBjZ5kbVnIQXFcqAyBO.JIMbtiRcWrIlF.zZauK3g.CoXcNzx2.', 'Meena Iyer', '9876543219', '1994-06-08', 'FEMALE', '456 Garden View', 'Kochi', 'Kerala', '682001', '990000000010', 'VOT8901234567', 'http://localhost:5173/profiles/10.jpg', TRUE, TRUE, '2024-01-11 11:00:00'),
-('anil.gupta@email.com', '$2a$12$JoYqmT4zrOPbTB4I/6cOw.AsaMjYB7On3n69KZ3mXa0MB22yjidC2', 'Anil Gupta', '9876543220', '1986-02-28', 'MALE', '789 Civil Lines', 'Lucknow', 'Uttar Pradesh', '226001', '890123456789', 'VOT9900000011', 'http://localhost:5173/profiles/11.jpg', TRUE, TRUE, '2024-01-11 11:30:00'),
-('pooja.joshi@email.com', '$2a$12$OlnTvuBoPFJv1jqpVmYL3OrYcdcHETymJHm8oMW.XSOmy6XQcGvje', 'Pooja Joshi', '9876543221', '1996-10-12', 'FEMALE', '234 University Road', 'Indore', 'Madhya Pradesh', '452001', '990000000012', 'VOT9012345678', 'http://localhost:5173/profiles/12.jpg', TRUE, TRUE, '2024-01-11 12:00:00'),
-('deepak.saxena@email.com', '$2a$12$HxMpfjyUH33IjL58CcdVQupc8naVaz8I7egg6/i.oRFWuVQy.FglC', 'Deepak Saxena', '9876543222', '1990-08-19', 'MALE', '567 Market Square', 'Bhopal', 'Madhya Pradesh', '462001', '901234567890', 'VOT9900000013', 'http://localhost:5173/profiles/13.jpg', TRUE, TRUE, '2024-01-12 09:00:00'),
-('neha.kapoor@email.com', '$2a$12$9gfo7Nkm/VYPpFuMrBh8neEaLEwu6cSb04y8aAu8V2ug2xtXVNvZ.', 'Neha Kapoor', '9876543223', '1992-11-03', 'FEMALE', '890 Hill View', 'Shimla', 'Himachal Pradesh', '171001', '990000000014', 'VOT0123456789', 'http://localhost:5173/profiles/14.jpg', TRUE, TRUE, '2024-01-12 09:30:00'),
-('ravi.krishnan@email.com', '$2a$12$wDVZ6It2dq1JNKMFdi0YzuNHdgn.ZLWmO5e323XHDDyJyEW7Su6BG', 'Ravi Krishnan', '9876543224', '1988-03-17', 'MALE', '123 Temple Street', 'Madurai', 'Tamil Nadu', '625001', '012345678901', 'VOT9900000015', 'http://localhost:5173/profiles/15.jpg', TRUE, TRUE, '2024-01-12 10:00:00'),
-('shalini.das@email.com', '$2a$12$AnYu/JR0ZIJltc1XegjntOimv7vCbznypzEehe8JZcN32NovvGfOG', 'Shalini Das', '9876543225', '1995-05-29', 'FEMALE', '456 Fort Road', 'Guwahati', 'Assam', '781001', '990000000016', 'VOT1234567891', 'http://localhost:5173/profiles/16.jpg', TRUE, TRUE, '2024-01-12 10:30:00'),
-('manish.yadav@email.com', '$2a$12$cixu8lsqF57fOT9nhfvFNuqtcvslyP9GYDElxLiFfT5GTPSEUaSm.', 'Manish Yadav', '9876543226', '1991-07-21', 'MALE', '789 Railway Colony', 'Patna', 'Bihar', '800001', '123456789013', 'VOT9900000017', 'http://localhost:5173/profiles/17.jpg', TRUE, TRUE, '2024-01-12 11:00:00'),
-('divya.menon@email.com', '$2a$12$7.1FJPUPpYv1CruCSoKZOOSfcE2/zDhO/ukUf/5zpSBGzAKZBSy1i', 'Divya Menon', '9876543227', '1993-09-09', 'FEMALE', '234 Beach Front', 'Thiruvananthapuram', 'Kerala', '695001', '990000000018', 'VOT2345678902', 'http://localhost:5173/profiles/18.jpg', TRUE, TRUE, '2024-01-12 11:30:00'),
-('arjun.pandey@email.com', '$2a$12$L30Zr13diUPP9NvNqenasePzijLYWYXmVwES42gYmhX7WPcWbSK5q', 'Arjun Pandey', '9876543228', '1989-12-24', 'MALE', '567 Ring Road', 'Nagpur', 'Maharashtra', '440001', '234567890124', 'VOT9900000019', 'http://localhost:5173/profiles/19.jpg', TRUE, TRUE, '2024-01-12 12:00:00'),
-('ritika.singh@email.com', '$2a$12$CJwSJuyIUvMaT5ApArqoR.kESXc1oiwv.mzn8GlDlguHhX8SV/aeS', 'Ritika Singh', '9876543229', '1994-01-31', 'FEMALE', '890 Cantonment', 'Dehradun', 'Uttarakhand', '248001', '990000000020', 'VOT3456789013', 'http://localhost:5173/profiles/20.jpg', TRUE, TRUE, '2024-01-12 12:30:00');
+('rajesh.kumar@email.com', '$2a$12$h2bW9dGj8X89JMBBHjvffe2jKCerIAzPFK.LsQiy0yV3fOk/NwiV6', 'Rajesh Kumar', '9876543210', '1995-01-15', 'MALE', '123 MG Road', 'Mumbai', 'Maharashtra', '400001', '123456789012', 'VOT9900000001', '/api/user/profile/photo/1.jpg', TRUE, TRUE, '2024-01-10 10:00:00'),
+('priya.sharma@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Priya Sharma', '9876543211', '1990-05-20', 'FEMALE', '456 CP Avenue', 'Delhi', 'Delhi', '110001', '990000000002', 'VOT2345678901', '/api/user/profile/photo/2.jpg', TRUE, TRUE, '2024-01-10 10:30:00'),
+('amit.patel@email.com', '$2a$12$0XWI2r/7LgSn6twF9XBZWegKk85neQGOQkjdZutCEsccmAjWwQ1OK', 'Amit Patel', '9876543212', '1988-08-10', 'MALE', '789 Brigade Road', 'Bangalore', 'Karnataka', '560001', '345678901234', 'VOT9900000003', '/api/user/profile/photo/3.jpg', TRUE, TRUE, '2024-01-10 11:00:00'),
+('sneha.desai@email.com', '$2a$12$GKbNrwaaUdIT0.3t.Qks8uI2KQvAvjT3WL8nK.rr9DbDEXglXm5Om', 'Sneha Desai', '9876543213', '1992-03-25', 'FEMALE', '321 Park Street', 'Pune', 'Maharashtra', '411001', '990000000004', 'VOT4567890123', '/api/user/profile/photo/4.jpg', TRUE, TRUE, '2024-01-10 11:30:00'),
+('vikram.singh@email.com', '$2a$12$.IG7McJt2tLTfIzPS3msluu0mqH7KxpwAkhoeGYKDV1Ig9q5dOzra', 'Vikram Singh', '9876543214', '1985-11-30', 'MALE', '654 Mall Road', 'Jaipur', 'Rajasthan', '302001', '567890123456', 'VOT9900000005', '/api/user/profile/photo/5.jpg', TRUE, TRUE, '2024-01-10 12:00:00'),
+('anita.verma@email.com', '$2a$12$rhrdrh19jqkEF5.8QcP9seYGIeC6nrZuiTicoOszmvgF64iZa21VS', 'Anita Verma', '9876543215', '1993-07-18', 'FEMALE', '234 Lake Road', 'Kolkata', 'West Bengal', '700001', '990000000006', 'VOT6789012345', '/api/user/profile/photo/6.jpg', TRUE, TRUE, '2024-01-11 09:00:00'),
+('rahul.mehta@email.com', '$2a$12$vyYQkoMHbyFqOIJ0F07HoezJ/kN/UOJUYuYw.eZAdeDSAabI6zBCm', 'Rahul Mehta', '9876543216', '1991-12-05', 'MALE', '567 Station Road', 'Ahmedabad', 'Gujarat', '380001', '678901234567', 'VOT9900000007', '/api/user/profile/photo/7.jpg', TRUE, TRUE, '2024-01-11 09:30:00'),
+('kavita.nair@email.com', '$2a$12$rTOeBs9Dz3IPFlPFQxyEaOrflZ3KqmKeOGA1cAbnWYb2BKt4XZPHm', 'Kavita Nair', '9876543217', '1989-04-22', 'FEMALE', '890 Beach Road', 'Chennai', 'Tamil Nadu', '600001', '990000000008', 'VOT7890123456', '/api/user/profile/photo/8.jpg', TRUE, TRUE, '2024-01-11 10:00:00'),
+('suresh.reddy@email.com', '$2a$12$F2U/XiDNCaNI4Z3mqc1ITe/E3VCbsJ/mmoJS3hx//XTluntMRnxee', 'Suresh Reddy', '9876543218', '1987-09-14', 'MALE', '123 Tech Park', 'Hyderabad', 'Telangana', '500001', '789012345678', 'VOT9900000009', '/api/user/profile/photo/9.jpg', TRUE, TRUE, '2024-01-11 10:30:00'),
+('meena.iyer@email.com', '$2a$12$/phBjZ5kbVnIQXFcqAyBO.JIMbtiRcWrIlF.zZauK3g.CoXcNzx2.', 'Meena Iyer', '9876543219', '1994-06-08', 'FEMALE', '456 Garden View', 'Kochi', 'Kerala', '682001', '990000000010', 'VOT8901234567', '/api/user/profile/photo/10.jpg', TRUE, TRUE, '2024-01-11 11:00:00'),
+('anil.gupta@email.com', '$2a$12$JoYqmT4zrOPbTB4I/6cOw.AsaMjYB7On3n69KZ3mXa0MB22yjidC2', 'Anil Gupta', '9876543220', '1986-02-28', 'MALE', '789 Civil Lines', 'Lucknow', 'Uttar Pradesh', '226001', '890123456789', 'VOT9900000011', '/api/user/profile/photo/11.jpg', TRUE, TRUE, '2024-01-11 11:30:00'),
+('pooja.joshi@email.com', '$2a$12$OlnTvuBoPFJv1jqpVmYL3OrYcdcHETymJHm8oMW.XSOmy6XQcGvje', 'Pooja Joshi', '9876543221', '1996-10-12', 'FEMALE', '234 University Road', 'Indore', 'Madhya Pradesh', '452001', '990000000012', 'VOT9012345678', '/api/user/profile/photo/12.jpg', TRUE, TRUE, '2024-01-11 12:00:00'),
+('deepak.saxena@email.com', '$2a$12$HxMpfjyUH33IjL58CcdVQupc8naVaz8I7egg6/i.oRFWuVQy.FglC', 'Deepak Saxena', '9876543222', '1990-08-19', 'MALE', '567 Market Square', 'Bhopal', 'Madhya Pradesh', '462001', '901234567890', 'VOT9900000013', '/api/user/profile/photo/13.jpg', TRUE, TRUE, '2024-01-12 09:00:00'),
+('neha.kapoor@email.com', '$2a$12$9gfo7Nkm/VYPpFuMrBh8neEaLEwu6cSb04y8aAu8V2ug2xtXVNvZ.', 'Neha Kapoor', '9876543223', '1992-11-03', 'FEMALE', '890 Hill View', 'Shimla', 'Himachal Pradesh', '171001', '990000000014', 'VOT0123456789', '/api/user/profile/photo/14.jpg', TRUE, TRUE, '2024-01-12 09:30:00'),
+('ravi.krishnan@email.com', '$2a$12$wDVZ6It2dq1JNKMFdi0YzuNHdgn.ZLWmO5e323XHDDyJyEW7Su6BG', 'Ravi Krishnan', '9876543224', '1988-03-17', 'MALE', '123 Temple Street', 'Madurai', 'Tamil Nadu', '625001', '012345678901', 'VOT9900000015', '/api/user/profile/photo/15.jpg', TRUE, TRUE, '2024-01-12 10:00:00'),
+('shalini.das@email.com', '$2a$12$AnYu/JR0ZIJltc1XegjntOimv7vCbznypzEehe8JZcN32NovvGfOG', 'Shalini Das', '9876543225', '1995-05-29', 'FEMALE', '456 Fort Road', 'Guwahati', 'Assam', '781001', '990000000016', 'VOT1234567891', '/api/user/profile/photo/16.jpg', TRUE, TRUE, '2024-01-12 10:30:00'),
+('manish.yadav@email.com', '$2a$12$cixu8lsqF57fOT9nhfvFNuqtcvslyP9GYDElxLiFfT5GTPSEUaSm.', 'Manish Yadav', '9876543226', '1991-07-21', 'MALE', '789 Railway Colony', 'Patna', 'Bihar', '800001', '123456789013', 'VOT9900000017', '/api/user/profile/photo/17.jpg', TRUE, TRUE, '2024-01-12 11:00:00'),
+('divya.menon@email.com', '$2a$12$7.1FJPUPpYv1CruCSoKZOOSfcE2/zDhO/ukUf/5zpSBGzAKZBSy1i', 'Divya Menon', '9876543227', '1993-09-09', 'FEMALE', '234 Beach Front', 'Thiruvananthapuram', 'Kerala', '695001', '990000000018', 'VOT2345678902', '/api/user/profile/photo/18.jpg', TRUE, TRUE, '2024-01-12 11:30:00'),
+('arjun.pandey@email.com', '$2a$12$L30Zr13diUPP9NvNqenasePzijLYWYXmVwES42gYmhX7WPcWbSK5q', 'Arjun Pandey', '9876543228', '1989-12-24', 'MALE', '567 Ring Road', 'Nagpur', 'Maharashtra', '440001', '234567890124', 'VOT9900000019', '/api/user/profile/photo/19.jpg', TRUE, TRUE, '2024-01-12 12:00:00'),
+('ritika.singh@email.com', '$2a$12$CJwSJuyIUvMaT5ApArqoR.kESXc1oiwv.mzn8GlDlguHhX8SV/aeS', 'Ritika Singh', '9876543229', '1994-01-31', 'FEMALE', '890 Cantonment', 'Dehradun', 'Uttarakhand', '248001', '990000000020', 'VOT3456789013', '/api/user/profile/photo/20.jpg', TRUE, TRUE, '2024-01-12 12:30:00');
 
 -- 2. INSERT 2 ADMINS (Passwords set to 'admin123', email updated to match login)
 INSERT INTO admins (email, password_hash, full_name, phone_number) VALUES
@@ -521,6 +527,30 @@ INSERT INTO election_reports (election_id, total_registered_voters, total_votes_
 (2, 20, 18, 90.00, 5, 6, 0, 2);
 
 
+-- 7. NEW USERS AND LOCATION UPDATES (January 20, 2026)
+-- Update Existing Elections with specific locations
+UPDATE elections SET state = 'Maharashtra', election_type = 'STATE' WHERE election_name = 'Maharashtra State Assembly Election 2025';
+UPDATE elections SET city = 'Mumbai', state = 'Maharashtra', election_type = 'LOCAL' WHERE election_name = 'Mumbai Municipal Corporation Election 2025';
+UPDATE elections SET state = 'Karnataka', election_type = 'STATE' WHERE election_name = 'Karnataka State Assembly Election 2024';
+UPDATE elections SET city = 'Delhi', state = 'Delhi', election_type = 'LOCAL' WHERE election_name = 'Delhi Municipal Corporation Election 2024';
+
+-- Insert 15 New Users
+INSERT INTO users (email, password_hash, full_name, phone_number, date_of_birth, gender, address, city, state, pincode, aadhar_number, voter_id_number, is_active, is_verified, approved_at) VALUES
+('madhur.chaudhari@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Madhur Chaudhari', '9000000001', '2000-01-01', 'MALE', 'Jalgaon City', 'Jalgaon', 'Maharashtra', '425001', '100000000001', 'VOT1000000001', TRUE, TRUE, NOW()),
+('anuj.tomar@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Anuj Tomar', '9000000002', '2000-01-01', 'MALE', 'Agra City', 'Agra', 'Uttar Pradesh', '282001', '100000000002', 'VOT1000000002', TRUE, TRUE, NOW()),
+('satyam.patel@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Satyam Patel', '9000000003', '2000-01-01', 'MALE', 'Katni City', 'Katni', 'Madhya Pradesh', '483501', '100000000003', 'VOT1000000003', TRUE, TRUE, NOW()),
+('soham.dey@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Soham Kumar Dey', '9000000004', '2000-01-01', 'MALE', 'Murshidabad City', 'Murshidabad', 'West Bengal', '742101', '100000000004', 'VOT1000000004', TRUE, TRUE, NOW()),
+('utkarsh.phalphale@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Utkarsh Phalphale', '9000000005', '2000-01-01', 'MALE', 'Pune City', 'Pune', 'Maharashtra', '411001', '100000000005', 'VOT1000000005', TRUE, TRUE, NOW()),
+('rajat.morya@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Rajat Morya', '9000000006', '2000-01-01', 'MALE', 'Bareilly City', 'Bareilly', 'Uttar Pradesh', '243001', '100000000006', 'VOT1000000006', TRUE, TRUE, NOW()),
+('ayush.kush@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Ayush Kush', '9000000007', '2000-01-01', 'MALE', 'Lucknow City', 'Lucknow', 'Uttar Pradesh', '226001', '100000000007', 'VOT1000000007', TRUE, TRUE, NOW()),
+('ninad.soman@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Ninad Soman', '9000000008', '2000-01-01', 'MALE', 'Pune City', 'Pune', 'Maharashtra', '411004', '100000000008', 'VOT1000000008', TRUE, TRUE, NOW()),
+('vivek.yadav@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Vivek Yadav', '9000000009', '2000-01-01', 'MALE', 'Nalanda City', 'Nalanda', 'Bihar', '803111', '100000000009', 'VOT1000000009', TRUE, TRUE, NOW()),
+('satyam.bavankar@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Satyam Bavankar', '9000000010', '2000-01-01', 'MALE', 'Seoni City', 'Seoni', 'Madhya Pradesh', '480661', '100000000010', 'VOT1000000010', TRUE, TRUE, NOW()),
+('tanay.mapare@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Tanay Mapare', '9000000011', '2000-01-01', 'MALE', 'Washim City', 'Washim', 'Maharashtra', '444505', '100000000011', 'VOT1000000011', TRUE, TRUE, NOW()),
+('ayush.shrivastava@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Ayush Shrivastava', '9000000012', '2000-01-01', 'MALE', 'Lucknow City', 'Lucknow', 'Uttar Pradesh', '226002', '100000000012', 'VOT1000000012', TRUE, TRUE, NOW()),
+('ansh.mittal@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Ansh Mittal', '9000000013', '2000-01-01', 'MALE', 'Gwalior City', 'Gwalior', 'Madhya Pradesh', '474001', '100000000013', 'VOT1000000013', TRUE, TRUE, NOW()),
+('rajdeep.kala@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Rajdeep Kala', '9000000014', '2000-01-01', 'MALE', 'Ujjain City', 'Ujjain', 'Madhya Pradesh', '456001', '100000000014', 'VOT1000000014', TRUE, TRUE, NOW()),
+('satyendra.rathore@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Satyendra Rathore', '9000000015', '2000-01-01', 'MALE', 'Ujjain City', 'Ujjain', 'Madhya Pradesh', '456001', '100000000015', 'VOT1000000015', TRUE, TRUE, NOW());
 
 
 -- ============================================
@@ -666,3 +696,44 @@ INSERT INTO election_reports (election_id, total_registered_voters, total_votes_
 -- Report for Election 4 (Delhi)
 INSERT INTO election_reports (election_id, total_registered_voters, total_votes_cast, voter_turnout_percentage, total_candidates, winning_candidate_id, winning_margin, report_generated_by) VALUES
 (4, 20, 16, 80.00, 5, 16, 4, 2);
+
+-- 8. UPDATE PASSWORDS TO MATCH FIRSTNAME+LASTNAME (Concatenated)
+-- Generated BCrypt hashes (cost 12)
+UPDATE users SET password_hash = '$2b$12$LRKGisaaXknMnsDUShcO4ugcvMASq0V2eYOI2SeMFivIOAxQNZp86' WHERE full_name = 'Rajesh Kumar';
+UPDATE users SET password_hash = '$2b$12$1LsyuVhJytA2cd/8yJFHN.5ZyNp.IXVRC/fFoTGbxBX.aYZlL55Ou' WHERE full_name = 'Priya Sharma';
+UPDATE users SET password_hash = '$2b$12$9RWpzRPTPvWDkwidMUWzyO9BoK/9EkLWcaJ0k6I46dfrbmhXPDELK' WHERE full_name = 'Amit Patel';
+UPDATE users SET password_hash = '$2b$12$btBbWEl.zXOUOH5LVzSHueSpKkDip4.LwX5PWWcnyZqY/6DedHXmC' WHERE full_name = 'Sneha Desai';
+UPDATE users SET password_hash = '$2b$12$6mlvweTQouNs/fMv6lZ0s.n.NXxmaYL9KUWl2k29qyB4L/ECjFi4K' WHERE full_name = 'Vikram Singh';
+UPDATE users SET password_hash = '$2b$12$qAlJfh2JmYiO2L0fJceDWeys.QAu8cbJd53aBqsOMBqwMcK5.2qeO' WHERE full_name = 'Anita Verma';
+UPDATE users SET password_hash = '$2b$12$lHfk2Y1BxQCZAwJCOwEQquewsL3/HJ540cZa/FWUSXd6V2drJmIOm' WHERE full_name = 'Rahul Mehta';
+UPDATE users SET password_hash = '$2b$12$AuovYys4/2yz1BKfb34fPOMHgh/rl1fEQEafh/Ho3SbyjjMyYjeBq' WHERE full_name = 'Kavita Nair';
+UPDATE users SET password_hash = '$2b$12$iIU9L1MEnows/Q84DU0kBuMdqu11i9Pe2T18JtL6XE3eMv7IHEAwK' WHERE full_name = 'Suresh Reddy';
+UPDATE users SET password_hash = '$2b$12$Dyk7vOoHPt9OTVttU1kAMuTn.jiPIE60VXSn2p/zfPSFRyMkEAnti' WHERE full_name = 'Meena Iyer';
+UPDATE users SET password_hash = '$2b$12$ElN.gaBxJYee2tzHXuc8g.nl74oGKvgB.OHOSAevHk.h4Yy/tHjWW' WHERE full_name = 'Anil Gupta';
+UPDATE users SET password_hash = '$2b$12$Xo1RkRceppO.JMK37PL8PeBruKuoIlIoUi6Qk3hOj4tpkwRhpzUsW' WHERE full_name = 'Pooja Joshi';
+UPDATE users SET password_hash = '$2b$12$Al0A7W.G42Mm6/1/5l1WU.39L/crVht6a0Xc/wvthfgvO6za/w/ue' WHERE full_name = 'Deepak Saxena';
+UPDATE users SET password_hash = '$2b$12$NxcjIrQ0Cls6nndMvBPhbuSfdn6DwFTbJzyTAGB2Uo/NlwD9nQ0Ke' WHERE full_name = 'Neha Kapoor';
+UPDATE users SET password_hash = '$2b$12$50tua8x5T.kKuQ/yTnGImOE1K.KMBozj6wZHw9v8b5UPeHaD9bNTC' WHERE full_name = 'Ravi Krishnan';
+UPDATE users SET password_hash = '$2b$12$LyYpetvoGqOkOUtnGxmwHOX1ImoQtcidaJd5haxgaymUsjUp1r4ju' WHERE full_name = 'Shalini Das';
+UPDATE users SET password_hash = '$2b$12$4Sx2iUPutyVT7PWh/KhJXuLQyb5aQCAJabFOupmHkO.1yjUlp0swK' WHERE full_name = 'Manish Yadav';
+UPDATE users SET password_hash = '$2b$12$ij1M3UsiI9Ifm3BuivSY6OS6beYnewXlKqdphJwi1SLWHUHzuHV6C' WHERE full_name = 'Divya Menon';
+UPDATE users SET password_hash = '$2b$12$piBODqC8yPlKCVv9aFpFjunvSKUVc29fBUshfPgiBkpXA9nYX5ADO' WHERE full_name = 'Arjun Pandey';
+UPDATE users SET password_hash = '$2b$12$/pSsDgV04YY1scj2Izz7ueyfItYodwDHZz1QvbA5FNqAXUOVOvcOC' WHERE full_name = 'Ritika Singh';
+UPDATE users SET password_hash = '$2b$12$XV1zyIMfPfLQEQ6beTDdI.dFXz9ZtESBxQ0Hzw.Sw6zkMwYEBpKFm' WHERE full_name = 'Madhur Chaudhari';
+UPDATE users SET password_hash = '$2b$12$HcobJJF2CnPEBQudKUYoF.oTIMm2GhlfOYmGjwB5JTgZm/2lW6wsa' WHERE full_name = 'Anuj Tomar';
+UPDATE users SET password_hash = '$2b$12$Nu7k/OvJ375ge1q059vNMu5c6iCkCfYccpqwjhU8mPVMIPurJnRGm' WHERE full_name = 'Satyam Patel';
+UPDATE users SET password_hash = '$2b$12$Q06ZkJmYlfr9tANm23xsQegxCI7gJ3hvqEYF402QV1/IbQPVRmF.q' WHERE full_name = 'Soham Kumar Dey';
+UPDATE users SET password_hash = '$2b$12$NAoBaojpBHnDDoVsOU7WxOAg0.A19qLO.XonxvWWRl41o9mMKTiE.' WHERE full_name = 'Utkarsh Phalphale';
+UPDATE users SET password_hash = '$2b$12$rYz63rTAbY9RaZtbMcDmBeh/MWPxntG6Pk7uPHYp3c5IK4mZ55cUe' WHERE full_name = 'Rajat Morya';
+UPDATE users SET password_hash = '$2b$12$Fg2MWFBB3YtuL7q3P.LNpeN23MP1DdnYfeAVaKh4XUthNnYbcKsCO' WHERE full_name = 'Ayush Kush';
+UPDATE users SET password_hash = '$2b$12$bvN6wY8qP35xOUjvY5r7eOyR/HvUHbqGZgavJMDLnPFQjtZRaZ6IK' WHERE full_name = 'Ninad Soman';
+UPDATE users SET password_hash = '$2b$12$jT8TUkmjyk9AUVkl/JH3Z.gQ.zz4ARI61zafC0s7ss4oDoJB5gYvK' WHERE full_name = 'Vivek Yadav';
+UPDATE users SET password_hash = '$2b$12$2SJOWPhT5/Vnb.bVri5zj.owJESODRm9pttqxsFD3s.b6JjgltGQK' WHERE full_name = 'Satyam Bavankar';
+UPDATE users SET password_hash = '$2b$12$vE3slXnL2jK6Q1ksDTnMFOHR4L/DR6mlPGJdGpTM66mwKtP4nsH/K' WHERE full_name = 'Tanay Mapare';
+UPDATE users SET password_hash = '$2b$12$3OFAOPmtDwC8lcabbE4Pl.r9U2UcmKhbHFc1UkC9H71sRZGVuDsdu' WHERE full_name = 'Ayush Shrivastava';
+UPDATE users SET password_hash = '$2b$12$kk1jKbnmgypn9n9sqpGRA.0rLDAVNVIJdnft.27FDkdXO7LvCbVlK' WHERE full_name = 'Ansh Mittal';
+UPDATE users SET password_hash = '$2b$12$0uRzjm9Dqs1lWxV6KADdY.BjXsOjmpozTWjknjuP11dG7QR7XKV4i' WHERE full_name = 'Rajdeep Kala';
+UPDATE users SET password_hash = '$2b$12$9sfh5B9c955pP.mIF.I4rey3YS90BI9X4lJUft4gd2fo.W2GwGRT.' WHERE full_name = 'Satyendra Rathore';
+
+SET SQL_SAFE_UPDATES = 1;
+

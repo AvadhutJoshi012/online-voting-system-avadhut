@@ -15,7 +15,9 @@ const AdminDashboard = () => {
         electionName: '',
         electionType: 'GENERAL',
         startDate: '',
-        endDate: ''
+        endDate: '',
+        city: '',
+        state: ''
     });
 
     // Candidates list for the new election
@@ -80,7 +82,7 @@ const AdminDashboard = () => {
 
             alert('Election created successfully!');
             setShowCreateModal(false);
-            setNewElection({ electionName: '', electionType: 'GENERAL', startDate: '', endDate: '' });
+            setNewElection({ electionName: '', electionType: 'GENERAL', startDate: '', endDate: '', city: '', state: '' });
             setNewCandidatesList([]);
             loadElections();
 
@@ -198,6 +200,26 @@ const AdminDashboard = () => {
                                 </Form.Group>
                             </Col>
                         </Row>
+
+                        {(newElection.electionType === 'STATE' || newElection.electionType === 'LOCAL') && (
+                            <Row>
+                                <Col md={6}>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>State</Form.Label>
+                                        <Form.Control type="text" value={newElection.state} onChange={(e) => setNewElection({...newElection, state: e.target.value})} placeholder="e.g. Maharashtra" />
+                                    </Form.Group>
+                                </Col>
+                                {newElection.electionType === 'LOCAL' && (
+                                    <Col md={6}>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>City</Form.Label>
+                                            <Form.Control type="text" value={newElection.city} onChange={(e) => setNewElection({...newElection, city: e.target.value})} placeholder="e.g. Pune" />
+                                        </Form.Group>
+                                    </Col>
+                                )}
+                            </Row>
+                        )}
+
                         <Row>
                              <Col md={6}>
                                 <Form.Group className="mb-3">

@@ -28,6 +28,9 @@ public class Election {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
+    private String city;
+    private String state;
+
     @Enumerated(EnumType.STRING)
     private ElectionStatus status = ElectionStatus.DRAFT;
 

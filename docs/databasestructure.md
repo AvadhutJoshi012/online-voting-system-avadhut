@@ -59,6 +59,8 @@ CREATE TABLE elections (
     election_type ENUM('GENERAL', 'STATE', 'LOCAL', 'SPECIAL') NOT NULL,
     start_date DATETIME NOT NULL,
     end_date DATETIME NOT NULL,
+    city VARCHAR(100),
+    state VARCHAR(100),
     status ENUM('DRAFT', 'SCHEDULED', 'ACTIVE', 'COMPLETED', 'CANCELLED') DEFAULT 'DRAFT',
     result_published BOOLEAN DEFAULT FALSE,
     result_published_at TIMESTAMP NULL,
