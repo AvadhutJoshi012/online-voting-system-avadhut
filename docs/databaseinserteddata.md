@@ -1,7 +1,3 @@
-```sql
-
-
-
 -- ============================================
 -- TEST DATA INSERTION
 -- ============================================
@@ -215,5 +211,59 @@ INSERT INTO users (email, password_hash, full_name, phone_number, date_of_birth,
 ('rajdeep.kala@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Rajdeep Kala', '9000000014', '2000-01-01', 'MALE', 'Ujjain City', 'Ujjain', 'Madhya Pradesh', '456001', '100000000014', 'VOT1000000014', TRUE, TRUE, NOW()),
 ('satyendra.rathore@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Satyendra Rathore', '9000000015', '2000-01-01', 'MALE', 'Ujjain City', 'Ujjain', 'Madhya Pradesh', '456001', '100000000015', 'VOT1000000015', TRUE, TRUE, NOW());
 
+-- ============================================
+-- USER CREDENTIALS REFERENCE
+-- ============================================
 
-```
+| Voter ID      | Full Name           | Password           | District & State             |
+|---------------|---------------------|--------------------|------------------------------|
+| VOT9900000001 | Rajesh Kumar        | RajeshKumar        | Mumbai, Maharashtra          |
+| VOT2345678901 | Priya Sharma        | PriyaSharma        | Delhi, Delhi                 |
+| VOT9900000003 | Amit Patel          | AmitPatel          | Bangalore, Karnataka         |
+| VOT4567890123 | Sneha Desai         | SnehaDesai         | Pune, Maharashtra            |
+| VOT9900000005 | Vikram Singh        | VikramSingh        | Jaipur, Rajasthan            |
+| VOT6789012345 | Anita Verma         | AnitaVerma         | Kolkata, West Bengal         |
+| VOT9900000007 | Rahul Mehta         | RahulMehta         | Ahmedabad, Gujarat           |
+| VOT7890123456 | Kavita Nair         | KavitaNair         | Chennai, Tamil Nadu          |
+| VOT9900000009 | Suresh Reddy        | SureshReddy        | Hyderabad, Telangana         |
+| VOT8901234567 | Meena Iyer          | MeenaIyer          | Kochi, Kerala                |
+| VOT9900000011 | Anil Gupta          | AnilGupta          | Lucknow, Uttar Pradesh       |
+| VOT9012345678 | Pooja Joshi         | PoojaJoshi         | Indore, Madhya Pradesh       |
+| VOT9900000013 | Deepak Saxena       | DeepakSaxena       | Bhopal, Madhya Pradesh       |
+| VOT0123456789 | Neha Kapoor         | NehaKapoor         | Shimla, Himachal Pradesh     |
+| VOT9900000015 | Ravi Krishnan       | RaviKrishnan       | Madurai, Tamil Nadu          |
+| VOT1234567891 | Shalini Das         | ShaliniDas         | Guwahati, Assam              |
+| VOT9900000017 | Manish Yadav        | ManishYadav        | Patna, Bihar                 |
+| VOT2345678902 | Divya Menon         | DivyaMenon         | Thiruvananthapuram, Kerala   |
+| VOT9900000019 | Arjun Pandey        | ArjunPandey        | Nagpur, Maharashtra          |
+| VOT3456789013 | Ritika Singh        | RitikaSingh        | Dehradun, Uttarakhand        |
+| VOT1000000001 | Madhur Chaudhari    | MadhurChaudhari    | Jalgaon, Maharashtra         |
+| VOT1000000002 | Anuj Tomar          | AnujTomar          | Agra, Uttar Pradesh          |
+| VOT1000000003 | Satyam Patel        | SatyamPatel        | Katni, Madhya Pradesh        |
+| VOT1000000004 | Soham Kumar Dey     | SohamKumarDey      | Murshidabad, West Bengal     |
+| VOT1000000005 | Utkarsh Phalphale   | UtkarshPhalphale   | Pune, Maharashtra            |
+| VOT1000000006 | Rajat Morya         | RajatMorya         | Bareilly, Uttar Pradesh      |
+| VOT1000000007 | Ayush Kush          | AyushKush          | Lucknow, Uttar Pradesh       |
+| VOT1000000008 | Ninad Soman         | NinadSoman         | Pune, Maharashtra            |
+| VOT1000000009 | Vivek Yadav         | VivekYadav         | Nalanda, Bihar               |
+| VOT1000000010 | Satyam Bavankar     | SatyamBavankar     | Seoni, Madhya Pradesh        |
+| VOT1000000011 | Tanay Mapare        | TanayMapare        | Washim, Maharashtra          |
+| VOT1000000012 | Ayush Shrivastava   | AyushShrivastava   | Lucknow, Uttar Pradesh       |
+| VOT1000000013 | Ansh Mittal         | AnshMittal         | Gwalior, Madhya Pradesh      |
+| VOT1000000014 | Rajdeep Kala        | RajdeepKala        | Ujjain, Madhya Pradesh       |
+| VOT1000000015 | Satyendra Rathore   | SatyendraRathore   | Ujjain, Madhya Pradesh       |
+| VOT1000000016 | Prabal Singh        | PrabalSingh        | Aligarh, Uttar Pradesh       |
+| VOT1000000017 | Akash Dwivedi       | AkashDwivedi       | Sidhi, Madhya Pradesh        |
+| VOT1000000018 | Priyanshu Raj       | PriyanshuRaj       | Bilaspur, Chhattisgarh       |
+| VOT1000000019 | Atul Pawar          | AtulPawar          | Pune, Maharashtra            |
+| VOT1000000020 | Himanshu Muleva     | HimanshuMuleva     | Indore, Madhya Pradesh       |
+| VOT1000000021 | Anuj Sharma         | AnujSharma         | Agra, Uttar Pradesh          |
+| VOT1000000022 | Akash Rout          | AkashRout          | Belagavi, Karnataka          |
+| VOT1000000023 | Pratinav            | Pratinav           | Varanasi, Uttar Pradesh      |
+| VOT1000000024 | Satyabrat Panigrahi | SatyabratPanigrahi | Bhadrak, Odisha              |
+| VOT1000000025 | Rohan Sinha         | RohanSinha         | Durg, Chhattisgarh           |
+| VOT1000000026 | Nishant Vij         | NishantVij         | Sirsa, Haryana               |
+| VOT1000000027 | Pritish Bhatiya     | PritishBhatiya     | Jabalpur, Madhya Pradesh     |
+| VOT1000000028 | Apoorv Singh        | ApoorvSingh        | Mathura, Uttar Pradesh       |
+| VOT1000000029 | Pranav Tiwari       | PranavTiwari       | Ghaziabad, Uttar Pradesh     |
+| VOT1000000030 | Abhijeet Singh      | AbhijeetSingh      | Indore, Madhya Pradesh       |

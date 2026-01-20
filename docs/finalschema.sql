@@ -552,6 +552,24 @@ INSERT INTO users (email, password_hash, full_name, phone_number, date_of_birth,
 ('rajdeep.kala@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Rajdeep Kala', '9000000014', '2000-01-01', 'MALE', 'Ujjain City', 'Ujjain', 'Madhya Pradesh', '456001', '100000000014', 'VOT1000000014', TRUE, TRUE, NOW()),
 ('satyendra.rathore@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Satyendra Rathore', '9000000015', '2000-01-01', 'MALE', 'Ujjain City', 'Ujjain', 'Madhya Pradesh', '456001', '100000000015', 'VOT1000000015', TRUE, TRUE, NOW());
 
+-- Insert 15 Additional Users (Group 2)
+INSERT INTO users (email, password_hash, full_name, phone_number, date_of_birth, gender, address, city, state, pincode, aadhar_number, voter_id_number, is_active, is_verified, approved_at) VALUES
+('prabal.singh@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Prabal Singh', '9000000016', '2000-01-01', 'MALE', 'Aligarh City', 'Aligarh', 'Uttar Pradesh', '111111', '100000000016', 'VOT1000000016', TRUE, TRUE, NOW()),
+('akash.dwivedi@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Akash Dwivedi', '9000000017', '2000-01-01', 'MALE', 'Sidhi City', 'Sidhi', 'Madhya Pradesh', '111111', '100000000017', 'VOT1000000017', TRUE, TRUE, NOW()),
+('priyanshu.raj@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Priyanshu Raj', '9000000018', '2000-01-01', 'MALE', 'Bilaspur City', 'Bilaspur', 'Chhattisgarh', '111111', '100000000018', 'VOT1000000018', TRUE, TRUE, NOW()),
+('atul.pawar@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Atul Pawar', '9000000019', '2000-01-01', 'MALE', 'Pune City', 'Pune', 'Maharashtra', '111111', '100000000019', 'VOT1000000019', TRUE, TRUE, NOW()),
+('himanshu.muleva@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Himanshu Muleva', '9000000020', '2000-01-01', 'MALE', 'Indore City', 'Indore', 'Madhya Pradesh', '111111', '100000000020', 'VOT1000000020', TRUE, TRUE, NOW()),
+('anuj.sharma@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Anuj Sharma', '9000000021', '2000-01-01', 'MALE', 'Agra City', 'Agra', 'Uttar Pradesh', '111111', '100000000021', 'VOT1000000021', TRUE, TRUE, NOW()),
+('akash.rout@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Akash Rout', '9000000022', '2000-01-01', 'MALE', 'Belagavi City', 'Belagavi', 'Karnataka', '111111', '100000000022', 'VOT1000000022', TRUE, TRUE, NOW()),
+('pratinav@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Pratinav', '9000000023', '2000-01-01', 'MALE', 'Varanasi City', 'Varanasi', 'Uttar Pradesh', '111111', '100000000023', 'VOT1000000023', TRUE, TRUE, NOW()),
+('satyabrat.panigrahi@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Satyabrat Panigrahi', '9000000024', '2000-01-01', 'MALE', 'Bhadrak City', 'Bhadrak', 'Odisha', '111111', '100000000024', 'VOT1000000024', TRUE, TRUE, NOW()),
+('rohan.sinha@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Rohan Sinha', '9000000025', '2000-01-01', 'MALE', 'Durg City', 'Durg', 'Chhattisgarh', '111111', '100000000025', 'VOT1000000025', TRUE, TRUE, NOW()),
+('nishant.vij@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Nishant Vij', '9000000026', '2000-01-01', 'MALE', 'Sirsa City', 'Sirsa', 'Haryana', '111111', '100000000026', 'VOT1000000026', TRUE, TRUE, NOW()),
+('pritish.bhatiya@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Pritish Bhatiya', '9000000027', '2000-01-01', 'MALE', 'Jabalpur City', 'Jabalpur', 'Madhya Pradesh', '111111', '100000000027', 'VOT1000000027', TRUE, TRUE, NOW()),
+('apoorv.singh@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Apoorv Singh', '9000000028', '2000-01-01', 'MALE', 'Mathura City', 'Mathura', 'Uttar Pradesh', '111111', '100000000028', 'VOT1000000028', TRUE, TRUE, NOW()),
+('pranav.tiwari@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Pranav Tiwari', '9000000029', '2000-01-01', 'MALE', 'Ghaziabad City', 'Ghaziabad', 'Uttar Pradesh', '111111', '100000000029', 'VOT1000000029', TRUE, TRUE, NOW()),
+('abhijeet.singh@email.com', '$2a$12$vBI2Llf/b1f1z3xr3r2g5.NOnPl2oRNzBFY5E2HQg1MrH.hOv9v12', 'Abhijeet Singh', '9000000030', '2000-01-01', 'MALE', 'Indore City', 'Indore', 'Madhya Pradesh', '111111', '100000000030', 'VOT1000000030', TRUE, TRUE, NOW());
+
 
 -- ============================================
 -- MISSING DATA FOR KARNATAKA AND DELHI ELECTIONS
@@ -734,6 +752,21 @@ UPDATE users SET password_hash = '$2b$12$3OFAOPmtDwC8lcabbE4Pl.r9U2UcmKhbHFc1UkC
 UPDATE users SET password_hash = '$2b$12$kk1jKbnmgypn9n9sqpGRA.0rLDAVNVIJdnft.27FDkdXO7LvCbVlK' WHERE full_name = 'Ansh Mittal';
 UPDATE users SET password_hash = '$2b$12$0uRzjm9Dqs1lWxV6KADdY.BjXsOjmpozTWjknjuP11dG7QR7XKV4i' WHERE full_name = 'Rajdeep Kala';
 UPDATE users SET password_hash = '$2b$12$9sfh5B9c955pP.mIF.I4rey3YS90BI9X4lJUft4gd2fo.W2GwGRT.' WHERE full_name = 'Satyendra Rathore';
+UPDATE users SET password_hash = '$2b$12$.Zpu.jmTtftHujWUm3Uz8OahR.zcyAAkSx7ly9eX0Yg1andvcvuQO' WHERE full_name = 'Prabal Singh';
+UPDATE users SET password_hash = '$2b$12$hs3jFd3N7kVpsbyEh1X4B.HZ6kn9igf1dhqoVkCGu2WBTbLPyStdu' WHERE full_name = 'Akash Dwivedi';
+UPDATE users SET password_hash = '$2b$12$ynVShBrM.Q14m5rUxTUvZe4K.447LOtP/SsxPA/u4jgCB9dR9hPo2' WHERE full_name = 'Priyanshu Raj';
+UPDATE users SET password_hash = '$2b$12$Pq2toaUdNkynpBZIbp2hHuouNjNnd4.CE.GyzjOxSw5GqpIPrTy6i' WHERE full_name = 'Atul Pawar';
+UPDATE users SET password_hash = '$2b$12$6oFcaklOmSEA0nGBlmfVZ.gMDSR6BBG25ThidHRhmR4Fz6.DidcP2' WHERE full_name = 'Himanshu Muleva';
+UPDATE users SET password_hash = '$2b$12$ejOMoTww67/e23fQSuykpuCsTSPv4SUSEJvseSVNZ/x88sZ/Mh/HG' WHERE full_name = 'Anuj Sharma';
+UPDATE users SET password_hash = '$2b$12$HflPyYYZUJ4EdpAmkTpuMeo/ARYcm/Rz8X9gTUijSlllBFDReZFaS' WHERE full_name = 'Akash Rout';
+UPDATE users SET password_hash = '$2b$12$MgVi3TCXSeJOz6boL36LZ.iGN46xc62TLbULROMPhtg6q9Om2ZW4W' WHERE full_name = 'Pratinav';
+UPDATE users SET password_hash = '$2b$12$oo9d5yI/rPivkgxB8cbdZuhtbhWv8EiXeuvGr4lx0i9QZ1PJYuvXi' WHERE full_name = 'Satyabrat Panigrahi';
+UPDATE users SET password_hash = '$2b$12$aH2tuukdyT095.ypQHQ./enzLDaAQk8.fFKLlPO8CRTzWW4OvFF0C' WHERE full_name = 'Rohan Sinha';
+UPDATE users SET password_hash = '$2b$12$KSjdlb7eYpMaCccTKMAvAe5M.XOsBBDyIgkPkhAymLKCCnJrK3FHO' WHERE full_name = 'Nishant Vij';
+UPDATE users SET password_hash = '$2b$12$DzKISrTEdow4H2E80zetduTf0/eNBrL0uWLhE21dzflRN32e1BJ0C' WHERE full_name = 'Pritish Bhatiya';
+UPDATE users SET password_hash = '$2b$12$278wWG.vBPSJYV2XzkB/9uJesS0dQ49rPTyzDWW5DvYYvIklzwz5m' WHERE full_name = 'Apoorv Singh';
+UPDATE users SET password_hash = '$2b$12$xut3Mwp7jUla9iEIoBPs3u/fGfVVZPPEZ.EYfgWhdaV84Mj1g1jsu' WHERE full_name = 'Pranav Tiwari';
+UPDATE users SET password_hash = '$2b$12$paHEXIlzDff6HcrmUeyhCOEyvAAuBxy1wms4gfR.2MosjOSjp0tAO' WHERE full_name = 'Abhijeet Singh';
 
 SET SQL_SAFE_UPDATES = 1;
 
