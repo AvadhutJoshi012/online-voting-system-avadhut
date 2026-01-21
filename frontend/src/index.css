@@ -2,10 +2,12 @@
 
 body {
   margin: 0;
+  padding-top: 70px; /* Account for fixed navbar */
   font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f0f2f5; /* Slightly darker than white for depth */
+  background-color: #f4f6f9; /* Light Gray */
+  color: #333; /* Standard Text Dark Gray */
 }
 
 code {
@@ -70,9 +72,37 @@ a:hover {
   box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
 }
 
-/* Hero Section Gradient */
+/* Brand Styles */
+.bg-brand-gradient {
+  background: linear-gradient(135deg, #7158e2, #3d4dc6);
+}
+
+.text-brand-gradient {
+  background: linear-gradient(135deg, #7158e2, #3d4dc6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-brand {
+  background: linear-gradient(135deg, #7158e2, #3d4dc6);
+  border: none;
+  color: white;
+  transition: opacity 0.3s ease, transform 0.2s;
+}
+
+.btn-brand:hover {
+  opacity: 0.9;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.btn-brand:active {
+  transform: translateY(0);
+}
+
+/* Hero Section Gradient - Updated */
 .hero-gradient {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #7158e2, #3d4dc6);
   color: white;
 }
 
@@ -82,10 +112,11 @@ a:hover {
   overflow: hidden;
   border: none;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  background-color: white; /* Ensure white background */
 }
 
 .form-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #7158e2, #3d4dc6);
   color: white;
   padding: 2rem;
   text-align: center;

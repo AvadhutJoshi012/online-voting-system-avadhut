@@ -45,11 +45,11 @@ const AdminLogin = () => {
     };
 
     return (
-        <div className="d-flex align-items-center justify-content-center min-vh-100 bg-dark py-5 animate-fade-in">
+        <div className="d-flex align-items-center justify-content-center min-vh-100 py-5 animate-fade-in">
             <Container>
                 <Row className="justify-content-center">
                     <Col md={6} lg={5}>
-                        <Card className="form-card shadow-lg animate-slide-up bg-secondary text-white border-0">
+                        <Card className="form-card shadow-lg animate-slide-up border-0">
                             <div className="form-header border-bottom border-light pb-3 mb-3">
                                 <h3 className="mb-0 fw-bold text-white">Admin Portal</h3>
                                 <p className="mb-0 text-white-50">Secure Login</p>
@@ -63,7 +63,7 @@ const AdminLogin = () => {
                                 )}
                                 <Form onSubmit={handleSubmit}>
                                     <Form.Group className="mb-4">
-                                        <Form.Label className="fw-bold">Email Address</Form.Label>
+                                        <Form.Label className="fw-bold text-dark">Email Address</Form.Label>
                                         <Form.Control
                                             type="email"
                                             placeholder="admin@example.com"
@@ -71,12 +71,11 @@ const AdminLogin = () => {
                                             onChange={(e) => setEmail(e.target.value)}
                                             required
                                             size="lg"
-                                            className="bg-dark text-white border-secondary"
                                         />
                                     </Form.Group>
 
                                     <Form.Group className="mb-4">
-                                        <Form.Label className="fw-bold">Password</Form.Label>
+                                        <Form.Label className="fw-bold text-dark">Password</Form.Label>
                                         <Form.Control
                                             type="password"
                                             placeholder="Enter your password"
@@ -84,27 +83,25 @@ const AdminLogin = () => {
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
                                             size="lg"
-                                            className="bg-dark text-white border-secondary"
                                         />
                                     </Form.Group>
 
                                     <Button 
-                                        variant="danger" 
                                         type="submit" 
-                                        className="w-100 mb-3 btn-lg fw-bold" 
+                                        className="w-100 mb-3 btn-lg fw-bold btn-brand" 
                                         disabled={isLoading}
                                     >
                                         {isLoading ? 'Authenticating...' : 'Admin Login'}
                                     </Button>
                                     
                                     <div className="text-center mt-3">
-                                        <Link to="/login" className="text-light text-decoration-none small">User Login</Link>
+                                        <Link to="/login" className="text-decoration-none small">User Login</Link>
                                     </div>
                                 </Form>
                             </Card.Body>
                         </Card>
                         <div className="text-center mt-4">
-                             <Link to="/" className="text-white-50 text-decoration-none">
+                             <Link to="/" className="text-muted text-decoration-none">
                                 <i className="bi bi-arrow-left me-1"></i> Back to Home
                             </Link>
                         </div>

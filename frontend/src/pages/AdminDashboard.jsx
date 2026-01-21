@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container, Table, Button, Modal, Form, Badge, Tabs, Tab, Row, Col } from 'react-bootstrap';
+import { Container, Table, Button, Modal, Form, Badge, Tabs, Tab, Row, Col, Card } from 'react-bootstrap';
 import { getAllElections, createElection, updateElectionStatus, calculateResults, getElectionResults, addCandidate, updateCandidateImage, adminGetCandidates, togglePublishResult } from '../services/api';
 import ManageUsers from './ManageUsers';
 
@@ -118,68 +118,117 @@ const AdminDashboard = () => {
     };
 
     return (
-        <Container className="mt-4">
-            <h2>Admin Dashboard</h2>
+        <>
+            <div className="bg-brand-gradient text-white py-5 mb-4 shadow-sm">
+                <Container>
+                    <h2 className="mb-0 fw-bold">Admin Dashboard</h2>
+                    <p className="mb-0 text-white-50">Manage elections, candidates, and users securely.</p>
+                </Container>
+            </div>
 
-            <Tabs defaultActiveKey="elections" id="admin-tabs" className="mb-3">
-                <Tab eventKey="elections" title="Manage Elections">
-                    <Button className="mb-3" onClick={() => setShowCreateModal(true)}>Create New Election</Button>
+            <Container className="mb-5">
+                <Tabs defaultActiveKey="elections" id="admin-tabs" className="mb-4">
+                    <Tab eventKey="elections" title="Manage Elections">
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                            <h4 className="mb-0">Election List</h4>
+                            <Button className="btn-brand" onClick={() => setShowCreateModal(true)}>
+                                <i className="bi bi-plus-lg me-2"></i>Create New Election
+                            </Button>
+                        </div>
 
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {elections.map(e => (
-                                <tr key={e.electionId}>
-                                    <td>{e.electionId}</td>
-                                    <td>{e.electionName}</td>
-                                    <td>{e.electionType}</td>
-                                    <td><Badge bg={e.status === 'ACTIVE' ? 'success' : 'secondary'}>{e.status}</Badge></td>
-                                    <td>
-                                        {e.status === 'DRAFT' && (
-                                            <Button size="sm" variant="primary" onClick={() => handleStatusChange(e.electionId, 'SCHEDULED')}>Schedule</Button>
-                                        )}
-                                        {e.status === 'SCHEDULED' && (
-                                            <Button size="sm" variant="success" className="ms-2" onClick={() => handleStatusChange(e.electionId, 'ACTIVE')}>Start</Button>
-                                        )}
-                                        {e.status === 'ACTIVE' && (
-                                            <Button size="sm" variant="warning" className="ms-2" onClick={() => handleStatusChange(e.electionId, 'COMPLETED')}>End</Button>
-                                        )}
+                        <Card className="border-0 shadow-sm">
+                            <Card.Body className="p-0">
+                                <Table striped hover responsive className="mb-0 align-middle">
+                                    <thead className="bg-light">
+                                        <tr>
+                                            <th className="ps-4">ID</th>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                            <th className="text-end pe-4">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {elections.map(e => (
+                                            <tr key={e.electionId}>
+                                                <td className="ps-4 fw-bold">#{e.electionId}</td>
+                                                <td>{e.electionName}</td>
+                                                <td><Badge bg="info" text="dark">{e.electionType}</Badge></td>
+                                                <td>
+                                                    <Badge bg={
+                                                        e.status === 'ACTIVE' ? 'success' : 
+                                                        e.status === 'COMPLETED' ? 'secondary' : 
+                                                        e.status === 'SCHEDULED' ? 'primary' : 'warning'
+                                                    }>
+                                                        {e.status}
+                                                    </Badge>
+                                                </td>
+                                                <td className="text-end pe-4">
+                                                    <div className="d-flex justify-content-end gap-2">
+                                                        {e.status === 'DRAFT' && (
+                                                            <Button size="sm" variant="outline-primary" onClick={() => handleStatusChange(e.electionId, 'SCHEDULED')}>
+                                                                <i className="bi bi-calendar-event me-1"></i> Schedule
+                                                            </Button>
+                                                        )}
+                                                        {e.status === 'SCHEDULED' && (
+                                                            <Button size="sm" variant="success" onClick={() => handleStatusChange(e.electionId, 'ACTIVE')}>
+                                                                <i className="bi bi-play-circle me-1"></i> Start
+                                                            </Button>
+                                                        )}
+                                                        {e.status === 'ACTIVE' && (
+                                                            <Button size="sm" variant="warning" onClick={() => handleStatusChange(e.electionId, 'COMPLETED')}>
+                                                                <i className="bi bi-stop-circle me-1"></i> End
+                                                            </Button>
+                                                        )}
 
-                                        <Button size="sm" variant="dark" className="ms-2" onClick={() => handleCalculateResults(e.electionId)}>Calc Results</Button>
-                                        <Button size="sm" variant="outline-primary" className="ms-2" onClick={() => handleViewResults(e)}>View Results</Button>
-                                        
-                                        {e.status === 'COMPLETED' && (
-                                            <Button 
-                                                size="sm" 
-                                                variant={e.resultPublished ? "danger" : "info"} 
-                                                className="ms-2"
-                                                onClick={() => handleTogglePublish(e.electionId)}
-                                            >
-                                                {e.resultPublished ? "Unpublish" : "Publish"}
-                                            </Button>
+                                                        <Button size="sm" variant="outline-dark" onClick={() => handleCalculateResults(e.electionId)} title="Calculate Results">
+                                                            <i className="bi bi-calculator me-1"></i> Calc
+                                                        </Button>
+                                                        
+                                                        <Button size="sm" variant="outline-primary" onClick={() => handleViewResults(e)} title="View Results">
+                                                            <i className="bi bi-bar-chart me-1"></i> Results
+                                                        </Button>
+                                                        
+                                                        {e.status === 'COMPLETED' && (
+                                                            <Button 
+                                                                size="sm" 
+                                                                variant={e.resultPublished ? "outline-danger" : "outline-info"} 
+                                                                onClick={() => handleTogglePublish(e.electionId)}
+                                                                title={e.resultPublished ? "Unpublish Results" : "Publish Results"}
+                                                            >
+                                                                {e.resultPublished ? (
+                                                                    <>
+                                                                        <i className="bi bi-eye-slash me-1"></i> Hide
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <i className="bi bi-eye me-1"></i> Publish
+                                                                    </>
+                                                                )}
+                                                            </Button>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {elections.length === 0 && (
+                                            <tr>
+                                                <td colSpan="5" className="text-center py-4 text-muted">No elections found. Create one to get started.</td>
+                                            </tr>
                                         )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                </Tab>
-                <Tab eventKey="users" title="Manage Users">
-                    <ManageUsers />
-                </Tab>
-            </Tabs>
-
-            {/* Create Election Modal */}
-            <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)} size="lg">
-                <Modal.Header closeButton><Modal.Title>Create Election</Modal.Title></Modal.Header>
+                                    </tbody>
+                                </Table>
+                            </Card.Body>
+                        </Card>
+                    </Tab>
+                    <Tab eventKey="users" title="Manage Users">
+                        <ManageUsers />
+                    </Tab>
+                </Tabs>
+            </Container>            <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)} size="lg">
+                <Modal.Header closeButton closeVariant="white" className="bg-brand-gradient text-white">
+                    <Modal.Title>Create Election</Modal.Title>
+                </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Row>
@@ -303,15 +352,17 @@ const AdminDashboard = () => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCreateModal(false)}>Close</Button>
-                    <Button variant="primary" onClick={handleCreateElection}>Create Election</Button>
+                    <Button className="btn-brand" onClick={handleCreateElection}>Create Election</Button>
                 </Modal.Footer>
             </Modal>
 
             {/* View Results Modal */}
             <Modal show={showResultsModal} onHide={() => setShowResultsModal(false)} size="lg">
-                <Modal.Header closeButton><Modal.Title>Results: {selectedElection?.electionName}</Modal.Title></Modal.Header>
+                <Modal.Header closeButton closeVariant="white" className="bg-brand-gradient text-white">
+                    <Modal.Title>Results: {selectedElection?.electionName}</Modal.Title>
+                </Modal.Header>
                 <Modal.Body>
-                    <Table>
+                    <Table striped hover>
                         <thead>
                             <tr>
                                 <th>Rank</th>
@@ -334,8 +385,11 @@ const AdminDashboard = () => {
                         </tbody>
                     </Table>
                 </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowResultsModal(false)}>Close</Button>
+                </Modal.Footer>
             </Modal>
-        </Container>
+        </>
     );
 };
 
