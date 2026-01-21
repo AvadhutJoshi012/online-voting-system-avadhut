@@ -54,10 +54,9 @@ const Home = () => {
                 {publishedResults.length > 0 && (
                     <section className="mb-5 animate-fade-in-up delay-100">
                         <div className="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
-                            <h2 className="fw-bold m-0 text-dark">
+                            <h2 className="fw-bold m-0 text-dark pt-5">
                                 <i className="bi bi-trophy-fill text-warning me-2"></i>Election Results
                             </h2>
-                            <Badge bg="success" className="badge-modern">Live Updates</Badge>
                         </div>
                         
                         <Row>
