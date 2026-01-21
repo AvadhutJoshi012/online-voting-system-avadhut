@@ -37,9 +37,17 @@ export const getCandidates = async (electionId) => {
     return response.data;
 };
 
-export const castVote = async (electionId, candidateId) => {
-    const response = await api.post(`/user/elections/${electionId}/vote`, null, {
-        params: { candidateId }
+export const castVote = async (electionId, candidateId, capturedImageBlob) => {
+    const formData = new FormData();
+    formData.append('candidateId', candidateId);
+    if (capturedImageBlob) {
+        // Create a File object from the blob if possible, or just append blob
+        // Give it a filename so the backend treats it as a file
+        formData.append('capturedImage', capturedImageBlob, "capture.jpg");
+    }
+
+    const response = await api.post(`/user/elections/${electionId}/vote`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
     });
     return response.data;
 };

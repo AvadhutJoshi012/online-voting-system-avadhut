@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { Container, Row, Col, Card, Button, Badge, Modal } from 'react-bootstrap';
+import Webcam from 'react-webcam';
 import { getActiveElections, getCompletedElections, getCandidates, castVote, checkHasVoted, getUserElectionResults } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -11,6 +12,9 @@ const UserDashboard = () => {
     const [hasVotedMap, setHasVotedMap] = useState({});
     const [results, setResults] = useState([]);
     const [showResults, setShowResults] = useState(false);
+    
+    const webcamRef = useRef(null);
+    const [isVerifying, setIsVerifying] = useState(false);
 
     const { user } = useAuth();
 
@@ -40,15 +44,44 @@ const UserDashboard = () => {
         setCandidates(cands);
     };
 
+    const capture = useCallback(() => {
+        const imageSrc = webcamRef.current.getScreenshot();
+        return imageSrc;
+    }, [webcamRef]);
+
+    // Convert base64 to blob
+    const dataURItoBlob = (dataURI) => {
+        if (!dataURI) return null;
+        const byteString = atob(dataURI.split(',')[1]);
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ab], { type: mimeString });
+    };
+
     const handleVote = async (candidateId) => {
-        if (window.confirm('Are you sure? You cannot change your vote later.')) {
+        if (window.confirm('Are you sure? This will capture your image for verification.')) {
             try {
-                await castVote(selectedElection.electionId, candidateId);
+                setIsVerifying(true);
+                const imageSrc = capture();
+                if (!imageSrc) {
+                    alert('Could not capture image from webcam. Please ensure camera permissions are allowed.');
+                    setIsVerifying(false);
+                    return;
+                }
+                const blob = dataURItoBlob(imageSrc);
+
+                await castVote(selectedElection.electionId, candidateId, blob);
                 alert('Vote cast successfully!');
                 loadElections(); // Refresh status
                 setSelectedElection(null);
             } catch (e) {
                 alert('Voting failed: ' + (e.response?.data || e.message));
+            } finally {
+                setIsVerifying(false);
             }
         }
     };
@@ -115,6 +148,20 @@ const UserDashboard = () => {
             <Modal show={!!selectedElection && !showResults} onHide={() => setSelectedElection(null)} size="lg">
                 <Modal.Header closeButton><Modal.Title>Vote: {selectedElection?.electionName}</Modal.Title></Modal.Header>
                 <Modal.Body>
+                    <div className="mb-4 text-center">
+                         <h5>Face Verification Required</h5>
+                         <p className="text-muted small">Please ensure your face is clearly visible.</p>
+                         <Webcam
+                            audio={false}
+                            ref={webcamRef}
+                            screenshotFormat="image/jpeg"
+                            width={320}
+                            height={240}
+                            videoConstraints={{ facingMode: "user" }}
+                            style={{ borderRadius: '10px', border: '2px solid #ddd' }}
+                         />
+                    </div>
+                    <hr />
                     <h5>Candidates</h5>
                     <Row>
                         {candidates.map(c => (
@@ -137,7 +184,9 @@ const UserDashboard = () => {
                                         <Card.Text className="mt-2 text-muted small">
                                             "{c.manifesto}"
                                         </Card.Text>
-                                        <Button variant="success" onClick={() => handleVote(c.candidateId)}>Vote for {c.partySymbol}</Button>
+                                        <Button variant="success" onClick={() => handleVote(c.candidateId)} disabled={isVerifying}>
+                                            {isVerifying ? 'Verifying...' : `Vote for ${c.partySymbol}`}
+                                        </Button>
                                     </Card.Body>
                                 </Card>
                             </Col>

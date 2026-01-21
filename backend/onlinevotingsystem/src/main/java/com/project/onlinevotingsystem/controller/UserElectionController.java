@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 @RestController
 @RequestMapping("/api/user/elections")
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class UserElectionController {
 
     private final ElectionService electionService;
     private final VoteService voteService;
+    private final com.project.onlinevotingsystem.repository.UserRepository userRepository;
 
     @GetMapping("/active")
     public ResponseEntity<List<Election>> getActiveElections(Authentication authentication) {
@@ -43,17 +46,19 @@ public class UserElectionController {
         return ResponseEntity.ok(electionService.getCandidatesForElection(id));
     }
 
-    private final com.project.onlinevotingsystem.repository.UserRepository userRepository;
 
     @PostMapping("/{id}/vote")
-    public ResponseEntity<?> vote(@PathVariable Long id, @RequestParam Long candidateId, Authentication authentication) {
+    public ResponseEntity<?> vote(@PathVariable Long id, 
+                                  @RequestParam Long candidateId, 
+                                  @RequestParam(required = false) MultipartFile capturedImage,
+                                  Authentication authentication) {
         String email = authentication.getName();
         Long userId = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"))
                 .getUserId();
 
         try {
-            return ResponseEntity.ok(voteService.castVote(id, userId, candidateId));
+            return ResponseEntity.ok(voteService.castVote(id, userId, candidateId, capturedImage));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
