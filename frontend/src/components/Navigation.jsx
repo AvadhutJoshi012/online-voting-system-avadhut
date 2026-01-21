@@ -12,7 +12,7 @@ const Navigation = () => {
     };
 
     return (
-        <Navbar bg="dark" variant="dark" expand="lg" className="shadow-sm">
+        <Navbar bg="dark" variant="dark" expand="lg" className="shadow-sm" fixed="top">
             <Container>
                 <Navbar.Brand as={Link} to="/" className="fw-bold">Online Voting System</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
