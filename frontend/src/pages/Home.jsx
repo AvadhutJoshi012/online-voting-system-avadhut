@@ -2,6 +2,7 @@ import { Container, Row, Col, Card, Button, Badge, Table, ProgressBar } from 're
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getPublishedResults } from '../services/api';
+import './Home.css';
 
 const Home = () => {
     const [publishedResults, setPublishedResults] = useState([]);
@@ -11,286 +12,257 @@ const Home = () => {
     }, []);
 
     return (
-        <div className="overflow-hidden">
+        <div className="bg-white">
             {/* Hero Section */}
-            <div className="hero-gradient py-5 mb-5 text-center animate-fade-in">
+            <header className="hero-section text-center mb-5 animate-fade-in-up">
                 <Container>
-                    <h1 className="display-3 fw-bold mb-3 animate-slide-up">Online Voting System</h1>
-                    <p className="lead mb-4 animate-slide-up delay-100" style={{ opacity: 0.9 }}>
-                        Secure, Transparent, and Reliable Election Platform
-                    </p>
-                    <div className="animate-slide-up delay-200">
-                        <Button as={Link} to="/login" variant="light" size="lg" className="me-3 px-4 fw-bold shadow-sm">
-                            Login
-                        </Button>
-                        <Button as={Link} to="/register" variant="outline-light" size="lg" className="px-4 fw-bold shadow-sm">
-                            Register
-                        </Button>
-                    </div>
-                    <div className="mt-4 animate-slide-up delay-300">
-                        <a href="https://github.com/yadnyeshkolte/online-voting-system" target="_blank" rel="noopener noreferrer" className="text-white me-4 text-decoration-none">
-                            <i className="bi bi-github me-1"></i> GitHub Repository
-                        </a>
-                        <a href="https://yadnyeshkolte.github.io/online-voting-system" target="_blank" rel="noopener noreferrer" className="text-white text-decoration-none">
-                            <i className="bi bi-book me-1"></i> Documentation
-                        </a>
-                    </div>
+                    <Row className="justify-content-center">
+                        <Col lg={8}>
+                            <h1 className="hero-title">
+                                Secure. Transparent. Reliable.
+                            </h1>
+                            <p className="hero-subtitle">
+                                The next generation of online voting. A secure platform designed for 
+                                seamless election management and real-time results.
+                            </p>
+                            <div className="d-flex gap-3 justify-content-center flex-wrap">
+                                <Button as={Link} to="/login" variant="primary" size="lg" className="px-5 py-3 fw-bold rounded-pill shadow-sm">
+                                    Get Started
+                                </Button>
+                                <Button as={Link} to="/register" variant="outline-dark" size="lg" className="px-5 py-3 fw-bold rounded-pill">
+                                    Register Now
+                                </Button>
+                            </div>
+                            <div className="mt-5 pt-3 d-flex justify-content-center gap-4 text-muted small">
+                                <div><i className="bi bi-shield-check me-2 text-primary"></i>Secure & Encrypted</div>
+                                <div><i className="bi bi-clock-history me-2 text-primary"></i>Real-time Results</div>
+                                <div><i className="bi bi-people me-2 text-primary"></i>Easy Management</div>
+                            </div>
+                        </Col>
+                    </Row>
                 </Container>
-            </div>
+            </header>
 
             <Container className="mb-5">
                 {/* Published Results Section */}
                 {publishedResults.length > 0 && (
-                    <div className="mb-5 animate-slide-up delay-200">
-                        <h2 className="text-center fw-bold text-primary mb-4">🏆 Election Results</h2>
+                    <section className="mb-5 animate-fade-in-up delay-100">
+                        <div className="d-flex align-items-center justify-content-between mb-4">
+                            <h2 className="fw-bold m-0 text-dark">
+                                <i className="bi bi-trophy-fill text-warning me-2"></i>Election Results
+                            </h2>
+                            <Badge bg="success" className="badge-modern">Live Updates</Badge>
+                        </div>
+                        
                         <Row>
                             {publishedResults.map(election => (
-                                <Col md={12} className="mb-4" key={election.electionId}>
-                                    <Card className="shadow border-0">
-                                        <Card.Header className="bg-primary text-white">
-                                            <h4 className="mb-0">{election.electionName} <Badge bg="light" text="dark" className="ms-2 fs-6">{election.electionType}</Badge></h4>
+                                <Col xs={12} className="mb-4" key={election.electionId}>
+                                    <Card className="feature-card border-0 shadow-sm overflow-hidden">
+                                        <Card.Header className="bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h4 className="mb-1 fw-bold">{election.electionName}</h4>
+                                                <small className="text-muted">
+                                                    Ended: {new Date(election.endDate).toLocaleDateString()}
+                                                </small>
+                                            </div>
+                                            <Badge bg="light" text="dark" className="border">
+                                                {election.electionType}
+                                            </Badge>
                                         </Card.Header>
-                                        <Card.Body>
-                                            <Table hover responsive className="align-middle">
-                                                <thead className="table-light">
+                                        <Card.Body className="p-0">
+                                            <Table responsive className="table-modern mb-0">
+                                                <thead className="bg-light text-muted small text-uppercase">
                                                     <tr>
-                                                        <th>Rank</th>
+                                                        <th className="ps-4">Rank</th>
                                                         <th>Candidate</th>
-                                                        <th>Party</th>
+                                                        <th>Party / Symbol</th>
                                                         <th>Votes</th>
-                                                        <th>%</th>
-                                                        <th>Bar</th>
+                                                        <th>Share</th>
+                                                        <th className="pe-4" style={{width: '35%'}}>Performance</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {election.results.map((res, idx) => (
-                                                        <tr key={idx} className={idx === 0 ? "table-warning fw-bold" : ""}>
-                                                            <td>{res.rankPosition === 1 ? '🥇' : res.rankPosition === 2 ? '🥈' : res.rankPosition === 3 ? '🥉' : res.rankPosition}</td>
+                                                        <tr key={idx}>
+                                                            <td className="ps-4 fw-bold text-secondary">
+                                                                #{res.rankPosition}
+                                                            </td>
                                                             <td>
                                                                 <div className="d-flex align-items-center">
-                                                                    {/* Placeholder for image if needed, or just name */}
-                                                                    {res.candidateName}
-                                                                    {idx === 0 && <span className="ms-2 badge bg-success">Winner</span>}
+                                                                    <div className="fw-bold text-dark">{res.candidateName}</div>
+                                                                    {idx === 0 && (
+                                                                        <Badge bg="warning" text="dark" className="ms-2 badge-modern shadow-sm">
+                                                                            <i className="bi bi-star-fill me-1"></i>Winner
+                                                                        </Badge>
+                                                                    )}
                                                                 </div>
                                                             </td>
-                                                            <td>{res.partyName} ({res.partySymbol})</td>
-                                                            <td>{res.voteCount}</td>
+                                                            <td className="text-secondary">
+                                                                {res.partyName} <small className="text-muted">({res.partySymbol})</small>
+                                                            </td>
+                                                            <td className="fw-bold">{res.voteCount.toLocaleString()}</td>
                                                             <td>{res.votePercentage}%</td>
-                                                            <td style={{ width: '30%' }}>
-                                                                <ProgressBar now={res.votePercentage} variant={idx === 0 ? "success" : "info"} label={`${res.votePercentage}%`} />
+                                                            <td className="pe-4">
+                                                                <ProgressBar 
+                                                                    now={res.votePercentage} 
+                                                                    variant={idx === 0 ? "success" : "info"} 
+                                                                    style={{height: '8px', borderRadius: '4px'}}
+                                                                />
                                                             </td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
                                             </Table>
                                         </Card.Body>
-                                        <Card.Footer className="text-muted small">
-                                            Ended on: {new Date(election.endDate).toLocaleDateString()}
-                                        </Card.Footer>
                                     </Card>
                                 </Col>
                             ))}
                         </Row>
-                    </div>
+                    </section>
                 )}
 
-                {/* Introduction & About */}
-                <Row className="mb-5 align-items-center animate-slide-up delay-200">
-                    <Col lg={12} className="text-center mb-4">
-                        <h2 className="fw-bold text-primary">About Online Voting System</h2>
-                        <div className="bg-white p-4 rounded shadow-sm">
-                            <p className="lead text-muted">
-                                The Online Voting System is a secure and reliable platform designed for conducting online elections. 
-                                Built with modern web technologies, it ensures transparency, security, and ease of use for both voters and administrators.
-                            </p>
-                            <Row className="text-start mt-4">
-                                <Col md={6}>
-                                    <div className="d-flex align-items-start mb-3">
-                                        <div className="bg-primary text-white rounded-circle p-2 me-3"><i className="bi bi-shield-lock"></i></div>
-                                        <div>
-                                            <h5 className="fw-bold">Secure Platform</h5>
-                                            <p className="small text-muted">Web-Based Platform for online voting and real-time result display.</p>
-                                        </div>
-                                    </div>
-                                    <div className="d-flex align-items-start mb-3">
-                                        <div className="bg-primary text-white rounded-circle p-2 me-3"><i className="bi bi-gear"></i></div>
-                                        <div>
-                                            <h5 className="fw-bold">Admin Management</h5>
-                                            <p className="small text-muted">Efficiently manage elections, candidates, and voters.</p>
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col md={6}>
-                                    <div className="d-flex align-items-start mb-3">
-                                        <div className="bg-primary text-white rounded-circle p-2 me-3"><i className="bi bi-code-slash"></i></div>
-                                        <div>
-                                            <h5 className="fw-bold">Modern Architecture</h5>
-                                            <p className="small text-muted">Built using React.js, Spring Boot, and MySQL with secure authentication.</p>
-                                        </div>
-                                    </div>
-                                    <div className="d-flex align-items-start mb-3">
-                                        <div className="bg-primary text-white rounded-circle p-2 me-3"><i className="bi bi-eye"></i></div>
-                                        <div>
-                                            <h5 className="fw-bold">Transparency</h5>
-                                            <p className="small text-muted">Ensuring fair elections with audit trails and vote integrity.</p>
-                                        </div>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Col>
-                </Row>
+                {/* Features Grid */}
+                <section className="mb-5 pt-5 animate-fade-in-up delay-200">
+                    <div className="text-center mb-5">
+                        <Badge bg="primary" className="mb-3 badge-modern bg-opacity-10 text-primary">Features</Badge>
+                        <h2 className="display-6 fw-bold">Why Choose Our Platform?</h2>
+                        <p className="text-muted lead">Built for reliability, speed, and trust.</p>
+                    </div>
 
-                {/* Project Details */}
-                <Row className="mb-5 animate-slide-up delay-300">
-                    <Col>
-                        <Card className="border-0 shadow-sm bg-light">
-                            <Card.Body className="p-4">
-                                <h3 className="fw-bold mb-3 text-center">📋 Project Details</h3>
-                                <Row className="text-center">
-                                    <Col md={3} className="mb-2"><strong>Course:</strong> PG-DAC</Col>
-                                    <Col md={3} className="mb-2"><strong>Batch:</strong> August 2025</Col>
-                                    <Col md={3} className="mb-2"><strong>Group:</strong> 06</Col>
-                                    <Col md={3} className="mb-2"><strong>Title:</strong> Online Voting System</Col>
-                                </Row>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-
-                {/* Key Features */}
-                <h2 className="text-center fw-bold mb-4 animate-slide-up delay-300">🎯 Key Features</h2>
-                <Row className="g-4 mb-5 animate-slide-up delay-400">
-                    <Col md={4}>
-                        <Card className="h-100 border-0 shadow hover-card">
-                            <Card.Header className="bg-primary text-white fw-bold text-center">For Voters</Card.Header>
-                            <Card.Body>
-                                <ul className="list-unstyled">
-                                    <li className="mb-2">✅ Secure Registration (JWT)</li>
-                                    <li className="mb-2">✅ Easy & Intuitive Voting Interface</li>
-                                    <li className="mb-2">✅ Real-time Results Display</li>
-                                    <li className="mb-2">✅ Vote Verification & History</li>
-                                </ul>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col md={4}>
-                        <Card className="h-100 border-0 shadow hover-card">
-                            <Card.Header className="bg-success text-white fw-bold text-center">For Administrators</Card.Header>
-                            <Card.Body>
-                                <ul className="list-unstyled">
-                                    <li className="mb-2">✅ Election Creation & Management</li>
-                                    <li className="mb-2">✅ Candidate & Voter Management</li>
-                                    <li className="mb-2">✅ User Verification & Approval</li>
-                                    <li className="mb-2">✅ Comprehensive Results Dashboard</li>
-                                    <li className="mb-2">✅ Audit Trail & Logs</li>
-                                </ul>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col md={4}>
-                        <Card className="h-100 border-0 shadow hover-card">
-                            <Card.Header className="bg-dark text-white fw-bold text-center">Security Features</Card.Header>
-                            <Card.Body>
-                                <ul className="list-unstyled">
-                                    <li className="mb-2">🔒 BCrypt Password Hashing</li>
-                                    <li className="mb-2">🔒 Vote Integrity (Cryptographic Hash)</li>
-                                    <li className="mb-2">🔒 One Vote Policy Enforcement</li>
-                                    <li className="mb-2">🔒 ID Verification (Aadhar, PAN, etc.)</li>
-                                    <li className="mb-2">🔒 Role-Based Access Control</li>
-                                </ul>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
+                    <Row className="g-4">
+                        <Col md={4}>
+                            <div className="feature-card p-4 h-100">
+                                <div className="feature-icon-wrapper bg-primary bg-opacity-10 text-primary mb-3 rounded-circle">
+                                    <i className="bi bi-shield-lock fs-3"></i>
+                                </div>
+                                <h3 className="h5 fw-bold mb-3">Enterprise Security</h3>
+                                <p className="text-muted mb-0">
+                                    Advanced encryption protocols and secure authentication (JWT) ensure that every vote is protected and verifiable.
+                                </p>
+                            </div>
+                        </Col>
+                        <Col md={4}>
+                            <div className="feature-card p-4 h-100">
+                                <div className="feature-icon-wrapper bg-success bg-opacity-10 text-success mb-3 rounded-circle">
+                                    <i className="bi bi-lightning-charge fs-3"></i>
+                                </div>
+                                <h3 className="h5 fw-bold mb-3">Real-time Analytics</h3>
+                                <p className="text-muted mb-0">
+                                    Watch election results unfold in real-time with comprehensive dashboards and data visualization tools.
+                                </p>
+                            </div>
+                        </Col>
+                        <Col md={4}>
+                            <div className="feature-card p-4 h-100">
+                                <div className="feature-icon-wrapper bg-info bg-opacity-10 text-info mb-3 rounded-circle">
+                                    <i className="bi bi-phone fs-3"></i>
+                                </div>
+                                <h3 className="h5 fw-bold mb-3">Mobile Optimized</h3>
+                                <p className="text-muted mb-0">
+                                    Vote from anywhere, on any device. Our responsive design ensures a seamless experience on mobile and desktop.
+                                </p>
+                            </div>
+                        </Col>
+                    </Row>
+                </section>
 
                 {/* Tech Stack */}
-                <h2 className="text-center fw-bold mb-4 animate-slide-up delay-400">💻 Technology Stack</h2>
-                <Row className="g-4 mb-5 text-center animate-slide-up delay-500">
-                    <Col md={4}>
-                        <div className="p-4 bg-white rounded shadow-sm h-100 hover-card">
-                            <h4 className="text-primary mb-3">Frontend</h4>
-                            <Badge bg="info" className="me-1 mb-1 text-dark">React.js</Badge>
-                            <Badge bg="info" className="me-1 mb-1 text-dark">HTML5 & CSS3</Badge>
-                            <Badge bg="info" className="me-1 mb-1 text-dark">JavaScript (ES6+)</Badge>
-                            <Badge bg="info" className="me-1 mb-1 text-dark">Bootstrap</Badge>
-                        </div>
-                    </Col>
-                    <Col md={4}>
-                        <div className="p-4 bg-white rounded shadow-sm h-100 hover-card">
-                            <h4 className="text-success mb-3">Backend</h4>
-                            <Badge bg="success" className="me-1 mb-1">Spring Boot</Badge>
-                            <Badge bg="success" className="me-1 mb-1">Spring Security</Badge>
-                            <Badge bg="success" className="me-1 mb-1">JWT Auth</Badge>
-                            <Badge bg="success" className="me-1 mb-1">Spring Data JPA</Badge>
-                        </div>
-                    </Col>
-                    <Col md={4}>
-                        <div className="p-4 bg-white rounded shadow-sm h-100 hover-card">
-                            <h4 className="text-warning mb-3">Database & Tools</h4>
-                            <Badge bg="warning" className="me-1 mb-1 text-dark">MySQL 8.0+</Badge>
-                            <Badge bg="secondary" className="me-1 mb-1">Git & GitHub</Badge>
-                            <Badge bg="secondary" className="me-1 mb-1">Maven</Badge>
-                            <Badge bg="secondary" className="me-1 mb-1">IntelliJ / VS Code</Badge>
-                        </div>
-                    </Col>
-                </Row>
+                <section className="py-5 mb-5 animate-fade-in-up delay-300">
+                     <div className="text-center mb-5">
+                        <h2 className="fw-bold">Powered by Modern Tech</h2>
+                        <p className="text-muted">Leveraging industry-standard technologies for performance.</p>
+                    </div>
+                    <Row className="g-4 text-center justify-content-center">
+                        {[
+                            { name: 'React.js', bg: 'info', icon: 'bi-filetype-jsx' },
+                            { name: 'Spring Boot', bg: 'success', icon: 'bi-gear-wide-connected' },
+                            { name: 'MySQL', bg: 'warning', icon: 'bi-database' },
+                            { name: 'Bootstrap', bg: 'primary', icon: 'bi-grid-1x2' },
+                            { name: 'JWT Auth', bg: 'dark', icon: 'bi-key' },
+                            { name: 'Git & CI/CD', bg: 'danger', icon: 'bi-git' }
+                        ].map((tech, idx) => (
+                            <Col key={idx} xs={6} md={2}>
+                                <div className="p-3 bg-white border rounded shadow-sm h-100 feature-card">
+                                    <i className={`bi ${tech.icon} fs-2 text-${tech.bg} mb-2 d-block`}></i>
+                                    <span className="fw-bold small">{tech.name}</span>
+                                </div>
+                            </Col>
+                        ))}
+                    </Row>
+                </section>
 
-                {/* Architecture */}
-                <h2 className="text-center fw-bold mb-4 animate-slide-up delay-500">🏗️ Project Architecture</h2>
-                <Row className="mb-5 animate-slide-up delay-500 justify-content-center">
-                    <Col lg={10}>
-                        <div className="architecture-box text-center">
-{`┌─────────────────────────────────────────────────────────┐ 
-│                    ONLINE VOTING SYSTEM                 │ 
-└─────────────────────────────────────────────────────────┘ 
-                            │ 
-        ┌───────────────────┼───────────────────┐ 
-        ▼                   ▼                   ▼ 
-   ┌─────────┐        ┌──────────┐       ┌──────────┐ 
-   │ React.js│◄──────►│  Spring  │◄─────►│  MySQL   │ 
-   │Frontend │        │   Boot   │       │ Database │ 
-   └─────────┘        └──────────┘       └──────────┘ 
-        │                   │                   │ 
-    UI Layer          Business Logic      Data Storage 
-    Components        REST APIs            Relationships 
-    State Mgmt        JWT Auth             Transactions `}
-                        </div>
+                {/* Architecture & About Grid */}
+                <Row className="mb-5 g-4 animate-fade-in-up delay-300">
+                    <Col lg={6}>
+                        <Card className="h-100 border-0 shadow-sm feature-card">
+                            <Card.Body className="p-4">
+                                <h3 className="h5 fw-bold mb-4">🏗️ System Architecture</h3>
+                                <div className="architecture-box">
+{`┌──────────┐      ┌──────────────┐      ┌──────────┐
+│  React   │ <--> │ Spring Boot  │ <--> │  MySQL   │
+│ Frontend │ REST │   Backend    │ JPA  │ Database │
+└──────────┘      └──────────────┘      └──────────┘
+     │                    │                   │
+    UI/UX           Business Logic       Persistence`}
+                                </div>
+                                <p className="text-muted mt-3 small">
+                                    A decoupled architecture ensuring scalability and maintainability. 
+                                    The frontend communicates via stateless REST APIs secure by JWT.
+                                </p>
+                            </Card.Body>
+                        </Card>
                     </Col>
-                </Row>
-
-                {/* Team Members */}
-                <h2 className="text-center fw-bold mb-4 animate-slide-up delay-500">👥 Team Members</h2>
-                <Row className="justify-content-center animate-slide-up delay-500">
-                    <Col lg={10}>
-                        <Card className="border-0 shadow-sm">
-                            <Table responsive hover className="mb-0 text-center align-middle">
-                                <thead className="bg-light">
-                                    <tr>
-                                        <th>Sr. No</th>
-                                        <th>Name</th>
-                                        <th>PRN</th>
-                                        <th>GitHub</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr><td>01</td><td>Aaman Javaed Sayyad</td><td>250850120003</td><td><a href="https://github.com/Aamanjs" target="_blank" rel="noopener noreferrer">@Aamanjs</a></td></tr>
-                                    <tr><td>02</td><td>Avadhut Ravindra Joshi</td><td>250850120042</td><td><a href="https://github.com/AvadhutJoshi012" target="_blank" rel="noopener noreferrer">@AvadhutJoshi012</a></td></tr>
-                                    <tr><td>03</td><td>Deepak Sanjay Revgade</td><td>250850120137</td><td><a href="https://github.com/deepakrevgade" target="_blank" rel="noopener noreferrer">@deepakrevgade</a></td></tr>
-                                    <tr><td>04</td><td>Rishikesh Sukhadev More</td><td>250850120143</td><td><a href="https://github.com/rushimore17" target="_blank" rel="noopener noreferrer">@rushimore17</a></td></tr>
-                                    <tr><td>05</td><td>Yadnyesh Rajesh Kolte</td><td>250850120192</td><td><a href="https://github.com/yadnyeshkolte" target="_blank" rel="noopener noreferrer">@yadnyeshkolte</a></td></tr>
-                                </tbody>
-                            </Table>
+                    <Col lg={6}>
+                        <Card className="h-100 border-0 shadow-sm feature-card">
+                            <Card.Body className="p-4">
+                                <h3 className="h5 fw-bold mb-4">👥 Development Team</h3>
+                                <Table hover responsive className="table-modern mb-0 small">
+                                    <thead className="bg-light">
+                                        <tr>
+                                            <th>Developer</th>
+                                            <th>GitHub</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {[
+                                            { name: "Aaman Javaed Sayyad", gh: "Aamanjs" },
+                                            { name: "Avadhut Ravindra Joshi", gh: "AvadhutJoshi012" },
+                                            { name: "Deepak Sanjay Revgade", gh: "deepakrevgade" },
+                                            { name: "Rishikesh Sukhadev More", gh: "rushimore17" },
+                                            { name: "Yadnyesh Rajesh Kolte", gh: "yadnyeshkolte" }
+                                        ].map((dev, idx) => (
+                                            <tr key={idx}>
+                                                <td className="fw-medium">{dev.name}</td>
+                                                <td>
+                                                    <a href={`https://github.com/${dev.gh}`} target="_blank" rel="noopener noreferrer" className="text-decoration-none text-primary">
+                                                        <i className="bi bi-github me-1"></i> @{dev.gh}
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </Table>
+                            </Card.Body>
                         </Card>
                     </Col>
                 </Row>
-
             </Container>
 
-            {/* Footer Section */}
-            <footer className="bg-dark text-white text-center py-4 mt-auto">
+            {/* Footer */}
+            <footer className="bg-white border-top py-5 text-center text-muted">
                 <Container>
-                    <p className="mb-0">&copy; {new Date().getFullYear()} Online Voting System. PG-DAC Batch Aug 2025.</p>
+                    <div className="mb-3">
+                        <a href="https://github.com/yadnyeshkolte/online-voting-system" target="_blank" rel="noopener noreferrer" className="text-decoration-none text-secondary me-3">
+                            <i className="bi bi-github fs-4"></i>
+                        </a>
+                        <a href="https://yadnyeshkolte.github.io/online-voting-system" target="_blank" rel="noopener noreferrer" className="text-decoration-none text-secondary">
+                            <i className="bi bi-book fs-4"></i>
+                        </a>
+                    </div>
+                    <p className="small mb-0">
+                        &copy; {new Date().getFullYear()} Online Voting System. Built with <i className="bi bi-heart-fill text-danger px-1"></i> by Group 06.
+                    </p>
+                    <p className="small text-muted mt-1">PG-DAC Batch August 2025</p>
                 </Container>
             </footer>
         </div>
