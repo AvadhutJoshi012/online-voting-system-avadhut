@@ -61,9 +61,11 @@ app.post('/verify', upload.fields([{ name: 'storedImage', maxCount: 1 }, { name:
 
         const distance = faceapi.euclideanDistance(storedDetection.descriptor, capturedDetection.descriptor);
         
-        // Threshold is usually 0.6
-        const threshold = 0.6;
+        // Threshold is usually 0.6, but lowering to 0.4 for stricter security
+        const threshold = 0.4;
         const isMatch = distance < threshold;
+
+        console.log(`Verification result: Distance = ${distance}, Threshold = ${threshold}, Match = ${isMatch}`);
 
         res.json({ match: isMatch, distance: distance });
 

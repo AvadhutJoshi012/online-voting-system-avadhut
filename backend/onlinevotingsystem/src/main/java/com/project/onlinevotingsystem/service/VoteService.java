@@ -22,6 +22,9 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.Map;
+import org.springframework.web.client.HttpClientErrorException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
 @RequiredArgsConstructor
@@ -184,6 +187,18 @@ public class VoteService {
             // Clean up temp file
             tempCapturedFile.delete();
 
+        } catch (HttpClientErrorException e) {
+            try {
+                String responseBody = e.getResponseBodyAsString();
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode root = mapper.readTree(responseBody);
+                if (root.has("error")) {
+                    throw new RuntimeException("Face verification failed: " + root.get("error").asText());
+                }
+            } catch (Exception parseException) {
+                // Fallback to default message
+            }
+            throw new RuntimeException("Face verification failed: " + e.getStatusText());
         } catch (IOException e) {
             throw new RuntimeException("Error processing images for verification.", e);
         } catch (Exception e) {
