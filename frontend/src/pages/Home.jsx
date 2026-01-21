@@ -274,7 +274,7 @@ const Home = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td>01</td><td>Aaman Javaed Sayyad</td><td>250850120003</td><td><a href="https://github.com/Aamanjs" target="_blank" rel="noopener noreferrer">@Aamanjs</a></td></tr>
+                                    <tr><td>01</td><td>Aaman Javed Sayyad</td><td>250850120003</td><td><a href="https://github.com/Aamanjs" target="_blank" rel="noopener noreferrer">@Aamanjs</a></td></tr>
                                     <tr><td>02</td><td>Avadhut Ravindra Joshi</td><td>250850120042</td><td><a href="https://github.com/AvadhutJoshi012" target="_blank" rel="noopener noreferrer">@AvadhutJoshi012</a></td></tr>
                                     <tr><td>03</td><td>Deepak Sanjay Revgade</td><td>250850120137</td><td><a href="https://github.com/deepakrevgade" target="_blank" rel="noopener noreferrer">@deepakrevgade</a></td></tr>
                                     <tr><td>04</td><td>Rishikesh Sukhadev More</td><td>250850120143</td><td><a href="https://github.com/rushimore17" target="_blank" rel="noopener noreferrer">@rushimore17</a></td></tr>
