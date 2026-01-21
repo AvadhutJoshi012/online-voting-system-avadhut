@@ -11,13 +11,19 @@ const Home = () => {
         getPublishedResults().then(data => setPublishedResults(data)).catch(err => console.error(err));
     }, []);
 
+    // Custom style for the gradient header
+    const gradientHeaderStyle = {
+        background: 'linear-gradient(135deg, #7158e2, #3d4dc6)',
+        color: 'white'
+    };
+
     return (
-        <div className="bg-white">
+        <div style={{ backgroundColor: '#f4f6f9', minHeight: '100vh', overflowX: 'hidden' }}>
             {/* Hero Section */}
             <header className="hero-section text-center mb-5 animate-fade-in-up">
                 <Container>
                     <Row className="justify-content-center">
-                        <Col lg={8}>
+                        <Col lg={8} md={10}>
                             <h1 className="hero-title">
                                 Secure. Transparent. Reliable.
                             </h1>
@@ -26,17 +32,17 @@ const Home = () => {
                                 seamless election management and real-time results.
                             </p>
                             <div className="d-flex gap-3 justify-content-center flex-wrap">
-                                <Button as={Link} to="/login" variant="primary" size="lg" className="px-5 py-3 fw-bold rounded-pill shadow-sm">
+                                <Button as={Link} to="/login" variant="light" size="lg" className="px-5 py-3 fw-bold rounded-pill shadow-sm text-primary">
                                     Get Started
                                 </Button>
-                                <Button as={Link} to="/register" variant="outline-dark" size="lg" className="px-5 py-3 fw-bold rounded-pill">
+                                <Button as={Link} to="/register" variant="outline-light" size="lg" className="px-5 py-3 fw-bold rounded-pill">
                                     Register Now
                                 </Button>
                             </div>
-                            <div className="mt-5 pt-3 d-flex justify-content-center gap-4 text-muted small">
-                                <div><i className="bi bi-shield-check me-2 text-primary"></i>Secure & Encrypted</div>
-                                <div><i className="bi bi-clock-history me-2 text-primary"></i>Real-time Results</div>
-                                <div><i className="bi bi-people me-2 text-primary"></i>Easy Management</div>
+                            <div className="mt-5 pt-3 d-flex justify-content-center gap-4 text-white opacity-75 small flex-wrap">
+                                <div><i className="bi bi-shield-check me-2"></i>Secure & Encrypted</div>
+                                <div><i className="bi bi-clock-history me-2"></i>Real-time Results</div>
+                                <div><i className="bi bi-people me-2"></i>Easy Management</div>
                             </div>
                         </Col>
                     </Row>
@@ -47,7 +53,7 @@ const Home = () => {
                 {/* Published Results Section */}
                 {publishedResults.length > 0 && (
                     <section className="mb-5 animate-fade-in-up delay-100">
-                        <div className="d-flex align-items-center justify-content-between mb-4">
+                        <div className="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
                             <h2 className="fw-bold m-0 text-dark">
                                 <i className="bi bi-trophy-fill text-warning me-2"></i>Election Results
                             </h2>
@@ -58,10 +64,10 @@ const Home = () => {
                             {publishedResults.map(election => (
                                 <Col xs={12} className="mb-4" key={election.electionId}>
                                     <Card className="feature-card border-0 shadow-sm overflow-hidden">
-                                        <Card.Header className="bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <h4 className="mb-1 fw-bold">{election.electionName}</h4>
-                                                <small className="text-muted">
+                                        <Card.Header className="py-3 d-flex justify-content-between align-items-center" style={gradientHeaderStyle}>
+                                            <div className="text-white">
+                                                <h4 className="mb-1 fw-bold h5">{election.electionName}</h4>
+                                                <small className="opacity-75">
                                                     Ended: {new Date(election.endDate).toLocaleDateString()}
                                                 </small>
                                             </div>
@@ -70,49 +76,51 @@ const Home = () => {
                                             </Badge>
                                         </Card.Header>
                                         <Card.Body className="p-0">
-                                            <Table responsive className="table-modern mb-0">
-                                                <thead className="bg-light text-muted small text-uppercase">
-                                                    <tr>
-                                                        <th className="ps-4">Rank</th>
-                                                        <th>Candidate</th>
-                                                        <th>Party / Symbol</th>
-                                                        <th>Votes</th>
-                                                        <th>Share</th>
-                                                        <th className="pe-4" style={{width: '35%'}}>Performance</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {election.results.map((res, idx) => (
-                                                        <tr key={idx}>
-                                                            <td className="ps-4 fw-bold text-secondary">
-                                                                #{res.rankPosition}
-                                                            </td>
-                                                            <td>
-                                                                <div className="d-flex align-items-center">
-                                                                    <div className="fw-bold text-dark">{res.candidateName}</div>
-                                                                    {idx === 0 && (
-                                                                        <Badge bg="warning" text="dark" className="ms-2 badge-modern shadow-sm">
-                                                                            <i className="bi bi-star-fill me-1"></i>Winner
-                                                                        </Badge>
-                                                                    )}
-                                                                </div>
-                                                            </td>
-                                                            <td className="text-secondary">
-                                                                {res.partyName} <small className="text-muted">({res.partySymbol})</small>
-                                                            </td>
-                                                            <td className="fw-bold">{res.voteCount.toLocaleString()}</td>
-                                                            <td>{res.votePercentage}%</td>
-                                                            <td className="pe-4">
-                                                                <ProgressBar 
-                                                                    now={res.votePercentage} 
-                                                                    variant={idx === 0 ? "success" : "info"} 
-                                                                    style={{height: '8px', borderRadius: '4px'}}
-                                                                />
-                                                            </td>
+                                            <div className="table-responsive">
+                                                <Table className="table-modern mb-0 w-100">
+                                                    <thead className="bg-light text-muted small text-uppercase">
+                                                        <tr>
+                                                            <th className="ps-4">Rank</th>
+                                                            <th>Candidate</th>
+                                                            <th className="d-none d-md-table-cell">Party</th>
+                                                            <th>Votes</th>
+                                                            <th>%</th>
+                                                            <th className="pe-4 d-none d-sm-table-cell" style={{width: '30%'}}>Bar</th>
                                                         </tr>
-                                                    ))}
-                                                </tbody>
-                                            </Table>
+                                                    </thead>
+                                                    <tbody>
+                                                        {election.results.map((res, idx) => (
+                                                            <tr key={idx}>
+                                                                <td className="ps-4 fw-bold text-secondary">
+                                                                    #{res.rankPosition}
+                                                                </td>
+                                                                <td>
+                                                                    <div className="d-flex align-items-center">
+                                                                        <div className="fw-bold text-dark">{res.candidateName}</div>
+                                                                        {idx === 0 && (
+                                                                            <Badge bg="warning" text="dark" className="ms-2 badge-modern shadow-sm d-none d-sm-inline-block">
+                                                                                <i className="bi bi-star-fill me-1"></i>
+                                                                            </Badge>
+                                                                        )}
+                                                                    </div>
+                                                                </td>
+                                                                <td className="text-secondary d-none d-md-table-cell">
+                                                                    {res.partyName} <small className="text-muted">({res.partySymbol})</small>
+                                                                </td>
+                                                                <td className="fw-bold">{res.voteCount.toLocaleString()}</td>
+                                                                <td>{res.votePercentage}%</td>
+                                                                <td className="pe-4 d-none d-sm-table-cell">
+                                                                    <ProgressBar 
+                                                                        now={res.votePercentage} 
+                                                                        variant={idx === 0 ? "success" : "info"} 
+                                                                        style={{height: '6px', borderRadius: '4px'}}
+                                                                    />
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </Table>
+                                            </div>
                                         </Card.Body>
                                     </Card>
                                 </Col>
@@ -125,7 +133,7 @@ const Home = () => {
                 <section className="mb-5 pt-5 animate-fade-in-up delay-200">
                     <div className="text-center mb-5">
                         <Badge bg="primary" className="mb-3 badge-modern bg-opacity-10 text-primary">Features</Badge>
-                        <h2 className="display-6 fw-bold">Why Choose Our Platform?</h2>
+                        <h2 className="display-6 fw-bold text-dark">Why Choose Our Platform?</h2>
                         <p className="text-muted lead">Built for reliability, speed, and trust.</p>
                     </div>
 
@@ -135,7 +143,7 @@ const Home = () => {
                                 <div className="feature-icon-wrapper bg-primary bg-opacity-10 text-primary mb-3 rounded-circle">
                                     <i className="bi bi-shield-lock fs-3"></i>
                                 </div>
-                                <h3 className="h5 fw-bold mb-3">Enterprise Security</h3>
+                                <h3 className="h5 fw-bold mb-3 text-dark">Enterprise Security</h3>
                                 <p className="text-muted mb-0">
                                     Advanced encryption protocols and secure authentication (JWT) ensure that every vote is protected and verifiable.
                                 </p>
@@ -146,7 +154,7 @@ const Home = () => {
                                 <div className="feature-icon-wrapper bg-success bg-opacity-10 text-success mb-3 rounded-circle">
                                     <i className="bi bi-lightning-charge fs-3"></i>
                                 </div>
-                                <h3 className="h5 fw-bold mb-3">Real-time Analytics</h3>
+                                <h3 className="h5 fw-bold mb-3 text-dark">Real-time Analytics</h3>
                                 <p className="text-muted mb-0">
                                     Watch election results unfold in real-time with comprehensive dashboards and data visualization tools.
                                 </p>
@@ -157,7 +165,7 @@ const Home = () => {
                                 <div className="feature-icon-wrapper bg-info bg-opacity-10 text-info mb-3 rounded-circle">
                                     <i className="bi bi-phone fs-3"></i>
                                 </div>
-                                <h3 className="h5 fw-bold mb-3">Mobile Optimized</h3>
+                                <h3 className="h5 fw-bold mb-3 text-dark">Mobile Optimized</h3>
                                 <p className="text-muted mb-0">
                                     Vote from anywhere, on any device. Our responsive design ensures a seamless experience on mobile and desktop.
                                 </p>
@@ -169,7 +177,7 @@ const Home = () => {
                 {/* Tech Stack */}
                 <section className="py-5 mb-5 animate-fade-in-up delay-300">
                      <div className="text-center mb-5">
-                        <h2 className="fw-bold">Powered by Modern Tech</h2>
+                        <h2 className="fw-bold text-dark">Powered by Modern Tech</h2>
                         <p className="text-muted">Leveraging industry-standard technologies for performance.</p>
                     </div>
                     <Row className="g-4 text-center justify-content-center">
@@ -181,10 +189,10 @@ const Home = () => {
                             { name: 'JWT Auth', bg: 'dark', icon: 'bi-key' },
                             { name: 'Git & CI/CD', bg: 'danger', icon: 'bi-git' }
                         ].map((tech, idx) => (
-                            <Col key={idx} xs={6} md={2}>
+                            <Col key={idx} xs={6} md={4} lg={2}>
                                 <div className="p-3 bg-white border rounded shadow-sm h-100 feature-card">
                                     <i className={`bi ${tech.icon} fs-2 text-${tech.bg} mb-2 d-block`}></i>
-                                    <span className="fw-bold small">{tech.name}</span>
+                                    <span className="fw-bold small text-dark">{tech.name}</span>
                                 </div>
                             </Col>
                         ))}
@@ -196,7 +204,7 @@ const Home = () => {
                     <Col lg={6}>
                         <Card className="h-100 border-0 shadow-sm feature-card">
                             <Card.Body className="p-4">
-                                <h3 className="h5 fw-bold mb-4">🏗️ System Architecture</h3>
+                                <h3 className="h5 fw-bold mb-4 text-dark">🏗️ System Architecture</h3>
                                 <div className="architecture-box">
 {`┌──────────┐      ┌──────────────┐      ┌──────────┐
 │  React   │ <--> │ Spring Boot  │ <--> │  MySQL   │
@@ -215,33 +223,35 @@ const Home = () => {
                     <Col lg={6}>
                         <Card className="h-100 border-0 shadow-sm feature-card">
                             <Card.Body className="p-4">
-                                <h3 className="h5 fw-bold mb-4">👥 Development Team</h3>
-                                <Table hover responsive className="table-modern mb-0 small">
-                                    <thead className="bg-light">
-                                        <tr>
-                                            <th>Developer</th>
-                                            <th>GitHub</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {[
-                                            { name: "Aaman Javaed Sayyad", gh: "Aamanjs" },
-                                            { name: "Avadhut Ravindra Joshi", gh: "AvadhutJoshi012" },
-                                            { name: "Deepak Sanjay Revgade", gh: "deepakrevgade" },
-                                            { name: "Rishikesh Sukhadev More", gh: "rushimore17" },
-                                            { name: "Yadnyesh Rajesh Kolte", gh: "yadnyeshkolte" }
-                                        ].map((dev, idx) => (
-                                            <tr key={idx}>
-                                                <td className="fw-medium">{dev.name}</td>
-                                                <td>
-                                                    <a href={`https://github.com/${dev.gh}`} target="_blank" rel="noopener noreferrer" className="text-decoration-none text-primary">
-                                                        <i className="bi bi-github me-1"></i> @{dev.gh}
-                                                    </a>
-                                                </td>
+                                <h3 className="h5 fw-bold mb-4 text-dark">👥 Development Team</h3>
+                                <div className="table-responsive">
+                                    <Table hover className="table-modern mb-0 small w-100">
+                                        <thead className="bg-light">
+                                            <tr>
+                                                <th>Developer</th>
+                                                <th>GitHub</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
+                                        </thead>
+                                        <tbody>
+                                            {[
+                                                { name: "Aaman Javaed Sayyad", gh: "Aamanjs" },
+                                                { name: "Avadhut Ravindra Joshi", gh: "AvadhutJoshi012" },
+                                                { name: "Deepak Sanjay Revgade", gh: "deepakrevgade" },
+                                                { name: "Rishikesh Sukhadev More", gh: "rushimore17" },
+                                                { name: "Yadnyesh Rajesh Kolte", gh: "yadnyeshkolte" }
+                                            ].map((dev, idx) => (
+                                                <tr key={idx}>
+                                                    <td className="fw-medium text-dark">{dev.name}</td>
+                                                    <td>
+                                                        <a href={`https://github.com/${dev.gh}`} target="_blank" rel="noopener noreferrer" className="text-decoration-none text-primary">
+                                                            <i className="bi bi-github me-1"></i> @{dev.gh}
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </Table>
+                                </div>
                             </Card.Body>
                         </Card>
                     </Col>

@@ -1,42 +1,62 @@
 /* Home.css - specific styles for the Homepage */
 
+/* General Layout Fixes */
+:root {
+    --brand-gradient: linear-gradient(135deg, #7158e2, #3d4dc6);
+    --bg-light-gray: #f4f6f9;
+    --text-dark: #333333;
+}
+
+body, html {
+    overflow-x: hidden; /* Prevent horizontal scrollbar on hover effects */
+}
+
 /* Hero Section */
 .hero-section {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 80px 0;
-    border-bottom: 1px solid #dee2e6;
+    background: var(--brand-gradient);
+    padding: 100px 0 80px 0; /* Increased top padding for fixed navbar clearance */
     position: relative;
-    overflow: hidden;
+    color: white;
+    margin-bottom: 0 !important; /* Overriding bootstrap/inline styles if any */
 }
 
 .hero-title {
-    font-size: 3.5rem;
+    font-size: 2.5rem; /* Mobile first font size */
     font-weight: 800;
     line-height: 1.2;
-    background: -webkit-linear-gradient(45deg, #0d6efd, #0dcaf0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: white;
     margin-bottom: 1.5rem;
 }
 
 .hero-subtitle {
-    font-size: 1.25rem;
-    color: #6c757d;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
     max-width: 600px;
     margin: 0 auto 2rem auto;
+}
+
+@media (min-width: 768px) {
+    .hero-title {
+        font-size: 3.5rem;
+    }
+    .hero-subtitle {
+        font-size: 1.25rem;
+    }
 }
 
 /* Feature Cards */
 .feature-card {
     transition: all 0.3s ease;
-    border: 1px solid rgba(0,0,0,0.05);
+    border: none;
     background: white;
     border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    height: 100%; /* Ensure uniform height */
 }
 
 .feature-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 1rem 3rem rgba(0,0,0,0.1) !important;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
 }
 
 .feature-icon-wrapper {
@@ -47,6 +67,9 @@
     justify-content: center;
     border-radius: 12px;
     margin-bottom: 1.5rem;
+    /* Use brand gradient or similar accents */
+    background: rgba(113, 88, 226, 0.1); 
+    color: #7158e2;
 }
 
 /* Modern Tables */
@@ -63,6 +86,8 @@
 
 .table-modern tbody tr:hover {
     transform: scale(1.01);
+    /* Ensure scale doesn't trigger scrollbars */
+    backface-visibility: hidden; 
 }
 
 .table-modern td, .table-modern th {
@@ -79,6 +104,17 @@
 .table-modern td:last-child, .table-modern th:last-child {
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    .table-modern td, .table-modern th {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.9rem;
+    }
+    .table-modern .pe-4 {
+        padding-right: 0.5rem !important;
+    }
 }
 
 /* Animations */
@@ -109,12 +145,19 @@
     background-color: #f8f9fa;
     border: 1px solid #dee2e6;
     border-radius: 8px;
-    padding: 2rem;
+    padding: 1.5rem;
     white-space: pre-wrap;
     overflow-x: auto;
-    font-size: 0.85rem;
+    font-size: 0.75rem; /* Smaller font for mobile */
     color: #495057;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+@media (min-width: 768px) {
+    .architecture-box {
+        font-size: 0.85rem;
+        padding: 2rem;
+    }
 }
 
 /* Badge Styles */
