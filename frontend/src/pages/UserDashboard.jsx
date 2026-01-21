@@ -96,134 +96,173 @@ const UserDashboard = () => {
     };
 
     return (
-        <Container className="mt-4">
-            <h2>Welcome, Voter</h2>
-            <p className="text-muted">Your ID: {user?.id}</p>
+        <>
+            <div className="bg-brand-gradient text-white py-5 mb-4 shadow-sm">
+                <Container>
+                    <h2 className="mb-0 fw-bold">Welcome, {user?.fullName || 'Voter'}</h2>
+                    <p className="mb-0 text-white-50">User ID: {user?.id} • Exercise your right to vote.</p>
+                </Container>
+            </div>
 
-            <h4 className="mt-4">Active Elections</h4>
-            {elections.length === 0 && <p>No active elections at the moment.</p>}
-
-            <Row>
-                {elections.map(e => (
-                    <Col md={4} key={e.electionId} className="mb-3">
-                        <Card>
-                            <Card.Body>
-                                <Card.Title>{e.electionName}</Card.Title>
-                                <Card.Subtitle className="mb-2 text-muted">{e.electionType}</Card.Subtitle>
-                                <Card.Text>
-                                    Status: <Badge bg="success">{e.status}</Badge>
-                                </Card.Text>
-                                {hasVotedMap[e.electionId] ? (
-                                    <Button variant="secondary" disabled>You Voted</Button>
-                                ) : (
-                                    <Button variant="primary" onClick={() => handleSelectElection(e)}>Vote Now</Button>
-                                )}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
-
-            <h4 className="mt-4">Past Election Results</h4>
-            {completedElections.length === 0 && <p>No completed elections found.</p>}
-
-            <Row>
-                {completedElections.map(e => (
-                    <Col md={4} key={e.electionId} className="mb-3">
-                        <Card>
-                            <Card.Body>
-                                <Card.Title>{e.electionName}</Card.Title>
-                                <Card.Subtitle className="mb-2 text-muted">{e.electionType}</Card.Subtitle>
-                                <Card.Text>
-                                    Status: <Badge bg="secondary">{e.status}</Badge>
-                                </Card.Text>
-                                <Button variant="link" onClick={() => handleViewResults(e)}>View Results</Button>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
-
-            {/* Voting Modal */}
-            <Modal show={!!selectedElection && !showResults} onHide={() => setSelectedElection(null)} size="lg">
-                <Modal.Header closeButton><Modal.Title>Vote: {selectedElection?.electionName}</Modal.Title></Modal.Header>
-                <Modal.Body>
-                    <div className="mb-4 text-center">
-                         <h5>Face Verification Required</h5>
-                         <p className="text-muted small">Please ensure your face is clearly visible.</p>
-                         <Webcam
-                            audio={false}
-                            ref={webcamRef}
-                            screenshotFormat="image/jpeg"
-                            width={320}
-                            height={240}
-                            videoConstraints={{ facingMode: "user" }}
-                            style={{ borderRadius: '10px', border: '2px solid #ddd' }}
-                         />
+            <Container className="mb-5">
+                <h4 className="mb-3 fw-bold text-dark border-bottom pb-2">Active Elections</h4>
+                {elections.length === 0 && (
+                    <div className="alert alert-light text-center border shadow-sm">
+                        No active elections at the moment.
                     </div>
-                    <hr />
-                    <h5>Candidates</h5>
-                    <Row>
-                        {candidates.map(c => (
-                            <Col md={6} key={c.candidateId} className="mb-3">
-                                <Card className="h-100">
-                                    <Card.Body className="text-center">
-                                        <div style={{marginBottom: '10px'}}>
-                                            {c.candidatePhoto ? (
-                                                <img
-                                                    src={`data:image/jpeg;base64,${c.candidatePhoto}`}
-                                                    alt="Candidate"
-                                                    style={{width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50%'}}
-                                                />
-                                            ) : (
-                                                <div style={{fontSize: '2rem'}}>👤</div>
-                                            )}
-                                        </div>
-                                        <Card.Title>{c.user?.fullName}</Card.Title>
-                                        <Card.Subtitle>{c.partyName} ({c.partySymbol})</Card.Subtitle>
-                                        <Card.Text className="mt-2 text-muted small">
-                                            "{c.manifesto}"
-                                        </Card.Text>
-                                        <Button variant="success" onClick={() => handleVote(c.candidateId)} disabled={isVerifying}>
-                                            {isVerifying ? 'Verifying...' : `Vote for ${c.partySymbol}`}
-                                        </Button>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        ))}
-                    </Row>
-                </Modal.Body>
-            </Modal>
+                )}
 
-             {/* Results Modal Reuse */}
-            <Modal show={showResults} onHide={() => {setShowResults(false); setSelectedElection(null);}} size="lg">
-                <Modal.Header closeButton><Modal.Title>Results: {selectedElection?.electionName}</Modal.Title></Modal.Header>
-                <Modal.Body>
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>Candidate</th>
-                                <th>Party</th>
-                                <th>Votes</th>
-                                <th>Percentage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {results.map(r => (
-                                <tr key={r.resultId}>
-                                    <td>{r.rankPosition}</td>
-                                    <td>{r.candidate?.user?.fullName}</td>
-                                    <td>{r.candidate?.partyName} ({r.candidate?.partySymbol})</td>
-                                    <td>{r.voteCount}</td>
-                                    <td>{r.votePercentage}%</td>
-                                </tr>
+                <Row className="mb-5">
+                    {elections.map(e => (
+                        <Col md={4} key={e.electionId} className="mb-4">
+                            <Card className="border-0 shadow-sm h-100 hover-card">
+                                <Card.Body className="d-flex flex-column">
+                                    <div className="d-flex justify-content-between align-items-start mb-2">
+                                        <Card.Title className="fw-bold mb-0">{e.electionName}</Card.Title>
+                                        <Badge bg="success" className="rounded-pill">{e.status}</Badge>
+                                    </div>
+                                    <Card.Subtitle className="mb-3 text-muted small">{e.electionType} Election</Card.Subtitle>
+                                    
+                                    <div className="mt-auto">
+                                        {hasVotedMap[e.electionId] ? (
+                                            <Button variant="secondary" className="w-100 disabled" disabled>
+                                                <i className="bi bi-check-circle-fill me-2"></i>You Voted
+                                            </Button>
+                                        ) : (
+                                            <Button className="btn-brand w-100" onClick={() => handleSelectElection(e)}>
+                                                Vote Now
+                                            </Button>
+                                        )}
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
+
+                <h4 className="mb-3 fw-bold text-dark border-bottom pb-2">Past Election Results</h4>
+                {completedElections.length === 0 && (
+                    <div className="text-muted">No completed elections found.</div>
+                )}
+
+                <Row>
+                    {completedElections.map(e => (
+                        <Col md={4} key={e.electionId} className="mb-3">
+                            <Card className="border-0 shadow-sm h-100 hover-card">
+                                <Card.Body>
+                                    <div className="d-flex justify-content-between align-items-center mb-2">
+                                        <Card.Title className="fw-bold mb-0 text-truncate">{e.electionName}</Card.Title>
+                                        <Badge bg="secondary" className="rounded-pill">{e.status}</Badge>
+                                    </div>
+                                    <Card.Subtitle className="mb-3 text-muted small">{e.electionType} Election</Card.Subtitle>
+                                    <Button variant="outline-primary" size="sm" className="w-100" onClick={() => handleViewResults(e)}>
+                                        View Results
+                                    </Button>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
+
+                {/* Voting Modal */}
+                <Modal show={!!selectedElection && !showResults} onHide={() => setSelectedElection(null)} size="lg" centered>
+                    <Modal.Header closeButton closeVariant="white" className="bg-brand-gradient text-white">
+                        <Modal.Title>Vote: {selectedElection?.electionName}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className="bg-light">
+                        <div className="mb-4 text-center bg-white p-3 rounded shadow-sm">
+                             <h5 className="fw-bold text-dark">Face Verification Required</h5>
+                             <p className="text-muted small mb-3">Please ensure your face is clearly visible in the camera frame.</p>
+                             <div className="d-flex justify-content-center">
+                                 <Webcam
+                                    audio={false}
+                                    ref={webcamRef}
+                                    screenshotFormat="image/jpeg"
+                                    width={320}
+                                    height={240}
+                                    videoConstraints={{ facingMode: "user" }}
+                                    style={{ borderRadius: '10px', border: '2px solid #e9ecef' }}
+                                 />
+                             </div>
+                        </div>
+                        
+                        <h5 className="mb-3 ps-2 border-start border-4 border-primary">Candidates</h5>
+                        <Row>
+                            {candidates.map(c => (
+                                <Col md={6} key={c.candidateId} className="mb-3">
+                                    <Card className="h-100 border-0 shadow-sm candidate-card">
+                                        <Card.Body className="text-center p-4">
+                                            <div className="mb-3 position-relative d-inline-block">
+                                                {c.candidatePhoto ? (
+                                                    <img
+                                                        src={`data:image/jpeg;base64,${c.candidatePhoto}`}
+                                                        alt="Candidate"
+                                                        className="rounded-circle shadow-sm"
+                                                        style={{width: '100px', height: '100px', objectFit: 'cover', border: '3px solid #f8f9fa'}}
+                                                    />
+                                                ) : (
+                                                    <div className="rounded-circle bg-light d-flex align-items-center justify-content-center shadow-sm" style={{width: '100px', height: '100px', margin: '0 auto', border: '3px solid #f8f9fa'}}>
+                                                        <span style={{fontSize: '2.5rem'}}>👤</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <Card.Title className="fw-bold mb-1">{c.user?.fullName}</Card.Title>
+                                            <Card.Subtitle className="text-primary mb-2 fw-bold">{c.partyName}</Card.Subtitle>
+                                            <Badge bg="light" text="dark" className="border mb-3">{c.partySymbol}</Badge>
+                                            <Card.Text className="text-muted small fst-italic mb-3">
+                                                "{c.manifesto}"
+                                            </Card.Text>
+                                            <Button 
+                                                variant="success" 
+                                                className="w-100 rounded-pill fw-bold" 
+                                                onClick={() => handleVote(c.candidateId)} 
+                                                disabled={isVerifying}
+                                            >
+                                                {isVerifying ? 'Verifying...' : `Vote for ${c.partySymbol}`}
+                                            </Button>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
                             ))}
-                        </tbody>
-                    </table>
-                </Modal.Body>
-            </Modal>
-        </Container>
+                        </Row>
+                    </Modal.Body>
+                </Modal>
+
+                 {/* Results Modal Reuse */}
+                <Modal show={showResults} onHide={() => {setShowResults(false); setSelectedElection(null);}} size="lg" centered>
+                    <Modal.Header closeButton closeVariant="white" className="bg-brand-gradient text-white">
+                        <Modal.Title>Results: {selectedElection?.electionName}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <table className="table table-hover align-middle">
+                            <thead className="table-light">
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Candidate</th>
+                                    <th>Party</th>
+                                    <th>Votes</th>
+                                    <th>Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {results.map(r => (
+                                    <tr key={r.resultId} className={r.rankPosition === 1 ? "table-success fw-bold" : ""}>
+                                        <td>
+                                            {r.rankPosition === 1 && <span className="me-1">🏆</span>}
+                                            {r.rankPosition}
+                                        </td>
+                                        <td>{r.candidate?.user?.fullName}</td>
+                                        <td>{r.candidate?.partyName} ({r.candidate?.partySymbol})</td>
+                                        <td>{r.voteCount}</td>
+                                        <td>{r.votePercentage}%</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </Modal.Body>
+                </Modal>
+            </Container>
+        </>
     );
 };
 
