@@ -2,6 +2,8 @@ package com.project.onlinevotingsystem.service;
 
 import com.project.onlinevotingsystem.dto.CandidateDto;
 import com.project.onlinevotingsystem.dto.ElectionCreationRequest;
+import com.project.onlinevotingsystem.dto.PublicCandidateResultDTO;
+import com.project.onlinevotingsystem.dto.PublicElectionResultDTO;
 import com.project.onlinevotingsystem.entity.*;
 import com.project.onlinevotingsystem.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +39,34 @@ public class ElectionService {
         return electionRepository.findByStatus(ElectionStatus.ACTIVE);
     }
 
+    public List<Election> getActiveElectionsForUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return electionRepository.findByStatus(ElectionStatus.ACTIVE).stream()
+                .filter(election -> isElectionVisibleToUser(election, user))
+                .collect(Collectors.toList());
+    }
+
+    public List<Election> getPastElectionsForUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return electionRepository.findByStatus(ElectionStatus.COMPLETED).stream()
+                .filter(election -> isElectionVisibleToUser(election, user))
+                .collect(Collectors.toList());
+    }
+
+    public boolean isElectionVisibleToUser(Election election, User user) {
+        if (election.getElectionType() == ElectionType.LOCAL) {
+            return user.getCity() != null && user.getCity().equalsIgnoreCase(election.getCity())
+                    && user.getState() != null && user.getState().equalsIgnoreCase(election.getState());
+        } else if (election.getElectionType() == ElectionType.STATE) {
+            return user.getState() != null && user.getState().equalsIgnoreCase(election.getState());
+        }
+        return true; // GENERAL or SPECIAL open to all
+    }
+
     public List<Election> getPastElections() {
         return electionRepository.findByStatus(ElectionStatus.COMPLETED);
     }
@@ -53,6 +84,8 @@ public class ElectionService {
         election.setStartDate(request.getStartDate());
         election.setEndDate(request.getEndDate());
         election.setStatus(ElectionStatus.DRAFT);
+        election.setCity(request.getCity());
+        election.setState(request.getState());
 
         // Get current admin user
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -207,5 +240,70 @@ public class ElectionService {
         Candidate candidate = candidateRepository.findById(candidateId)
                 .orElseThrow(() -> new RuntimeException("Candidate not found"));
         return candidate.getCandidatePhoto();
+    }
+
+    @Transactional
+    public Election toggleResultPublication(Long electionId) {
+        Election election = electionRepository.findById(electionId)
+                .orElseThrow(() -> new RuntimeException("Election not found"));
+
+        if (election.getStatus() != ElectionStatus.COMPLETED) {
+            throw new RuntimeException("Cannot publish results for incomplete elections");
+        }
+
+        election.setResultPublished(!Boolean.TRUE.equals(election.getResultPublished()));
+        
+        if (election.getResultPublished()) {
+            election.setResultPublishedAt(LocalDateTime.now());
+            // Get current admin user
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String adminUsername;
+            if (principal instanceof UserDetails) {
+                adminUsername = ((UserDetails) principal).getUsername();
+            } else {
+                adminUsername = principal.toString();
+            }
+            adminRepository.findByEmail(adminUsername).ifPresent(admin -> election.setResultPublishedBy(admin.getAdminId()));
+        } else {
+            election.setResultPublishedAt(null);
+            election.setResultPublishedBy(null);
+        }
+
+        return electionRepository.save(election);
+    }
+
+    public List<PublicElectionResultDTO> getPublishedElectionResults() {
+        List<Election> publishedElections = electionRepository.findAll().stream()
+                .filter(e -> Boolean.TRUE.equals(e.getResultPublished()))
+                .collect(Collectors.toList());
+
+        List<PublicElectionResultDTO> resultDTOs = new ArrayList<>();
+
+        for (Election election : publishedElections) {
+            PublicElectionResultDTO dto = new PublicElectionResultDTO();
+            dto.setElectionId(election.getElectionId());
+            dto.setElectionName(election.getElectionName());
+            dto.setElectionType(election.getElectionType().name());
+            dto.setEndDate(election.getEndDate());
+
+            List<ElectionResult> results = electionResultRepository.findByElection_ElectionIdOrderByRankPositionAsc(election.getElectionId());
+            
+            List<PublicCandidateResultDTO> candidateDTOs = results.stream().map(result -> {
+                PublicCandidateResultDTO cDto = new PublicCandidateResultDTO();
+                cDto.setCandidateName(result.getCandidate().getUser().getFullName());
+                cDto.setPartyName(result.getCandidate().getPartyName());
+                cDto.setPartySymbol(result.getCandidate().getPartySymbol());
+                cDto.setProfileImageUrl(result.getCandidate().getUser().getProfileImageUrl());
+                cDto.setVoteCount(result.getVoteCount());
+                cDto.setVotePercentage(result.getVotePercentage());
+                cDto.setRankPosition(result.getRankPosition());
+                return cDto;
+            }).collect(Collectors.toList());
+
+            dto.setResults(candidateDTOs);
+            resultDTOs.add(dto);
+        }
+
+        return resultDTOs;
     }
 }

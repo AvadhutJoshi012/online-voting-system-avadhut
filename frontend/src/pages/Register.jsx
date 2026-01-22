@@ -18,7 +18,7 @@ const Register = () => {
         pincode: '',
         aadharNumber: '',
         voterIdNumber: '',
-        profileImageUrl: '/api/user/profile/photo/default.png' // Default value
+        profileImageUrl: '/api/user/profile/photo/default.jpg' // Default value
     });
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -46,6 +46,22 @@ const Register = () => {
         e.preventDefault();
         setIsLoading(true);
         setError('');
+
+        // Client-side age validation
+        const dob = new Date(formData.dateOfBirth);
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const m = today.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+
+        if (age < 18) {
+            setError('You must be at least 18 years old to register.');
+            setIsLoading(false);
+            return;
+        }
+
         try {
             await registerUser(formData);
             navigate('/login');

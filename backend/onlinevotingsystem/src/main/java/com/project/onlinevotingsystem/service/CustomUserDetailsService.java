@@ -69,10 +69,16 @@ public class CustomUserDetailsService implements UserDetailsService {
             );
         }
 
-        // Try finding in User
-        Optional<User> user = userRepository.findByEmail(username);
-        if (user.isPresent()) {
-            return new CustomUserDetails(user.get());
+        // Try finding in User by Email
+        Optional<User> userByEmail = userRepository.findByEmail(username);
+        if (userByEmail.isPresent()) {
+            return new CustomUserDetails(userByEmail.get());
+        }
+
+        // Try finding in User by Voter ID
+        Optional<User> userByVoterId = userRepository.findByVoterIdNumber(username);
+        if (userByVoterId.isPresent()) {
+            return new CustomUserDetails(userByVoterId.get());
         }
 
         throw new UsernameNotFoundException("User not found with username: " + username);

@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { loginUser } from '../services/api';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
+    const [voterId, setVoterId] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const { login, user } = useAuth();
@@ -27,17 +27,18 @@ const Login = () => {
         setIsLoading(true);
         setError('');
         try {
-            const data = await loginUser(email, password);
-            login(data.token);
-            // Navigation handled by useEffect based on user state change, 
-            // but we can also do it here if context updates are async/laggy
+            const data = await loginUser(voterId, password);
+            
             if (data.role === 'ADMIN') {
-                navigate('/admin');
-            } else {
-                navigate('/user');
+                setError('Please use the Admin Login page.');
+                setIsLoading(false);
+                return;
             }
+
+            login(data.token);
+            navigate('/user');
         } catch (err) {
-            setError('Invalid credentials. Please check your email and password.');
+            setError('Invalid credentials. Please check your Voter ID and password.');
         } finally {
             setIsLoading(false);
         }
@@ -50,8 +51,8 @@ const Login = () => {
                     <Col md={6} lg={5}>
                         <Card className="form-card shadow-lg animate-slide-up">
                             <div className="form-header">
-                                <h3 className="mb-0 fw-bold">Welcome Back!</h3>
-                                <p className="mb-0 text-white-50">Login to access your dashboard</p>
+                                <h3 className="mb-0 fw-bold">Voter Login</h3>
+                                <p className="mb-0 text-white-50">Login with your Voter ID</p>
                             </div>
                             <Card.Body className="p-4 p-md-5">
                                 {error && (
@@ -62,12 +63,12 @@ const Login = () => {
                                 )}
                                 <Form onSubmit={handleSubmit}>
                                     <Form.Group className="mb-4">
-                                        <Form.Label className="fw-bold">Email Address</Form.Label>
+                                        <Form.Label className="fw-bold">Voter ID</Form.Label>
                                         <Form.Control
-                                            type="email"
-                                            placeholder="name@example.com"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
+                                            type="text"
+                                            placeholder="Enter your Voter ID"
+                                            value={voterId}
+                                            onChange={(e) => setVoterId(e.target.value)}
                                             required
                                             size="lg"
                                             className="bg-light border-0"
@@ -100,6 +101,9 @@ const Login = () => {
                                     <div className="text-center mt-3">
                                         <span className="text-muted">Don't have an account? </span>
                                         <Link to="/register" className="fw-bold text-decoration-none text-primary">Register Here</Link>
+                                    </div>
+                                    <div className="text-center mt-2">
+                                        <Link to="/admin-login" className="text-muted text-decoration-none small">Admin Login</Link>
                                     </div>
                                 </Form>
                             </Card.Body>

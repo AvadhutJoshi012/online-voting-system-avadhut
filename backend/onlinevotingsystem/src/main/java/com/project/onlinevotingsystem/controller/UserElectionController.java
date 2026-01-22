@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 @RestController
 @RequestMapping("/api/user/elections")
 @RequiredArgsConstructor
@@ -19,15 +21,24 @@ public class UserElectionController {
 
     private final ElectionService electionService;
     private final VoteService voteService;
+    private final com.project.onlinevotingsystem.repository.UserRepository userRepository;
 
     @GetMapping("/active")
-    public ResponseEntity<List<Election>> getActiveElections() {
-        return ResponseEntity.ok(electionService.getActiveElections());
+    public ResponseEntity<List<Election>> getActiveElections(Authentication authentication) {
+        String email = authentication.getName();
+        Long userId = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"))
+                .getUserId();
+        return ResponseEntity.ok(electionService.getActiveElectionsForUser(userId));
     }
 
     @GetMapping("/completed")
-    public ResponseEntity<List<Election>> getCompletedElections() {
-        return ResponseEntity.ok(electionService.getPastElections());
+    public ResponseEntity<List<Election>> getCompletedElections(Authentication authentication) {
+        String email = authentication.getName();
+        Long userId = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"))
+                .getUserId();
+        return ResponseEntity.ok(electionService.getPastElectionsForUser(userId));
     }
 
     @GetMapping("/{id}/candidates")
@@ -35,36 +46,49 @@ public class UserElectionController {
         return ResponseEntity.ok(electionService.getCandidatesForElection(id));
     }
 
-    private final com.project.onlinevotingsystem.repository.UserRepository userRepository;
 
     @PostMapping("/{id}/vote")
-    public ResponseEntity<?> vote(@PathVariable Long id, @RequestParam Long candidateId, Authentication authentication) {
+    public ResponseEntity<?> vote(@PathVariable Long id, 
+                                  @RequestParam Long candidateId, 
+                                  @RequestParam(required = false) MultipartFile capturedImage,
+                                  Authentication authentication) {
         String email = authentication.getName();
         Long userId = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"))
                 .getUserId();
 
         try {
-            return ResponseEntity.ok(voteService.castVote(id, userId, candidateId));
+            return ResponseEntity.ok(voteService.castVote(id, userId, candidateId, capturedImage));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @GetMapping("/{id}/has-voted")
-    public ResponseEntity<Boolean> hasVoted(@PathVariable Long id, @RequestParam Long userId) {
-        // Security concern: User should only check their own status.
-        // But for this task I will allow passing userId.
-        return ResponseEntity.ok(voteService.hasUserVoted(id, userId));
+    public ResponseEntity<Boolean> hasVoted(@PathVariable Long id, Authentication authentication) {
+        String email = authentication.getName();
+        Long currentUserId = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"))
+                .getUserId();
+        return ResponseEntity.ok(voteService.hasUserVoted(id, currentUserId));
     }
 
     @GetMapping("/{id}/results")
-    public ResponseEntity<List<ElectionResult>> getResults(@PathVariable Long id) {
+    public ResponseEntity<List<ElectionResult>> getResults(@PathVariable Long id, Authentication authentication) {
+        String email = authentication.getName();
+        com.project.onlinevotingsystem.entity.User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         // Users can only view results of completed elections
         Election election = electionService.getElectionById(id);
         if (election.getStatus() != com.project.onlinevotingsystem.entity.ElectionStatus.COMPLETED) {
             return ResponseEntity.status(403).build(); // Forbidden
         }
+
+        if (!electionService.isElectionVisibleToUser(election, user)) {
+            return ResponseEntity.status(403).build(); // Forbidden
+        }
+
         return ResponseEntity.ok(electionService.getResults(id));
     }
 

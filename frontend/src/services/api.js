@@ -12,8 +12,8 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-export const loginUser = async (email, password) => {
-    const response = await api.post('/auth/login', { email, password });
+export const loginUser = async (identifier, password) => {
+    const response = await api.post('/auth/login', { identifier, password });
     return response.data;
 };
 
@@ -37,17 +37,23 @@ export const getCandidates = async (electionId) => {
     return response.data;
 };
 
-export const castVote = async (electionId, candidateId) => {
-    const response = await api.post(`/user/elections/${electionId}/vote`, null, {
-        params: { candidateId }
+export const castVote = async (electionId, candidateId, capturedImageBlob) => {
+    const formData = new FormData();
+    formData.append('candidateId', candidateId);
+    if (capturedImageBlob) {
+        // Create a File object from the blob if possible, or just append blob
+        // Give it a filename so the backend treats it as a file
+        formData.append('capturedImage', capturedImageBlob, "capture.jpg");
+    }
+
+    const response = await api.post(`/user/elections/${electionId}/vote`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
     });
     return response.data;
 };
 
-export const checkHasVoted = async (electionId, userId) => {
-    const response = await api.get(`/user/elections/${electionId}/has-voted`, {
-        params: { userId }
-    });
+export const checkHasVoted = async (electionId) => {
+    const response = await api.get(`/user/elections/${electionId}/has-voted`);
     return response.data;
 };
 
@@ -91,6 +97,17 @@ export const getElectionResults = async (electionId) => {
 
 export const adminGetCandidates = async (electionId) => {
     const response = await api.get(`/admin/elections/${electionId}/candidates`);
+    return response.data;
+};
+
+export const togglePublishResult = async (electionId) => {
+    const response = await api.put(`/admin/elections/${electionId}/publish`);
+    return response.data;
+};
+
+// Public APIs
+export const getPublishedResults = async () => {
+    const response = await api.get('/public/elections/results');
     return response.data;
 };
 

@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { Container, Row, Col, Card, Button, Badge, Modal } from 'react-bootstrap';
+import Webcam from 'react-webcam';
 import { getActiveElections, getCompletedElections, getCandidates, castVote, checkHasVoted, getUserElectionResults } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -11,6 +12,9 @@ const UserDashboard = () => {
     const [hasVotedMap, setHasVotedMap] = useState({});
     const [results, setResults] = useState([]);
     const [showResults, setShowResults] = useState(false);
+    
+    const webcamRef = useRef(null);
+    const [isVerifying, setIsVerifying] = useState(false);
 
     const { user } = useAuth();
 
@@ -28,7 +32,7 @@ const UserDashboard = () => {
         // Check voting status for each election
         const votedStatus = {};
         for (const election of data) {
-            const hasVoted = await checkHasVoted(election.electionId, user.id);
+            const hasVoted = await checkHasVoted(election.electionId);
             votedStatus[election.electionId] = hasVoted;
         }
         setHasVotedMap(votedStatus);
@@ -40,15 +44,44 @@ const UserDashboard = () => {
         setCandidates(cands);
     };
 
+    const capture = useCallback(() => {
+        const imageSrc = webcamRef.current.getScreenshot();
+        return imageSrc;
+    }, [webcamRef]);
+
+    // Convert base64 to blob
+    const dataURItoBlob = (dataURI) => {
+        if (!dataURI) return null;
+        const byteString = atob(dataURI.split(',')[1]);
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ab], { type: mimeString });
+    };
+
     const handleVote = async (candidateId) => {
-        if (window.confirm('Are you sure? You cannot change your vote later.')) {
+        if (window.confirm('Are you sure? This will capture your image for verification.')) {
             try {
-                await castVote(selectedElection.electionId, candidateId);
+                setIsVerifying(true);
+                const imageSrc = capture();
+                if (!imageSrc) {
+                    alert('Could not capture image from webcam. Please ensure camera permissions are allowed.');
+                    setIsVerifying(false);
+                    return;
+                }
+                const blob = dataURItoBlob(imageSrc);
+
+                await castVote(selectedElection.electionId, candidateId, blob);
                 alert('Vote cast successfully!');
                 loadElections(); // Refresh status
                 setSelectedElection(null);
             } catch (e) {
                 alert('Voting failed: ' + (e.response?.data || e.message));
+            } finally {
+                setIsVerifying(false);
             }
         }
     };
@@ -62,10 +95,29 @@ const UserDashboard = () => {
         setShowResults(true);
     };
 
+    // --- GRADIENT THEME CONSTANTS ---
+    const primaryGradient = 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)'; 
+    const lightGradient = 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)';
+
     return (
         <Container className="mt-4">
-            <h2>Welcome, Voter</h2>
-            <p className="text-muted">Your ID: {user?.id}</p>
+
+            <div style={{ 
+                background: primaryGradient, 
+                color: 'white', 
+                padding: '25px 0',      /* Reduced from 50px to 25px */
+                marginBottom: '25px',   /* Reduced spacing below the box */
+                textAlign: 'center',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                borderRadius: '13px 13px 13px 13px' /* Optional: soft rounding at the bottom */
+            }}>
+                <Container>
+                    <h2 style={{ fontWeight: '700', margin: '0' }}>Voter Dashboard</h2>
+                    <p style={{ opacity: '0.8', fontSize: '1rem', margin: '5px 0 0' }}>
+                        User ID: {user?.id}
+                    </p>
+                </Container>
+            </div>
 
             <h4 className="mt-4">Active Elections</h4>
             {elections.length === 0 && <p>No active elections at the moment.</p>}
@@ -73,17 +125,24 @@ const UserDashboard = () => {
             <Row>
                 {elections.map(e => (
                     <Col md={4} key={e.electionId} className="mb-3">
-                        <Card>
+                        <Card style={{ border: 'none', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
+                            <div style={{ background: primaryGradient, height: '8px' }}></div>
                             <Card.Body>
-                                <Card.Title>{e.electionName}</Card.Title>
-                                <Card.Subtitle className="mb-2 text-muted">{e.electionType}</Card.Subtitle>
+                                <Card.Title className="fw-bold">{e.electionName}</Card.Title>
+                                <Card.Subtitle className="mb-3 text-muted">{e.electionType}</Card.Subtitle>
                                 <Card.Text>
-                                    Status: <Badge bg="success">{e.status}</Badge>
+                                    Status: <Badge style={{ background: '#28a745' }}>{e.status}</Badge>
                                 </Card.Text>
                                 {hasVotedMap[e.electionId] ? (
-                                    <Button variant="secondary" disabled>You Voted</Button>
+                                    <Button variant="secondary" className="w-100 py-2" disabled>You Voted</Button>
                                 ) : (
-                                    <Button variant="primary" onClick={() => handleSelectElection(e)}>Vote Now</Button>
+                                    <Button 
+                                        style={{ background: primaryGradient, border: 'none' }} 
+                                        className="w-100 py-2 shadow-sm" 
+                                        onClick={() => handleSelectElection(e)}
+                                    >
+                                        Vote Now
+                                    </Button>
                                 )}
                             </Card.Body>
                         </Card>
@@ -96,15 +155,30 @@ const UserDashboard = () => {
 
             <Row>
                 {completedElections.map(e => (
-                    <Col md={4} key={e.electionId} className="mb-3">
-                        <Card>
+                    <Col md={4} key={e.electionId} className="mb-4">
+                        <Card style={{ 
+                            border: 'none', 
+                            borderRadius: '15px', 
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                            transition: 'transform 0.2s' 
+                        }}>
                             <Card.Body>
-                                <Card.Title>{e.electionName}</Card.Title>
-                                <Card.Subtitle className="mb-2 text-muted">{e.electionType}</Card.Subtitle>
-                                <Card.Text>
-                                    Status: <Badge bg="secondary">{e.status}</Badge>
-                                </Card.Text>
-                                <Button variant="link" onClick={() => handleViewResults(e)}>View Results</Button>
+                                <Card.Title className="fw-bold">{e.electionName}</Card.Title>
+                                <Card.Subtitle className="mb-3 text-muted">{e.electionType}</Card.Subtitle>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <Badge bg="secondary" pill style={{ fontSize: '0.8rem' }}>{e.status}</Badge>
+                                    <Button 
+                                        variant="link" 
+                                        style={{ 
+                                            color: '#6a11cb', // Matching the violet in your gradient
+                                            fontWeight: '600',
+                                            textDecoration: 'none'
+                                        }} 
+                                        onClick={() => handleViewResults(e)}
+                                    >
+                                        View Results →
+                                    </Button>
+                                </div>
                             </Card.Body>
                         </Card>
                     </Col>
@@ -113,8 +187,30 @@ const UserDashboard = () => {
 
             {/* Voting Modal */}
             <Modal show={!!selectedElection && !showResults} onHide={() => setSelectedElection(null)} size="lg">
-                <Modal.Header closeButton><Modal.Title>Vote: {selectedElection?.electionName}</Modal.Title></Modal.Header>
+                <Modal.Header 
+                    closeButton 
+                    closeVariant="white" /* This ensures the cross is white like the Results modal */
+                    style={{ background: primaryGradient, color: 'white' }}
+                >
+                    <Modal.Title style={{ fontWeight: '600' }}>
+                        Cast Your Vote: {selectedElection?.electionName}
+                    </Modal.Title>
+                </Modal.Header>
                 <Modal.Body>
+                    <div className="mb-4 text-center">
+                            <h5>Face Verification Required</h5>
+                            <p className="text-muted small">Please ensure your face is clearly visible.</p>
+                            <Webcam
+                                audio={false}
+                                ref={webcamRef}
+                                screenshotFormat="image/jpeg"
+                                width={320}
+                                height={240}
+                                videoConstraints={{ facingMode: "user" }}
+                                style={{ borderRadius: '10px', border: '2px solid #ddd' }}
+                            />
+                    </div>
+                    <hr />
                     <h5>Candidates</h5>
                     <Row>
                         {candidates.map(c => (
@@ -137,7 +233,14 @@ const UserDashboard = () => {
                                         <Card.Text className="mt-2 text-muted small">
                                             "{c.manifesto}"
                                         </Card.Text>
-                                        <Button variant="success" onClick={() => handleVote(c.candidateId)}>Vote for {c.partySymbol}</Button>
+                                        <Button 
+                                            style={{ background: primaryGradient, border: 'none' }} 
+                                            className="w-100 mt-2"
+                                            onClick={() => handleVote(c.candidateId)}
+                                            disabled={isVerifying}
+                                        >
+                                            {isVerifying ? 'Verifying...' : `Vote for ${c.partySymbol}`}
+                                        </Button>
                                     </Card.Body>
                                 </Card>
                             </Col>
@@ -148,7 +251,15 @@ const UserDashboard = () => {
 
              {/* Results Modal Reuse */}
             <Modal show={showResults} onHide={() => {setShowResults(false); setSelectedElection(null);}} size="lg">
-                <Modal.Header closeButton><Modal.Title>Results: {selectedElection?.electionName}</Modal.Title></Modal.Header>
+            <Modal.Header 
+                closeButton 
+                closeVariant="white" /* This turns the dark cross white */
+                style={{ background: primaryGradient, color: 'white', borderBottom: 'none' }}
+            >
+                <Modal.Title style={{ fontWeight: '600' }}>
+                    Election Results: {selectedElection?.electionName}
+                </Modal.Title>
+            </Modal.Header>
                 <Modal.Body>
                     <table className="table">
                         <thead>

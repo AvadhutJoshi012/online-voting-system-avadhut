@@ -52,6 +52,11 @@ public class AdminElectionController {
         return ResponseEntity.ok("Results calculated");
     }
 
+    @PutMapping("/{id}/publish")
+    public ResponseEntity<Election> togglePublishResults(@PathVariable Long id) {
+        return ResponseEntity.ok(electionService.toggleResultPublication(id));
+    }
+
     @GetMapping("/{id}/results")
     public ResponseEntity<List<ElectionResult>> getResults(@PathVariable Long id) {
         return ResponseEntity.ok(electionService.getResults(id));

@@ -9,6 +9,8 @@ import java.util.List;
 public class ElectionCreationRequest {
     private String electionName;
     private ElectionType electionType;
+    private String city;
+    private String state;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private List<CandidateDto> candidates;

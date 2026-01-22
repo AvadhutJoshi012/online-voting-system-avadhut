@@ -35,7 +35,7 @@ const EditUserModal = ({ show, onHide, user, onUpdate }) => {
 
     return (
         <Modal show={show} onHide={onHide} size="lg">
-            <Modal.Header closeButton>
+            <Modal.Header closeButton closeVariant="white" className="bg-brand-gradient text-white">
                 <Modal.Title>Edit User: {user.fullName}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -106,7 +106,10 @@ const EditUserModal = ({ show, onHide, user, onUpdate }) => {
                         <Form.Control type="text" name="profileImageUrl" value={formData.profileImageUrl || ''} onChange={handleChange} />
                     </Form.Group>
 
-                    <Button variant="primary" type="submit">Update User</Button>
+                    <div className="d-flex justify-content-end">
+                        <Button variant="secondary" onClick={onHide} className="me-2">Cancel</Button>
+                        <Button className="btn-brand" type="submit">Update User</Button>
+                    </div>
                 </Form>
             </Modal.Body>
         </Modal>
